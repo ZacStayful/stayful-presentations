@@ -440,8 +440,26 @@ a.pill:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.2
   opacity:0;transition:opacity 0.2s,transform 0.2s;
   box-shadow:0 4px 16px rgba(196,124,26,0.4);
 }
-#sf-toast.show{
-  opacity:1;transform:translateX(-50%) translateY(0);
+#sf-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* Welcome back banner — slides down from top bar */
+#sf-welcome-back{
+  position:fixed;top:55px;left:50%;
+  transform:translateX(-50%) translateY(-12px);
+  background:var(--gd);color:#fff;
+  border:1px solid rgba(230,235,215,0.2);
+  border-radius:100px;padding:8px 18px;
+  font-size:12px;font-weight:500;
+  z-index:299;white-space:nowrap;
+  display:flex;align-items:center;gap:8px;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.3s,transform 0.3s;
+  box-shadow:0 4px 18px rgba(0,0,0,0.25);
+}
+#sf-welcome-back.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+  pointer-events:all;
 }
 .sf-ask.answered.light{background:rgba(240,244,232,0.94);border-color:rgba(93,129,86,0.3);}
 .sf-ask.answered.dark{background:rgba(35,58,35,0.94);border-color:rgba(230,235,215,0.25);}
@@ -1232,6 +1250,15 @@ a.pill:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.2
 <!-- ERROR TOAST -->
 <div id="sf-toast">↓ Please answer the question below</div>
 
+<!-- WELCOME BACK BANNER -->
+<div id="sf-welcome-back">
+  <span style="font-size:13px;">👋</span>
+  <span class="wb-msg"></span>
+  <button onclick="document.getElementById('sf-welcome-back').classList.remove('show')"
+    style="margin-left:auto;background:none;border:none;color:rgba(255,255,255,0.6);
+           cursor:pointer;font-size:15px;padding:0 4px;line-height:1;">✕</button>
+</div>
+
 <!-- BOTTOM NAV -->
 <div id="bnav">
   <button class="na" id="prev" onclick="nav(-1)" disabled>←</button>
@@ -1262,7 +1289,13 @@ function go(idx){
   lv.classList.add(d>0?'el':'er');
   en.classList.add(d>0?'nl':'nr');
   en.classList.add('active');
-  setTimeout(()=>{lv.classList.remove('active','el','er');en.classList.remove('nl','nr');cur=idx;anim=false;update();stagger(en);},440);
+  setTimeout(()=>{
+    lv.classList.remove('active','el','er');
+    en.classList.remove('nl','nr');
+    cur=idx;anim=false;update();stagger(en);
+    // Save position so lead can return to this slide
+    try{localStorage.setItem('sfp_'+SF_ITEM_ID, idx);}catch(e){}
+  },440);
 }
 function nav(d){
   // Block forward navigation if current slide's question is unanswered
@@ -1579,7 +1612,10 @@ function sfFormatForMonday(){
 
 function sfSync(){
   // Save to localStorage
-  try{ localStorage.setItem('sfr_'+SF_ITEM_ID, JSON.stringify(sfR)); }catch(e){}
+  try{
+    localStorage.setItem('sfr_'+SF_ITEM_ID, JSON.stringify(sfR));
+    localStorage.setItem('sfp_'+SF_ITEM_ID, cur); // also save current slide
+  }catch(e){}
 
   // Keep email link href current
   sfUpdateEmailLink();
@@ -1601,12 +1637,16 @@ function sfSync(){
   }
 }
 
-// Restore on reload
+// Restore responses and slide position on reload
 try{
-  const saved=localStorage.getItem('sfr_'+SF_ITEM_ID);
-  if(saved){
-    const parsed=JSON.parse(saved);
+  const savedR=localStorage.getItem('sfr_'+SF_ITEM_ID);
+  const savedP=localStorage.getItem('sfp_'+SF_ITEM_ID);
+
+  if(savedR){
+    const parsed=JSON.parse(savedR);
     Object.assign(sfR,parsed);
+
+    // Restore visual state of each answered question block
     Object.keys(sfR).forEach(qIdx=>{
       const parent=document.querySelector(`.sf-ask[data-q="${qIdx}"]`);
       if(!parent)return;
@@ -1629,6 +1669,31 @@ try{
       if(cf)cf.classList.add('show');
     });
     sfBuildSummary();
+  }
+
+  // Restore slide position — jump straight to where they left off
+  const resumeIdx = savedP !== null ? parseInt(savedP) : 0;
+  if(resumeIdx > 0){
+    // Skip animation — just show the right slide directly
+    slides.forEach((s,i)=>{
+      s.classList.toggle('active', i===resumeIdx);
+      s.style.opacity = i===resumeIdx ? '1' : '0';
+      s.style.pointerEvents = i===resumeIdx ? 'all' : 'none';
+    });
+    cur = resumeIdx;
+    update();
+    stagger(slides[resumeIdx]);
+
+    // Show welcome-back banner for 3.5 seconds
+    const wb = document.getElementById('sf-welcome-back');
+    if(wb){
+      const answeredCount = Object.keys(sfR).length;
+      wb.querySelector('.wb-msg').textContent =
+        'Welcome back — picking up from slide '+(resumeIdx+1)+
+        (answeredCount > 0 ? ' · '+answeredCount+' answer'+(answeredCount>1?'s':'')+' saved' : '');
+      wb.classList.add('show');
+      setTimeout(()=>wb.classList.remove('show'), 3500);
+    }
   }
 }catch(e){}
 
