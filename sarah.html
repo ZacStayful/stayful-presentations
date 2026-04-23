@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stayful · Property Review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --green:#5d8156;--gd:#2d4a2d;--gl:#4a6a44;--gc:#e6ebd7;--gp:#f0f4e8;
+  --cream:#faf8f4;--white:#ffffff;--ch:#1c2420;--mid:#4a5e52;--mu:#8a9e92;
+  --bd:rgba(93,129,86,0.15);--am:#c47c1a;--amp:#fdf3e3;
+  --serif:'Cormorant Garamond',Georgia,serif;--sans:'DM Sans',system-ui,sans-serif;
+  --ease:cubic-bezier(0.4,0,0.2,1);
+}
+html,body{width:100%;height:100%;overflow:hidden;font-family:var(--sans);background:var(--cream);}
+
+/* TOPBAR */
+#tb{position:fixed;top:0;left:0;right:0;z-index:200;height:52px;background:rgba(255,255,255,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;padding:0 24px;}
+.tb-logo img{height:24px;width:auto;display:block;}
+.tb-logo-f{font-family:var(--serif);font-size:20px;font-weight:600;color:var(--green);display:none;}
+.tb-menu{display:flex;gap:1px;background:var(--gp);border:1px solid var(--bd);border-radius:10px;padding:3px;}
+.tb-i{font-size:10.5px;color:var(--mu);border:none;background:none;padding:5px 10px;border-radius:7px;cursor:pointer;font-family:var(--sans);transition:all 0.2s;white-space:nowrap;}
+.tb-i:hover{color:var(--green);}
+.tb-i.on{background:var(--green);color:#fff;}
+.tb-r{display:flex;align-items:center;gap:8px;}
+.tb-badge{font-size:11px;color:var(--mu);}
+.btn-e{background:var(--gc);border:1px solid var(--bd);color:var(--gd);border-radius:8px;padding:5px 12px;font-size:11px;font-weight:500;cursor:pointer;font-family:var(--sans);transition:all 0.2s;}
+.btn-e:hover{background:var(--gp);}
+
+/* PROGRESS */
+#prog{position:fixed;top:52px;left:0;right:0;height:2px;z-index:200;background:var(--gp);}
+#pf{height:100%;background:var(--green);transition:width 0.4s var(--ease);}
+
+/* PERSONALISE PANEL */
+#pp{position:fixed;top:54px;left:0;right:0;z-index:190;background:var(--gd);overflow:hidden;max-height:0;transition:max-height 0.35s var(--ease),padding 0.35s;}
+#pp.open{max-height:130px;padding:16px 32px;}
+.pp-r{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;}
+.ppf label{display:block;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:4px;}
+.ppf input{background:rgba(255,255,255,0.09);border:1px solid rgba(255,255,255,0.15);border-radius:7px;padding:7px 10px;font-size:12px;color:#fff;font-family:var(--sans);outline:none;transition:border-color 0.2s;}
+.ppf input:focus{border-color:rgba(230,235,215,0.5);}
+.ppf input::placeholder{color:rgba(255,255,255,0.25);}
+.pp-ok{background:var(--green);color:#fff;border:none;border-radius:7px;padding:8px 16px;font-size:12px;font-weight:500;cursor:pointer;font-family:var(--sans);white-space:nowrap;align-self:flex-end;transition:background 0.2s;}
+.pp-ok:hover{background:var(--gl);}
+
+/* DECK */
+#deck{position:fixed;inset:54px 0 64px;z-index:10;overflow:hidden;}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;opacity:0;pointer-events:none;will-change:transform,opacity;}
+.slide.active{opacity:1;pointer-events:all;}
+.slide.el{animation:el 0.42s var(--ease) forwards;}
+.slide.er{animation:er 0.42s var(--ease) forwards;}
+.slide.nl{animation:nl 0.42s var(--ease) forwards;}
+.slide.nr{animation:nr 0.42s var(--ease) forwards;}
+@keyframes el{to{opacity:0;transform:translateX(-54px);}}
+@keyframes er{to{opacity:0;transform:translateX(54px);}}
+@keyframes nl{from{opacity:0;transform:translateX(-54px);}to{opacity:1;transform:none;}}
+@keyframes nr{from{opacity:0;transform:translateX(54px);}to{opacity:1;transform:none;}}
+
+/* ENTRY ANIMS */
+.fi{opacity:0;transform:translateY(12px);transition:opacity 0.5s var(--ease),transform 0.5s var(--ease);}
+.fi.in{opacity:1;transform:none;}
+
+/* BOTTOM NAV */
+#bnav{position:fixed;bottom:0;left:0;right:0;z-index:200;height:64px;background:rgba(255,255,255,0.96);backdrop-filter:blur(16px);border-top:1px solid var(--bd);display:flex;align-items:center;justify-content:center;gap:20px;}
+.na{width:36px;height:36px;border-radius:50%;background:var(--gp);border:1px solid var(--bd);color:var(--mid);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;transition:all 0.2s;}
+.na:hover:not(:disabled){background:var(--gc);border-color:var(--green);color:var(--green);}
+.na:disabled{opacity:0.25;cursor:default;}
+.dots{display:flex;gap:6px;align-items:center;}
+.dot{cursor:pointer;border-radius:100px;background:var(--gc);border:1px solid var(--bd);transition:all 0.3s var(--ease);width:6px;height:6px;}
+.dot.on{background:var(--green);border-color:var(--green);width:22px;}
+#ctr{font-size:11px;color:var(--mu);letter-spacing:0.1em;min-width:44px;text-align:center;}
+
+/* SLIDE BACKGROUNDS */
+#s0{background:var(--gd);}
+#s1{background:var(--cream);}
+#s2{background:var(--white);}
+#s3{background:var(--gd);}
+#s4{background:var(--cream);}
+#s5{background:var(--white);}
+#s6{background:var(--gd);}
+#s7{background:var(--cream);}
+#s8{background:var(--gd);}
+
+/* LAYOUT */
+.si{max-width:1080px;margin:0 auto;width:100%;padding:32px 56px;position:relative;}
+
+/* TYPOGRAPHY */
+.ey{font-size:10px;letter-spacing:0.24em;text-transform:uppercase;font-weight:500;color:var(--green);display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.ey::before{content:'';display:block;width:18px;height:1px;background:var(--green);}
+.ey.lt{color:var(--gc);}
+.ey.lt::before{background:var(--gc);opacity:0.5;}
+.hl{font-family:var(--serif);font-weight:300;line-height:1.05;color:var(--ch);}
+.hl em{font-style:italic;color:var(--green);}
+.hl.white{color:#fff;}
+.hl.white em{color:var(--gc);}
+.sub{font-size:14px;font-weight:300;color:var(--mid);line-height:1.65;}
+.sub.lt{color:rgba(255,255,255,0.5);}
+
+/* NUMBERS */
+.nl2{font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;font-weight:500;color:var(--mu);margin-bottom:4px;}
+.nl2.lt{color:rgba(255,255,255,0.4);}
+.dn{font-family:var(--serif);font-weight:300;line-height:1;color:var(--green);}
+.dn.white{color:#fff;}
+.dn.gc{color:var(--gc);}
+.ns{font-size:11.5px;color:var(--mu);margin-top:3px;font-weight:300;}
+.ns.lt{color:rgba(255,255,255,0.38);}
+
+/* CARDS */
+.card{background:var(--white);border:1px solid var(--bd);border-radius:16px;padding:20px 22px;transition:all 0.22s var(--ease);}
+.card-p{background:var(--gp);border:1px solid var(--bd);border-radius:16px;padding:20px 22px;transition:all 0.22s var(--ease);}
+.card-dk{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:20px 22px;transition:all 0.22s var(--ease);}
+.card-am{background:var(--amp);border:1px solid rgba(196,124,26,0.2);border-radius:16px;padding:20px 22px;transition:all 0.22s var(--ease);}
+.card-green{background:rgba(93,129,86,0.12);border:1px solid rgba(93,129,86,0.22);border-radius:16px;padding:20px 22px;transition:all 0.22s var(--ease);}
+
+/* GRIDS */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.g6{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:38px;align-items:start;}
+.t60{display:grid;grid-template-columns:1.35fr 1fr;gap:38px;align-items:start;}
+
+/* STRIP */
+.strip{display:flex;border:1px solid var(--bd);border-radius:16px;overflow:hidden;background:var(--white);}
+.sc{flex:1;padding:18px 20px;border-right:1px solid var(--bd);transition:background 0.2s var(--ease);}
+.sc:last-child{border-right:none;}
+.sc.hi{background:var(--gp);}
+.strip-dk{display:flex;border:1px solid rgba(255,255,255,0.1);border-radius:16px;overflow:hidden;background:rgba(255,255,255,0.04);}
+.sc-dk{flex:1;padding:18px 20px;border-right:1px solid rgba(255,255,255,0.08);transition:background 0.2s var(--ease);}
+.sc-dk:last-child{border-right:none;}
+.sc-dk.hi{background:rgba(93,129,86,0.18);}
+
+/* RESP LIST */
+.rl{display:flex;flex-direction:column;gap:6px;}
+.ri{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:9px;transition:all 0.2s var(--ease);}
+.ri.g{background:var(--gc);border:1px solid var(--bd);}
+.ri.n{background:#f5f4f2;border:1px solid rgba(0,0,0,0.05);}
+.ri.dk{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);}
+.rd{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.rd.g{background:var(--green);}
+.rd.n{background:#b0bab5;}
+.rd.w{background:rgba(255,255,255,0.4);}
+.rt{font-size:13px;line-height:1.4;}
+.rt.dk{color:var(--ch);}
+.rt.lt{color:rgba(255,255,255,0.65);}
+.rt.mu{color:var(--mid);}
+.ch2{font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;font-weight:500;margin-bottom:10px;}
+.ch2.g{color:var(--green);}
+.ch2.mu{color:var(--mu);}
+.ch2.lt{color:rgba(255,255,255,0.38);}
+
+/* PROTECTION */
+.pr{display:flex;gap:10px;}
+.pt{flex:1;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:18px 12px;text-align:center;transition:background 0.2s;}
+.pt:hover{background:rgba(255,255,255,0.12);}
+.pi{font-size:22px;display:block;margin-bottom:9px;}
+.pv{font-family:var(--serif);font-size:28px;font-weight:300;color:#fff;line-height:1;margin-bottom:4px;}
+.pl{font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.38);}
+
+/* BAR CHART */
+.cw{background:var(--gp);border:1px solid var(--bd);border-radius:14px;padding:14px 12px 10px;position:relative;}
+.brs{display:flex;align-items:flex-end;gap:5px;height:64px;margin-bottom:4px;}
+.bw{flex:1;display:flex;flex-direction:column;align-items:center;}
+.bar{width:100%;border-radius:3px 3px 0 0;background:var(--green);transition:height 0.9s var(--ease);min-height:3px;}
+.bar.lo{background:#7fa679;}
+.bm{font-size:7.5px;color:var(--mu);text-align:center;margin-top:3px;}
+.lr{position:relative;border-top:2px dashed var(--am);margin:2px 0 4px;}
+.ll{position:absolute;right:0;top:-16px;font-size:8.5px;color:var(--am);white-space:nowrap;font-weight:500;}
+.cn{font-size:9px;color:var(--mu);}
+
+/* CASE STUDIES */
+.cs{background:var(--white);border:1px solid var(--bd);border-radius:13px;padding:12px 12px 10px;display:flex;flex-direction:column;gap:7px;transition:all 0.22s var(--ease);}
+.cs:hover{border-color:var(--green);box-shadow:0 2px 12px rgba(93,129,86,0.1);}
+.cc{font-family:var(--serif);font-size:18px;font-weight:400;color:var(--ch);line-height:1;}
+.cd{font-size:9px;color:var(--mu);}
+.ccp{display:grid;grid-template-columns:1fr 1fr;gap:5px;}
+.ccol{padding:6px 8px;border-radius:6px;}
+.ccol.e{background:var(--gp);}
+.ccol.a{background:var(--gc);}
+.cll{font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--mu);margin-bottom:2px;}
+.cll.g{color:var(--gl);}
+.cln{font-family:var(--serif);font-size:16px;font-weight:300;color:var(--ch);}
+.cln.g{color:var(--green);}
+.cb{background:var(--gc);border:1px solid var(--bd);color:var(--gd);border-radius:7px;padding:5px 9px;font-size:10px;font-weight:500;cursor:pointer;text-decoration:none;font-family:var(--sans);display:flex;align-items:center;justify-content:center;gap:3px;transition:all 0.2s;}
+.cb:hover{background:var(--green);border-color:var(--green);color:#fff;}
+
+/* CHECKLIST */
+.ck{list-style:none;display:flex;flex-direction:column;gap:7px;}
+.ck li{display:flex;align-items:flex-start;gap:9px;font-size:13px;color:var(--mid);font-weight:300;line-height:1.5;}
+.ck li::before{content:'';flex-shrink:0;width:15px;height:15px;margin-top:2px;border-radius:50%;background:var(--gc) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8l3.5 3.5L13 4' stroke='%235d8156' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;}
+.ck.white li{color:rgba(255,255,255,0.65);}
+.ck.white li::before{background:rgba(255,255,255,0.1) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8l3.5 3.5L13 4' stroke='%23e6ebd7' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;}
+
+/* CONTRACT */
+.ctl{display:flex;flex-direction:column;gap:8px;}
+.ct{display:flex;align-items:flex-start;gap:12px;padding:12px 15px;background:var(--gp);border:1px solid var(--bd);border-radius:10px;transition:all 0.2s var(--ease);}
+.ct:hover{border-color:var(--green);}
+.ctk{color:var(--green);flex-shrink:0;margin-top:2px;font-size:14px;}
+.ctt{font-size:13px;color:var(--mid);font-weight:300;line-height:1.55;}
+.ctt strong{color:var(--ch);font-weight:500;}
+
+/* STEPS */
+.steps{display:flex;flex-direction:column;gap:10px;}
+.step{display:flex;align-items:center;gap:14px;background:rgba(230,235,215,0.2);border:1px solid rgba(230,235,215,0.3);border-radius:12px;padding:14px 18px;transition:all 0.22s var(--ease);}
+.step:hover{background:rgba(230,235,215,0.35);}
+.sn{width:28px;height:28px;flex-shrink:0;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:14px;color:var(--green);}
+.st{font-size:13.5px;color:#fff;}
+.st span{color:rgba(255,255,255,0.5);font-weight:300;font-size:12.5px;}
+
+/* PILLS */
+.pill{background:var(--gc);border:1px solid var(--bd);border-radius:100px;padding:8px 18px;font-size:12px;font-weight:500;color:var(--gd);cursor:pointer;text-decoration:none;font-family:var(--sans);transition:all 0.2s;display:inline-flex;align-items:center;gap:6px;}
+.pill:hover{background:var(--green);border-color:var(--green);color:#fff;}
+.pill-dk{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:7px 16px;font-size:12px;font-weight:500;color:rgba(255,255,255,0.7);cursor:pointer;text-decoration:none;font-family:var(--sans);transition:all 0.2s;display:inline-flex;align-items:center;gap:6px;}
+.pill-dk:hover{background:rgba(255,255,255,0.16);color:#fff;}
+
+/* PULL QUOTE */
+.pq{border-left:2px solid var(--green);padding:12px 20px;margin-top:14px;}
+.pq p{font-family:var(--serif);font-size:19px;font-weight:300;font-style:italic;color:var(--ch);line-height:1.5;}
+.pq cite{display:block;margin-top:5px;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--mu);font-style:normal;}
+
+/* CUE */
+.cue{position:fixed;bottom:72px;left:50%;transform:translateX(-50%);font-size:10.5px;color:rgba(93,129,86,0.4);font-style:italic;white-space:nowrap;pointer-events:none;letter-spacing:0.03em;}
+.cue.lt{color:rgba(230,235,215,0.3);}
+
+/* ── UNIVERSAL HOVER SYSTEM ─────────────────────────────── */
+
+/* Nav buttons — stronger highlight */
+.tb-i:hover{color:var(--green);background:var(--gc);}
+
+/* Edit button */
+.btn-e:hover{background:var(--green);color:#fff;border-color:var(--green);}
+
+/* Nav dots */
+.dot:hover{background:rgba(93,129,86,0.55);transform:scale(1.5);}
+.dot.on:hover{background:var(--green);}
+
+/* Nav arrows */
+.na:hover:not(:disabled){background:var(--gc);border-color:var(--green);color:var(--green);transform:scale(1.08);}
+
+/* Pills */
+.pill:hover{background:var(--green);border-color:var(--green);color:#fff;transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.25);}
+.pill-dk:hover{background:rgba(255,255,255,0.18);color:#fff;transform:translateY(-1px);}
+
+/* Case study open buttons */
+.cb:hover{background:var(--green);border-color:var(--green);color:#fff;transform:translateY(-1px);}
+
+/* Case study cards */
+.cs:hover{border-color:var(--green);box-shadow:0 4px 18px rgba(93,129,86,0.13);transform:translateY(-2px);}
+
+/* Guest type cards */
+.guest-card:hover{border-color:var(--green);box-shadow:0 6px 24px rgba(93,129,86,0.14);transform:translateY(-2px);}
+.guest-driver:hover{background:var(--gc);color:var(--gd);}
+
+/* Protection stats */
+.pt:hover{background:rgba(255,255,255,0.16);transform:translateY(-2px);}
+
+/* Contract items */
+.ct:hover{border-color:var(--green);background:var(--gc);}
+
+/* Steps */
+.step:hover{background:rgba(230,235,215,0.32);transform:translateX(3px);}
+
+/* Resp list items */
+.ri.g:hover{background:#d8e4c8;border-color:rgba(93,129,86,0.3);}
+.ri.n:hover{background:#eeecea;border-color:rgba(0,0,0,0.1);}
+.ri.dk:hover{background:rgba(255,255,255,0.1);}
+
+/* Strip / stat bar cells */
+.sc:hover{background:rgba(93,129,86,0.08);}
+.sc.hi:hover{background:#e8f0da;}
+.sc-dk:hover{background:rgba(93,129,86,0.25);}
+.sb-cell:hover{background:rgba(93,129,86,0.07);}
+
+/* Cards — subtle glow on hover */
+.card:hover{border-color:rgba(93,129,86,0.3);box-shadow:0 2px 12px rgba(93,129,86,0.08);}
+.card-p:hover{border-color:rgba(93,129,86,0.28);box-shadow:0 2px 12px rgba(93,129,86,0.09);}
+.card-dk:hover{border-color:rgba(255,255,255,0.18);}
+.card-am:hover{border-color:rgba(196,124,26,0.35);}
+.card-green:hover{border-color:rgba(93,129,86,0.4);}
+.mtg-banner:hover{filter:brightness(1.03);}
+
+/* Timeline steps */
+.tl-step:hover .tl-body .tl-title{color:var(--green);}
+.tl-step:hover{cursor:default;}
+
+/* Demo links */
+.demo-link:hover{background:rgba(93,129,86,0.25);border-color:rgba(93,129,86,0.5);color:#fff;}
+
+/* BAR CHART hover — bars scale up on hover */
+.bar:hover{filter:brightness(1.25);cursor:crosshair;}
+.bw:hover .bm{color:var(--green);font-weight:500;}
+
+/* BAR TOOLTIP */
+#bar-tip{
+  position:absolute;
+  background:var(--gd);
+  color:#fff;
+  padding:6px 10px;
+  border-radius:8px;
+  font-size:11.5px;
+  font-weight:500;
+  font-family:var(--sans);
+  pointer-events:none;
+  white-space:nowrap;
+  opacity:0;
+  transform:translateY(4px);
+  transition:opacity 0.15s ease,transform 0.15s ease;
+  z-index:500;
+  box-shadow:0 4px 14px rgba(0,0,0,0.2);
+}
+#bar-tip::after{
+  content:'';
+  position:absolute;
+  bottom:-5px;
+  left:50%;
+  transform:translateX(-50%);
+  border:5px solid transparent;
+  border-bottom:none;
+  border-top-color:var(--gd);
+}
+#bar-tip.show{opacity:1;transform:translateY(0);}
+#bar-tip .tip-val{color:var(--gc);font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:300;}
+#bar-tip .tip-vs{font-size:10px;opacity:0.6;margin-top:2px;}
+
+/* GUEST TYPE CARDS */
+.guest-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.guest-card{background:var(--white);border:1px solid var(--bd);border-radius:16px;padding:24px 22px;transition:all 0.22s var(--ease);}
+.guest-card:hover{border-color:var(--green);box-shadow:0 2px 16px rgba(93,129,86,0.1);}
+.guest-icon{font-size:32px;margin-bottom:12px;display:block;}
+.guest-type{font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;font-weight:500;color:var(--green);margin-bottom:6px;}
+.guest-title{font-family:var(--serif);font-size:22px;font-weight:400;color:var(--ch);margin-bottom:8px;line-height:1.15;}
+.guest-desc{font-size:12.5px;color:var(--mid);font-weight:300;line-height:1.65;margin-bottom:12px;}
+.guest-driver{font-size:11px;color:var(--mu);padding:6px 10px;background:var(--gp);border-radius:7px;display:inline-flex;align-items:center;gap:5px;}
+.guest-driver strong{color:var(--green);font-weight:500;}
+
+/* BOOKING TIMELINE */
+.timeline-steps{display:flex;flex-direction:column;gap:0;position:relative;}
+.timeline-steps::before{content:'';position:absolute;left:19px;top:24px;bottom:24px;width:1px;background:var(--bd);}
+.tl-step{display:flex;gap:18px;align-items:flex-start;padding:12px 0;}
+.tl-dot{width:38px;height:38px;flex-shrink:0;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:16px;color:#fff;position:relative;z-index:1;}
+.tl-dot.outline{background:var(--white);border:2px solid var(--bd);color:var(--mu);}
+.tl-body{padding-top:6px;}
+.tl-title{font-size:14px;font-weight:500;color:var(--ch);margin-bottom:2px;}
+.tl-desc{font-size:12px;font-weight:300;color:var(--mid);line-height:1.5;}
+.tl-tag{font-size:9px;letter-spacing:0.12em;text-transform:uppercase;font-weight:500;color:var(--green);margin-top:3px;}
+
+/* MORTGAGE COVERAGE */
+.mtg-banner{
+  border-radius:16px;padding:20px 22px;margin-bottom:12px;
+  display:flex;align-items:center;gap:20px;
+}
+.mtg-banner.covers{background:rgba(93,129,86,0.1);border:1px solid rgba(93,129,86,0.22);}
+.mtg-banner.shortfall{background:var(--amp);border:1px solid rgba(196,124,26,0.2);}
+.mtg-icon{font-size:24px;flex-shrink:0;}
+.mtg-body{flex:1;}
+.mtg-lbl{font-size:9px;letter-spacing:0.14em;text-transform:uppercase;font-weight:500;margin-bottom:4px;}
+.mtg-lbl.g{color:var(--green);}
+.mtg-lbl.am{color:var(--am);}
+.mtg-num{font-family:var(--serif);font-size:28px;font-weight:300;line-height:1;}
+.mtg-num.g{color:var(--green);}
+.mtg-num.am{color:var(--am);}
+.mtg-sub{font-size:11.5px;color:var(--mid);margin-top:3px;font-weight:300;}
+
+/* STAT BAR */
+.stat-bar{display:flex;gap:0;border:1px solid var(--bd);border-radius:12px;overflow:hidden;background:var(--white);margin-bottom:12px;}
+.sb-cell{flex:1;padding:14px 16px;border-right:1px solid var(--bd);text-align:center;transition:background 0.2s var(--ease);}
+.sb-cell:last-child{border-right:none;}
+.sb-num{font-family:var(--serif);font-size:30px;font-weight:300;color:var(--green);line-height:1;}
+.sb-lbl{font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--mu);margin-top:3px;font-weight:500;}
+
+/* BOOKING PROB */
+.prob-bar{height:8px;border-radius:100px;background:var(--gp);overflow:hidden;margin:8px 0;}
+.prob-fill{height:100%;border-radius:100px;background:var(--green);}
+
+/* ── GLOBAL HOVER UPGRADES ──────────────────────────────────── */
+/* Nav menu buttons */
+.tb-i:hover{color:var(--green);background:var(--gp);}
+.tb-i.on:hover{background:var(--gl);}
+
+/* Edit button */
+.btn-e:hover{background:var(--gp);border-color:var(--green);color:var(--green);transform:translateY(-1px);box-shadow:0 2px 8px rgba(93,129,86,0.15);}
+
+/* Bottom nav arrows */
+.na:hover:not(:disabled){background:var(--gc);border-color:var(--green);color:var(--green);transform:scale(1.1);box-shadow:0 2px 10px rgba(93,129,86,0.2);}
+
+/* Dot indicators */
+.dot:hover{background:var(--gl);transform:scale(1.4);}
+.dot.on:hover{background:var(--gl);}
+
+/* Pill buttons */
+.pill:hover{background:var(--green);border-color:var(--green);color:#fff;transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.25);}
+.pill-dk:hover{background:rgba(255,255,255,0.16);color:#fff;transform:translateY(-1px);}
+
+/* Case study cards */
+.cs:hover{border-color:var(--green);box-shadow:0 4px 20px rgba(93,129,86,0.12);transform:translateY(-2px);}
+.cb:hover{background:var(--green);border-color:var(--green);color:#fff;transform:translateY(-1px);}
+
+/* Contract items */
+.ct:hover{border-color:var(--green);background:var(--gc);transform:translateX(3px);}
+
+/* Steps */
+.step:hover{background:rgba(230,235,215,0.35);transform:translateX(3px);box-shadow:0 2px 12px rgba(93,129,86,0.1);}
+
+/* Guest cards */
+.guest-card:hover{border-color:var(--green);box-shadow:0 6px 24px rgba(93,129,86,0.13);transform:translateY(-3px);}
+
+/* Protection stat cards */
+.pt:hover{background:rgba(255,255,255,0.14);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,0.15);}
+
+/* Stat bar cells */
+.sb-cell:hover{background:var(--gp);}
+
+/* All card types — subtle lift */
+.card:hover,.card-p:hover,.card-dk:hover,.card-am:hover,.card-green:hover{
+  box-shadow:0 4px 16px rgba(93,129,86,0.1);
+  transform:translateY(-1px);
+  transition:all 0.2s var(--ease);
+}
+.card,.card-p,.card-dk,.card-am,.card-green{transition:all 0.2s var(--ease);}
+
+/* Checklist items hover */
+.ck li:hover{color:var(--ch);}
+.ck.white li:hover{color:#fff;}
+
+/* Demo/live links in proof slide */
+a.pill:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.25);}
+
+/* Apply button */
+.pp-ok:hover{background:var(--gl);transform:translateY(-1px);box-shadow:0 2px 8px rgba(93,129,86,0.3);}
+
+/* Timeline steps hover */
+.tl-step:hover .tl-dot{transform:scale(1.1);}
+.tl-dot{transition:transform 0.2s var(--ease);}
+
+/* ── BAR CHART TOOLTIP ─────────────────────────────────────── */
+.bar-wrap-hover{position:relative;flex:1;display:flex;flex-direction:column;align-items:center;cursor:pointer;}
+.bar-tip{
+  position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%) scale(0.85);
+  background:var(--gd);color:#fff;font-size:11px;font-weight:500;font-family:var(--sans);
+  padding:5px 9px;border-radius:7px;white-space:nowrap;pointer-events:none;
+  opacity:0;transition:opacity 0.15s,transform 0.15s;z-index:50;
+  box-shadow:0 4px 12px rgba(0,0,0,0.2);
+}
+.bar-tip::after{
+  content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);
+  border:4px solid transparent;border-top-color:var(--gd);
+}
+.bar-wrap-hover:hover .bar-tip{opacity:1;transform:translateX(-50%) scale(1);}
+.bar-wrap-hover:hover .bar{filter:brightness(1.15);box-shadow:0 2px 8px rgba(93,129,86,0.35);}
+.bar-wrap-hover .bar{transition:filter 0.15s,box-shadow 0.15s,height 0.9s var(--ease);}
+
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div id="tb">
+  <div class="tb-logo">
+    <img src="https://images.squarespace-cdn.com/content/v1/64946e7680c92451dce86167/b6f59d1c-fee6-4f55-948b-3c05b6e18a3b/Stayful_Dark_Green.png?format=300w" alt="Stayful" onerror="this.style.display='none';document.querySelector('.tb-logo-f').style.display='block'">
+    <span class="tb-logo-f">Stayful</span>
+  </div>
+  <div class="tb-menu">
+    <button class="tb-i on"  onclick="go(0)">Property</button>
+    <button class="tb-i"     onclick="go(1)">Who books?</button>
+    <button class="tb-i"     onclick="go(2)">Income</button>
+    <button class="tb-i"     onclick="go(3)">Management</button>
+    <button class="tb-i"     onclick="go(4)">Protection</button>
+    <button class="tb-i"     onclick="go(5)">Proof</button>
+    <button class="tb-i"     onclick="go(6)">First booking</button>
+    <button class="tb-i"     onclick="go(7)">Agreement</button>
+    <button class="tb-i"     onclick="go(8)">Next steps</button>
+  </div>
+  <div class="tb-r">
+    <span class="tb-badge" id="tb-b">Sarah · Station Road, Tempsford</span>
+    <button class="btn-e" onclick="togglePP()">✏ Edit</button>
+  </div>
+</div>
+<div id="prog"><div id="pf"></div></div>
+
+<!-- PERSONALISE PANEL -->
+<div id="pp">
+  <div class="pp-r">
+    <div class="ppf"><label>Name</label><input id="p-n" value="Sarah" style="width:90px"></div>
+    <div class="ppf"><label>Address</label><input id="p-a" value="Station Road, Tempsford SG19" style="width:210px"></div>
+    <div class="ppf"><label>Monthly rev (£)</label><input id="p-r" type="number" value="3745" style="width:88px"></div>
+    <div class="ppf"><label>Occupancy (%)</label><input id="p-o" type="number" value="60" style="width:72px"></div>
+    <div class="ppf"><label>Nightly (£)</label><input id="p-d" type="number" value="205" style="width:72px"></div>
+    <div class="ppf"><label>LTL net/mo (£)</label><input id="p-l" type="number" value="1190" style="width:82px"></div>
+    <div class="ppf"><label>Mortgage/mo (£)</label><input id="p-m" type="number" value="1300" style="width:88px"></div>
+    <button class="pp-ok" onclick="applyPP()">Apply →</button>
+  </div>
+</div>
+
+<!-- DECK -->
+<div id="deck">
+
+<!-- ── S0: COVER (dark) ──────────────────────────────────── -->
+<div class="slide active" id="s0">
+  <div class="si" style="padding-left:72px;">
+    <div style="position:absolute;left:56px;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,rgba(230,235,215,0.3) 20%,rgba(230,235,215,0.3) 80%,transparent);pointer-events:none;"></div>
+    <!-- GAP 1: Stayful = Airbnb management company -->
+    <div class="ey lt fi" style="margin-bottom:8px;">Stayful · Airbnb Management Company</div>
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:100px;padding:5px 14px 5px 10px;margin-bottom:24px;" class="fi">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Airbnb_Logo_B%C3%A9lo.svg/120px-Airbnb_Logo_B%C3%A9lo.svg.png" alt="Airbnb" style="height:14px;filter:brightness(0) invert(1);opacity:0.5;">
+      <span style="font-size:10.5px;color:rgba(255,255,255,0.4);">Listed on Airbnb · Booking.com · Managed by Stayful</span>
+    </div>
+    <div class="hl white fi" style="font-size:clamp(42px,5.5vw,68px);margin-bottom:6px;"><span id="s0n">Sarah</span>'s<br>property <em>review.</em></div>
+    <div class="fi" style="font-size:14px;font-weight:300;color:rgba(255,255,255,0.4);margin-bottom:34px;" id="s0a">Station Road, Tempsford, Sandy SG19</div>
+    <div class="strip-dk fi" style="max-width:560px;margin-bottom:20px;">
+      <div class="sc-dk hi"><div class="nl2 lt">Est. monthly revenue</div><div class="dn gc" style="font-size:44px;" id="s0r">£3,745</div></div>
+      <div class="sc-dk hi"><div class="nl2 lt">Monthly vs long-let</div><div class="dn gc" style="font-size:44px;" id="s0u">+£757</div></div>
+      <div class="sc-dk"><div class="nl2 lt">Risk score</div><div class="dn white" style="font-size:44px;">3<span style="font-size:18px;color:rgba(255,255,255,0.3);"> /100</span></div><div class="ns lt">Low risk</div></div>
+    </div>
+    <div class="fi" style="display:flex;gap:8px;flex-wrap:wrap;">
+      <div style="padding:6px 14px;background:rgba(230,235,215,0.12);border:1px solid rgba(230,235,215,0.18);border-radius:100px;font-size:11px;color:var(--gc);">12 comparable properties</div>
+      <div style="padding:6px 14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:11px;color:rgba(255,255,255,0.4);">Airbtics · AirDNA · Live Airbnb</div>
+    </div>
+    <div class="fi" style="position:absolute;right:56px;top:50%;transform:translateY(-50%);text-align:right;">
+      <div style="margin-bottom:18px;"><div class="nl2 lt">Nightly rate</div><div class="dn gc" style="font-size:34px;" id="s0d">£205</div></div>
+      <div style="height:1px;background:rgba(255,255,255,0.1);margin:14px 0;"></div>
+      <div><div class="nl2 lt">Occupancy</div><div class="dn gc" style="font-size:34px;" id="s0o">60%</div></div>
+    </div>
+  </div>
+  <div class="cue lt">Ask: "Before we go through the numbers — what's your main concern about making this change?"</div>
+</div>
+
+<!-- ── S1: WHO BOOKS? (cream) ────────────────────────────── -->
+<div class="slide" id="s1">
+  <div class="si">
+    <div class="ey fi">Demand intelligence</div>
+    <div class="hl fi" style="font-size:clamp(28px,3.6vw,46px);margin-bottom:8px;">Who actually <em>stays</em><br>at your property.</div>
+    <div class="sub fi" style="margin-bottom:22px;">Demand for your area comes from three consistent sources — not just tourism. These guests book year-round and specifically need properties in your location.</div>
+    <div class="guest-grid fi">
+      <div class="guest-card">
+        <span class="guest-icon">🏥</span>
+        <div class="guest-type">Healthcare workers</div>
+        <div class="guest-title">NHS staff on rotations &amp; placements</div>
+        <div class="guest-desc">Consultants, nurses, and specialists covering shifts at Bedford Hospital stay for days or weeks at a time. They book far in advance and tend to rebook the same properties.</div>
+        <div class="guest-driver">📍 <strong>Bedford Hospital</strong> · 13.2km · High demand</div>
+      </div>
+      <div class="guest-card">
+        <span class="guest-icon">✈️</span>
+        <div class="guest-type">Business &amp; academic visitors</div>
+        <div class="guest-title">Contractors, researchers &amp; industry professionals</div>
+        <div class="guest-desc">Cranfield University and Airport generate a steady flow of visiting academics, aerospace professionals, and business travellers who need nearby accommodation for multi-day visits.</div>
+        <div class="guest-driver">📍 <strong>Cranfield Airport</strong> · 25.7km · High demand</div>
+      </div>
+      <div class="guest-card">
+        <span class="guest-icon">🎪</span>
+        <div class="guest-type">Events visitors</div>
+        <div class="guest-title">Motorsport, automotive &amp; festival attendees</div>
+        <div class="guest-desc">With 224 local events throughout the year — including Caffeine &amp; Machine — weekend bookings are driven by a rotating calendar of automotive events, motorsport, and attractions.</div>
+        <div class="guest-driver">📍 <strong>224 local events</strong> · Year-round · High demand</div>
+      </div>
+    </div>
+    <div class="fi" style="margin-top:14px;padding:12px 18px;background:var(--gp);border:1px solid var(--bd);border-radius:12px;display:flex;gap:16px;align-items:center;">
+      <span style="font-size:18px;">💡</span>
+      <div style="font-size:12.5px;color:var(--mid);font-weight:300;line-height:1.6;"><strong style="color:var(--ch);font-weight:500;">These aren't tourist guests.</strong> Worker guests and repeat business visitors tend to be lower-risk, lower-maintenance, and more predictable in their booking patterns than leisure travellers.</div>
+    </div>
+  </div>
+  <div class="cue">Ask: "Which of those guest types do you think would suit your property best?"</div>
+</div>
+
+<!-- ── S2: INCOME (white) ────────────────────────────────── -->
+<div class="slide" id="s2">
+  <div class="si">
+    <div class="ey fi">Your numbers</div>
+    <div class="hl fi" style="font-size:clamp(26px,3.4vw,42px);margin-bottom:18px;">Your income.<br>Your mortgage.<br><em>Here's how it stacks up.</em></div>
+    <div class="two fi" style="gap:28px;">
+      <div style="display:flex;flex-direction:column;gap:10px;">
+
+        <!-- GAP 2: Mortgage coverage — primary metric -->
+        <div id="mtg-covers" class="mtg-banner covers">
+          <span class="mtg-icon">🏠</span>
+          <div class="mtg-body">
+            <div class="mtg-lbl g">Short-let covers your mortgage</div>
+            <div class="mtg-num g" id="mtg-surplus">+£647 / month</div>
+            <div class="mtg-sub" id="mtg-sub-text">STL net £1,947 − mortgage £1,300 = £647 surplus every month</div>
+          </div>
+        </div>
+
+        <!-- STL vs LTL comparison -->
+        <div class="strip">
+          <div class="sc hi">
+            <div class="nl2">STL net / month</div>
+            <div class="dn" style="font-size:42px;" id="s2s">£1,947</div>
+            <!-- GAP 3: Cleaning note -->
+            <div class="ns">After management &amp; platform fees</div>
+            <div style="font-size:10.5px;color:var(--green);margin-top:4px;font-style:italic;">Cleaning is charged to guests — not deducted from you</div>
+          </div>
+          <div class="sc">
+            <div class="nl2">Long-let net / month</div>
+            <div class="dn" style="font-size:42px;color:var(--mu);" id="s2l">£1,190</div>
+            <div class="ns">After letting agent 10%</div>
+            <div id="ltl-mtg-note" style="font-size:10.5px;color:var(--am);margin-top:4px;font-style:italic;">Doesn't cover your £1,300 mortgage</div>
+          </div>
+        </div>
+
+        <!-- Bar chart -->
+        <div class="cw">
+          <div style="font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--mu);margin-bottom:8px;">12-month net — every bar above long-let line</div>
+          <div class="brs" id="bars"></div>
+          <div style="display:flex;gap:5px;" id="bnames"></div>
+          <div class="lr" id="lref"><span class="ll" id="lrefl">LTL £1,190</span></div>
+          <div class="cn">Lighter = quietest month · dashed = long-term alternative</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="card-p">
+          <div class="nl2">Your quietest month</div>
+          <div class="dn" style="font-size:40px;" id="s2f">£1,488</div>
+          <div style="font-size:12px;color:var(--mid);margin-top:5px;font-weight:300;" id="s2fs">Still +£298 above long-term — in your worst month.</div>
+        </div>
+        <div class="card">
+          <div class="nl2">Setup break-even</div>
+          <div style="font-family:var(--serif);font-size:40px;font-weight:300;color:var(--ch);line-height:1;">5 <span style="font-size:17px;color:var(--mu);font-weight:300;">months</span></div>
+          <div style="font-size:11.5px;color:var(--mu);margin-top:3px;font-weight:300;">£3,810 setup ÷ £757/mo uplift</div>
+        </div>
+        <div class="card-am">
+          <div style="font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--am);margin-bottom:4px;font-weight:500;">By year 3</div>
+          <div style="font-family:var(--serif);font-size:32px;font-weight:300;color:var(--am);">+£234<span style="font-size:13px;color:rgba(196,124,26,0.5);"> / month extra</span></div>
+          <div style="font-size:11px;color:rgba(196,124,26,0.6);margin-top:2px;font-weight:300;">As direct bookings cut platform fees</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="cue">Ask: "Does knowing it covers your mortgage every month — even in the quietest month — change how you see the risk?"</div>
+</div>
+
+<!-- ── S3: MANAGEMENT (dark) ─────────────────────────────── -->
+<div class="slide" id="s3">
+  <div class="si">
+    <div class="ey lt fi">Day to day</div>
+    <div class="hl white fi" style="font-size:clamp(28px,3.6vw,48px);margin-bottom:22px;">You hand over the operation.<br><em>You keep the ownership.</em></div>
+    <div class="two fi">
+      <div>
+        <div class="ch2 lt" style="color:var(--gc);">Stayful handles all of this</div>
+        <div class="rl">
+          <div class="ri dk"><div class="rd w"></div><div class="rt lt">Guest communication — 24/7, every message</div></div>
+          <div class="ri dk"><div class="rd w"></div><div class="rt lt">Cleaning and linen after every stay</div></div>
+          <div class="ri dk"><div class="rd w"></div><div class="rt lt">Dynamic pricing — reviewed and updated daily</div></div>
+          <div class="ri dk"><div class="rd w"></div><div class="rt lt">Key management and guest check-in</div></div>
+          <div class="ri dk"><div class="rd w"></div><div class="rt lt">Listing optimisation across all platforms</div></div>
+          <div class="ri dk"><div class="rd w"></div><div class="rt lt">Maintenance — urgent repairs up to £300 without calling you</div></div>
+          <div class="ri dk"><div class="rd w"></div><div class="rt lt">Monthly reports · payout within 3 working days</div></div>
+        </div>
+      </div>
+      <div>
+        <div class="ch2 lt">What stays with you</div>
+        <div class="rl" style="margin-bottom:14px;">
+          <div class="ri dk" style="opacity:0.7;"><div class="rd" style="background:rgba(255,255,255,0.3);"></div><div class="rt lt">Mortgage</div></div>
+          <div class="ri dk" style="opacity:0.7;"><div class="rd" style="background:rgba(255,255,255,0.3);"></div><div class="rt lt">Short-let building &amp; liability insurance</div></div>
+          <div class="ri dk" style="opacity:0.7;"><div class="rd" style="background:rgba(255,255,255,0.3);"></div><div class="rt lt">Gas &amp; electrical safety certificates (annual)</div></div>
+          <div class="ri dk" style="opacity:0.7;"><div class="rd" style="background:rgba(255,255,255,0.3);"></div><div class="rt lt">Utilities in your name · WiFi active</div></div>
+        </div>
+        <div style="padding:14px 16px;background:rgba(196,124,26,0.12);border:1px solid rgba(196,124,26,0.2);border-radius:12px;margin-bottom:12px;">
+          <div style="font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--am);margin-bottom:3px;font-weight:500;">Before we go live</div>
+          <div style="font-size:12px;color:rgba(212,168,71,0.65);font-weight:300;line-height:1.6;">Gas cert, electrical cert, insurance confirmation — 10 minutes for most landlords.</div>
+        </div>
+        <div style="padding:14px 16px;background:rgba(230,235,215,0.1);border:1px solid rgba(230,235,215,0.15);border-radius:12px;">
+          <div style="font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gc);margin-bottom:3px;">Fee</div>
+          <div style="font-family:var(--serif);font-size:22px;font-weight:300;color:#fff;">15% + VAT <span style="font-size:13px;color:rgba(255,255,255,0.35);">+ £42/mo software</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="cue lt">Ask: "Is there anything on the Stayful list you'd want to stay more involved with?"</div>
+</div>
+
+<!-- ── S4: PROTECTION (cream) ────────────────────────────── -->
+<div class="slide" id="s4">
+  <div class="si">
+    <div class="ey fi">Guest screening</div>
+    <div class="hl fi" style="font-size:clamp(28px,3.6vw,48px);margin-bottom:22px;">We treat your property<br>like it's <em>ours.</em></div>
+    <div class="stat-bar fi">
+      <div class="sb-cell"><div class="sb-num">£100k</div><div class="sb-lbl">Insurance / stay</div></div>
+      <div class="sb-cell"><div class="sb-num">100%</div><div class="sb-lbl">Guests ID verified</div></div>
+      <div class="sb-cell"><div class="sb-num">£200</div><div class="sb-lbl">Security deposit</div></div>
+      <div class="sb-cell"><div class="sb-num">Quarterly</div><div class="sb-lbl">Inspections</div></div>
+      <div class="sb-cell"><div class="sb-num">30%</div><div class="sb-lbl">Returning guests</div></div>
+    </div>
+    <div class="g2 fi">
+      <div class="card-p">
+        <div class="ch2 g">How we screen every guest</div>
+        <ul class="ck"><li>Government ID verified before booking confirmed</li><li>Profile history and review record checked</li><li>Purpose of stay confirmed for new guests</li><li>Local bookings flagged for additional review</li></ul>
+      </div>
+      <div class="card-p">
+        <div class="ch2 g">If something goes wrong</div>
+        <ul class="ck"><li>Damage documented and reported within 24 hours</li><li>Claim submitted via Airbnb AirCover or insurance</li><li>Contractor arranged and managed by us</li><li>You're kept informed at every step</li></ul>
+      </div>
+    </div>
+  </div>
+  <div class="cue">Ask: "What's your biggest worry about having guests — damage, wrong type of guest, or something else?"</div>
+</div>
+
+<!-- ── S5: PROOF (white) ─────────────────────────────────── -->
+<div class="slide" id="s5">
+  <div class="si">
+    <div class="ey fi">Estimate vs actual · 2025</div>
+    <div class="hl fi" style="font-size:clamp(24px,3.2vw,40px);margin-bottom:6px;">We told landlords what to expect.<br><em>Here's what actually happened.</em></div>
+    <div class="sub fi" style="margin-bottom:12px;">Live Uplisting data Jan–Dec 2025. Click any city to open the full case study.</div>
+    <div class="g6 fi">
+      <div class="cs"><div><div class="cc">Manchester</div><div class="cd">3 bed · 235 nights · 64% occ</div></div><div class="ccp"><div class="ccol e"><div class="cll">Estimated</div><div class="cln">£5,844/mo</div></div><div class="ccol a"><div class="cll g">Actual net</div><div class="cln g">£3,410</div></div></div><a href="#" class="cb" data-city="manchester">📄 Case study</a></div>
+      <div class="cs"><div><div class="cc">Newcastle</div><div class="cd">4 bed · 270 nights · 74% occ</div></div><div class="ccp"><div class="ccol e"><div class="cll">Estimated</div><div class="cln">£5,320/mo</div></div><div class="ccol a"><div class="cll g">Actual net</div><div class="cln g">£3,101</div></div></div><a href="#" class="cb" data-city="newcastle">📄 Case study</a></div>
+      <div class="cs"><div><div class="cc">London</div><div class="cd">3 bed · 260 nights · 71% occ</div></div><div class="ccp"><div class="ccol e"><div class="cll">Estimated</div><div class="cln">£7,842/mo</div></div><div class="ccol a"><div class="cll g">Actual net</div><div class="cln g">£4,547</div></div></div><a href="#" class="cb" data-city="london">📄 Case study</a></div>
+      <div class="cs"><div><div class="cc">Bristol</div><div class="cd">5 bed · 166 nights · 45% occ</div></div><div class="ccp"><div class="ccol e"><div class="cll">Estimated</div><div class="cln">£7,764/mo</div></div><div class="ccol a"><div class="cll g">Actual net</div><div class="cln g">£4,499</div></div></div><a href="#" class="cb" data-city="bristol">📄 Case study</a></div>
+      <div class="cs"><div><div class="cc">Liverpool</div><div class="cd">5 bed · 222 nights · 61% occ</div></div><div class="ccp"><div class="ccol e"><div class="cll">Estimated</div><div class="cln">£3,999/mo</div></div><div class="ccol a"><div class="cll g">Actual net</div><div class="cln g">£2,323</div></div></div><a href="#" class="cb" data-city="liverpool">📄 Case study</a></div>
+      <div class="cs"><div><div class="cc">Derby</div><div class="cd">3 bed · 263 nights · 72% occ</div></div><div class="ccp"><div class="ccol e"><div class="cll">Estimated</div><div class="cln">£3,104/mo</div></div><div class="ccol a"><div class="cll g">Actual net</div><div class="cln g">£1,804</div></div></div><a href="#" class="cb" data-city="derby">📄 Case study</a></div>
+    </div>
+    <div class="fi" style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
+      <a class="pill" href="https://drive.google.com/file/d/1OMLH73P0I4UdsoK8g7kMUDX9u4s46jF2/view" target="_blank">📊 Monthly report</a>
+      <a class="pill" href="https://app.slack.com/client/T061GPD7ZB8/C09LDM5GY86" target="_blank">💬 Live Slack channel</a>
+      <a class="pill" href="https://app.uplisting.io/calendar/" target="_blank">🗓 Owner calendar</a>
+    </div>
+  </div>
+  <div class="cue">Ask: "Want to see what a similar property earns, or what you'd actually see as a Stayful customer?"</div>
+</div>
+
+<!-- ── S6: FIRST BOOKING (dark) ──────────────────────────── -->
+<div class="slide" id="s6">
+  <div class="si">
+    <div class="ey lt fi">Going live</div>
+    <div class="hl white fi" style="font-size:clamp(28px,3.6vw,48px);margin-bottom:20px;">Your first booking<br>arrives <em>sooner than you think.</em></div>
+    <div class="two fi" style="align-items:start;">
+      <div>
+        <!-- 80% stat -->
+        <div style="background:rgba(230,235,215,0.1);border:1px solid rgba(230,235,215,0.15);border-radius:16px;padding:24px;margin-bottom:12px;">
+          <div class="nl2 lt" style="margin-bottom:8px;">Probability of first booking</div>
+          <div style="font-family:var(--serif);font-size:58px;font-weight:300;color:var(--gc);line-height:1;">80%</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.5);margin-top:4px;font-weight:300;">within 24–72 hours of going live</div>
+          <div class="prob-bar" style="margin-top:12px;"><div class="prob-fill" style="width:80%;"></div></div>
+          <div style="display:flex;justify-content:space-between;font-size:9px;color:rgba(255,255,255,0.25);margin-top:4px;"><span>Day 1</span><span>Week 1</span><span>Month 1</span></div>
+        </div>
+        <div class="strip-dk">
+          <div class="sc-dk">
+            <div class="nl2 lt">Avg booking lead time</div>
+            <div class="dn gc" style="font-size:32px;">30–45</div>
+            <div class="ns lt">days in advance</div>
+          </div>
+          <div class="sc-dk">
+            <div class="nl2 lt">New listing boost</div>
+            <div class="dn gc" style="font-size:32px;">↑</div>
+            <div class="ns lt">Airbnb algorithm priority</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:14px;font-weight:500;">From signature to first guest</div>
+        <div class="timeline-steps" style="--bd:rgba(255,255,255,0.1);">
+          <div class="tl-step">
+            <div class="tl-dot" style="background:var(--green);">1</div>
+            <div class="tl-body">
+              <div class="tl-title" style="color:#fff;">Sign management agreement</div>
+              <div class="tl-desc" style="color:rgba(255,255,255,0.5);">We send it by email. Signed digitally, takes minutes.</div>
+              <div class="tl-tag" style="color:var(--gc);">Day 1</div>
+            </div>
+          </div>
+          <div class="tl-step">
+            <div class="tl-dot" style="background:var(--green);">2</div>
+            <div class="tl-body">
+              <div class="tl-title" style="color:#fff;">Kick-off call &amp; setup</div>
+              <div class="tl-desc" style="color:rgba(255,255,255,0.5);">Photography, staging, listing prep. Your Slack channel is created.</div>
+              <div class="tl-tag" style="color:var(--gc);">Week 1–2</div>
+            </div>
+          </div>
+          <div class="tl-step">
+            <div class="tl-dot" style="background:var(--green);">3</div>
+            <div class="tl-body">
+              <div class="tl-title" style="color:#fff;">Listed live on Airbnb &amp; Booking.com</div>
+              <div class="tl-desc" style="color:rgba(255,255,255,0.5);">New listings receive a platform algorithm boost — more visibility from day one.</div>
+              <div class="tl-tag" style="color:var(--gc);">Week 3</div>
+            </div>
+          </div>
+          <div class="tl-step">
+            <div class="tl-dot" style="background:rgba(230,235,215,0.25);border:1px solid rgba(230,235,215,0.2);">★</div>
+            <div class="tl-body">
+              <div class="tl-title" style="color:var(--gc);font-family:var(--serif);font-size:18px;font-weight:300;font-style:italic;">First booking arrives</div>
+              <div class="tl-desc" style="color:rgba(255,255,255,0.5);">80% of new Stayful properties receive their first booking within 24–72 hours of going live. Rarely more than 5–6 days.</div>
+              <div class="tl-tag" style="color:var(--gc);">Within 72hrs of going live</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="cue lt">Ask: "Does knowing the first booking typically arrives within 72 hours change how you think about the timing?"</div>
+</div>
+
+<!-- ── S7: AGREEMENT (cream) ─────────────────────────────── -->
+<div class="slide" id="s7">
+  <div class="si">
+    <div class="ey fi">The agreement</div>
+    <div class="hl fi" style="font-size:clamp(28px,3.6vw,48px);margin-bottom:22px;">What you're<br><em>actually agreeing to.</em></div>
+    <div class="two fi">
+      <div class="ctl">
+        <div class="ct"><span class="ctk">✓</span><div class="ctt"><strong>6-month initial term.</strong> Exit early: £1,000 fee. After 6 months: 3 months written notice, no penalty.</div></div>
+        <div class="ct"><span class="ctk">✓</span><div class="ctt"><strong>15% + VAT</strong> on gross revenue. Plus <strong>£42/month</strong> software. No other fees unless quoted in advance.</div></div>
+        <div class="ct"><span class="ctk">✓</span><div class="ctt"><strong>72 hours Slack notice</strong> to access your property — to protect guest privacy. Genuine emergencies excepted.</div></div>
+        <div class="ct"><span class="ctk">✓</span><div class="ctt">We <strong>authorise repairs up to £300</strong> without calling you. Above £300, we get your sign-off first.</div></div>
+        <div class="ct"><span class="ctk">✓</span><div class="ctt"><strong>All communication via Slack</strong> — your dedicated channel, set up at kick-off. 24-hour response in office hours.</div></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div class="card-p">
+          <div style="font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--mu);margin-bottom:10px;">Questions to take away</div>
+          <ul class="ck"><li>Does my mortgage allow short-term letting?</li><li>Do I have short-let building and liability insurance?</li><li>Are my gas and electrical certificates current?</li></ul>
+        </div>
+        <div class="card-p" style="display:flex;flex-direction:column;gap:8px;">
+          <div style="font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--green);">Open the full agreement</div>
+          <a href="#" data-doc="agreement" class="pill" style="align-self:flex-start;">📄 View management agreement</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="cue">Ask: "Any of those terms you'd want to talk through? The 6-month commitment is the one most people ask about."</div>
+</div>
+
+<!-- ── S8: NEXT STEPS (dark) ─────────────────────────────── -->
+<div class="slide" id="s8">
+  <div class="si">
+    <div class="ey lt fi">Next steps</div>
+    <div class="hl white fi" style="font-size:clamp(28px,3.6vw,48px);margin-bottom:6px;">Ready to move forward,<br><em id="s8n">Sarah?</em></div>
+    <div class="sub lt fi" id="s8s" style="margin-bottom:26px;">Every month you wait is +£757 you don't collect. First booking in 72 hours. Break-even in month 5.</div>
+    <div class="t60 fi">
+      <div class="steps">
+        <div class="step"><div class="sn">1</div><div class="st">Sign the management agreement <span>— we send it by email today</span></div></div>
+        <div class="step"><div class="sn">2</div><div class="st">Kick-off call booked <span>— within 3–5 days</span></div></div>
+        <div class="step"><div class="sn">3</div><div class="st">Live in 3 weeks · <span>first booking typically within 72 hours</span></div></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="card-dk">
+          <div class="ch2 lt">Not ready today?</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.55);font-weight:300;line-height:1.6;margin-top:4px;">This presentation stays live at your link. Your figures are saved. Take the time you need.</div>
+        </div>
+        <div class="card-dk" style="padding:16px 18px;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <div style="font-size:24px;">📞</div>
+            <div>
+              <div style="font-size:9.5px;color:rgba(255,255,255,0.3);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:2px;">Reach Zac directly</div>
+              <div style="font-size:15px;font-weight:500;color:#fff;">0113 479 0251</div>
+              <div style="font-size:11.5px;color:rgba(255,255,255,0.38);">zac@stayful.co.uk</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="cue lt">Ask: "What would you need to see or know to feel confident moving forward?"</div>
+</div>
+
+</div><!-- /deck -->
+
+<!-- BOTTOM NAV -->
+<div id="bnav">
+  <button class="na" id="prev" onclick="nav(-1)" disabled>←</button>
+  <div class="dots" id="dots"></div>
+  <span id="ctr">1 / 9</span>
+  <button class="na" id="next" onclick="nav(1)">→</button>
+</div>
+
+<script>
+const MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const FC=[1581,1669,1488,2029,1864,2158,2420,2130,2139,2072,1834,1984];
+let ltl=1190,mtg=1300,TOTAL=9,cur=0,anim=false;
+const slides=Array.from(document.querySelectorAll('.slide'));
+const LINKS={manchester:'https://drive.google.com/file/d/REPLACE_MANCHESTER/view',newcastle:'https://drive.google.com/file/d/REPLACE_NEWCASTLE/view',london:'https://drive.google.com/file/d/REPLACE_LONDON/view',bristol:'https://drive.google.com/file/d/REPLACE_BRISTOL/view',liverpool:'https://drive.google.com/file/d/REPLACE_LIVERPOOL/view',derby:'https://drive.google.com/file/d/REPLACE_DERBY/view',agreement:'https://drive.google.com/file/d/1ct_Br_7XR69s6beyFfqHSnSPoRouKkG6/view?usp=sharing'};
+
+function go(idx){
+  if(anim||idx===cur||idx<0||idx>=TOTAL)return;
+  anim=true;
+  const d=idx>cur?1:-1;
+  const lv=slides[cur],en=slides[idx];
+  lv.classList.add(d>0?'el':'er');
+  en.classList.add(d>0?'nl':'nr');
+  en.classList.add('active');
+  setTimeout(()=>{lv.classList.remove('active','el','er');en.classList.remove('nl','nr');cur=idx;anim=false;update();stagger(en);},440);
+}
+function nav(d){go(cur+d);}
+function stagger(sl){const els=sl.querySelectorAll('.fi');els.forEach((el,i)=>{el.classList.remove('in');setTimeout(()=>el.classList.add('in'),i*85);});}
+function update(){
+  document.getElementById('ctr').textContent=(cur+1)+' / '+TOTAL;
+  document.getElementById('prev').disabled=cur===0;
+  document.getElementById('next').disabled=cur===TOTAL-1;
+  document.getElementById('pf').style.width=((cur+1)/TOTAL*100)+'%';
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('on',i===cur));
+  document.querySelectorAll('.tb-i').forEach((b,i)=>b.classList.toggle('on',i===cur));
+}
+function buildDots(){const c=document.getElementById('dots');for(let i=0;i<TOTAL;i++){const d=document.createElement('div');d.className='dot'+(i===0?' on':'');d.onclick=()=>go(i);c.appendChild(d);}}
+
+/* BAR CHART with hover tooltips */
+function buildBars(){
+  const bc=document.getElementById('bars'),bn=document.getElementById('bnames'),max=Math.max(...FC),min=Math.min(...FC);
+
+  // Create tooltip element once
+  const tip=document.createElement('div');
+  tip.id='bar-tip';
+  tip.innerHTML='<div class="tip-month"></div><div class="tip-val"></div><div class="tip-vs"></div>';
+  document.getElementById('s2').appendChild(tip);
+
+  FC.forEach((v,i)=>{
+    const bw=document.createElement('div');bw.className='bw';bw.style.position='relative';
+    const b=document.createElement('div');
+    b.className='bar'+(v===min?' lo':'');
+    b.style.height='0';
+    b.style.transition='height 0.9s cubic-bezier(0.4,0,0.2,1), filter 0.15s ease';
+
+    // Tooltip on hover
+    bw.addEventListener('mouseenter',function(e){
+      tip.querySelector('.tip-month').textContent=MN[i];
+      tip.querySelector('.tip-val').textContent='£'+v.toLocaleString('en-GB');
+      const diff=v-ltl;
+      tip.querySelector('.tip-vs').textContent=(diff>=0?'+':'')+'£'+diff.toLocaleString('en-GB')+' vs long-let';
+      // Position above the bar
+      const cw=bc.parentElement.getBoundingClientRect();
+      const bRect=bw.getBoundingClientRect();
+      const tipL=(bRect.left+bRect.width/2)-cw.left;
+      const tipT=(bRect.top-cw.top)-44;
+      tip.style.left=Math.max(0,tipL-(tip.offsetWidth/2||35))+'px';
+      tip.style.top=tipT+'px';
+      tip.classList.add('show');
+    });
+    bw.addEventListener('mouseleave',()=>tip.classList.remove('show'));
+
+    bw.appendChild(b);bc.appendChild(bw);
+    const l=document.createElement('div');l.className='bm';l.textContent=MN[i];bn.appendChild(l);
+    setTimeout(()=>{b.style.height=Math.round((v/max)*64)+'px';},400+i*45);
+  });
+}
+function updateLTL(){
+  const max=Math.max(...FC),h=Math.round((ltl/max)*64);
+  const r=document.getElementById('lref');if(r)r.style.marginTop=(64-h)+'px';
+  const l=document.getElementById('lrefl');if(l)l.textContent='LTL £'+ltl.toLocaleString('en-GB');
+}
+function updateMortgage(str,ltlVal,mtgVal){
+  // GAP 2: mortgage coverage framing
+  const surplus=str-mtgVal;
+  const ltlSurplus=ltlVal-mtgVal;
+  const covers=document.getElementById('mtg-covers');
+  const ltlNote=document.getElementById('ltl-mtg-note');
+  if(covers){
+    if(mtgVal>0){
+      covers.style.display='flex';
+      covers.className='mtg-banner '+(surplus>=0?'covers':'shortfall');
+      const lbl=covers.querySelector('.mtg-lbl');
+      const num=covers.querySelector('.mtg-num');
+      const sub=document.getElementById('mtg-surplus');
+      const subtext=document.getElementById('mtg-sub-text');
+      if(surplus>=0){
+        lbl.className='mtg-lbl g';
+        if(sub){sub.className='mtg-num g';sub.textContent='+£'+surplus.toLocaleString('en-GB')+' / month';}
+        if(subtext)subtext.textContent='STL net £'+str.toLocaleString('en-GB')+' − mortgage £'+mtgVal.toLocaleString('en-GB')+' = £'+surplus.toLocaleString('en-GB')+' surplus every month';
+        lbl.textContent='Short-let covers your mortgage';
+      }else{
+        lbl.className='mtg-lbl am';
+        if(sub){sub.className='mtg-num am';sub.textContent='−£'+Math.abs(surplus).toLocaleString('en-GB')+' / month';}
+        if(subtext)subtext.textContent='Discuss with lead — STL is still stronger than LTL';
+        lbl.textContent='STL vs your mortgage';
+      }
+      // LTL vs mortgage note
+      if(ltlNote){
+        ltlNote.style.display='block';
+        if(ltlSurplus<0)ltlNote.textContent="Doesn't cover your £"+mtgVal.toLocaleString('en-GB')+" mortgage";
+        else ltlNote.textContent="Covers mortgage by +£"+ltlSurplus.toLocaleString('en-GB');
+        ltlNote.style.color=ltlSurplus<0?'var(--am)':'var(--green)';
+      }
+    } else {
+      covers.style.display='none';
+      if(ltlNote)ltlNote.style.display='none';
+    }
+  }
+}
+function togglePP(){document.getElementById('pp').classList.toggle('open');}
+function applyPP(){
+  const name=document.getElementById('p-n').value.trim()||'Sarah';
+  const addr=document.getElementById('p-a').value.trim();
+  const rev=Number(document.getElementById('p-r').value)||3745;
+  const occ=Number(document.getElementById('p-o').value)||60;
+  const adr=Number(document.getElementById('p-d').value)||205;
+  ltl=Number(document.getElementById('p-l').value)||1190;
+  mtg=Number(document.getElementById('p-m').value)||0;
+  const str=Math.round(rev*0.52),up=str-ltl,fl=Math.min(...FC);
+  // Cover
+  document.getElementById('s0n').textContent=name;
+  document.getElementById('s0a').textContent=addr;
+  document.getElementById('s0r').textContent='£'+rev.toLocaleString('en-GB');
+  document.getElementById('s0u').textContent=(up>=0?'+':'')+'£'+Math.abs(up).toLocaleString('en-GB');
+  document.getElementById('s0d').textContent='£'+adr;
+  document.getElementById('s0o').textContent=occ+'%';
+  // Income
+  document.getElementById('s2s').textContent='£'+str.toLocaleString('en-GB');
+  document.getElementById('s2l').textContent='£'+ltl.toLocaleString('en-GB');
+  document.getElementById('s2f').textContent='£'+fl.toLocaleString('en-GB');
+  document.getElementById('s2fs').textContent='Still +£'+(fl-ltl).toLocaleString('en-GB')+' above long-term — in your worst month.';
+  // Next steps
+  document.getElementById('s8n').textContent=name+'?';
+  document.getElementById('s8s').textContent='Every month you wait is +£'+up.toLocaleString('en-GB')+' you don\'t collect. First booking in 72 hours. Break-even in month 5.';
+  // Badge
+  document.getElementById('tb-b').textContent=name+' · '+addr;
+  // Mortgage coverage
+  updateMortgage(str,ltl,mtg);
+  updateLTL();
+  document.getElementById('pp').classList.remove('open');
+}
+function wireLinks(){
+  document.querySelectorAll('[data-city],[data-doc]').forEach(el=>{
+    const k=el.getAttribute('data-city')||el.getAttribute('data-doc');
+    if(LINKS[k]&&!LINKS[k].includes('REPLACE')){el.href=LINKS[k];}
+    else{el.href='#';el.style.opacity='0.4';el.title='Update LINKS["'+k+'"] in script';el.onclick=e=>{e.preventDefault();alert('Upload to Google Drive and update LINKS["'+k+'"] in the script.');};}
+  });
+}
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();nav(1);}
+  if(e.key==='ArrowLeft'){e.preventDefault();nav(-1);}
+  if(e.key==='p'||e.key==='P')togglePP();
+  if(e.key==='f'||e.key==='F'){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}
+});
+let tx=0;
+document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;},{passive:true});
+document.addEventListener('touchend',e=>{const dx=tx-e.changedTouches[0].clientX;if(Math.abs(dx)>55)nav(dx>0?1:-1);});
+// Init with Sarah's data
+buildDots();buildBars();
+updateLTL();
+updateMortgage(Math.round(3745*0.52),1190,1300);
+wireLinks();update();stagger(slides[0]);
+</script>
+</body>
+</html>

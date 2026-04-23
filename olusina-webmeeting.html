@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stayful · Olusina Web Meeting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --green:#5d8156;--gd:#2d4a2d;--gl:#4a6a44;--gc:#e6ebd7;--gp:#f0f4e8;
+  --cream:#faf8f4;--white:#ffffff;--ch:#1c2420;--mid:#4a5e52;--mu:#8a9e92;
+  --bd:rgba(93,129,86,0.15);--am:#c47c1a;--amp:#fdf3e3;
+  --serif:'Cormorant Garamond',Georgia,serif;--sans:'DM Sans',system-ui,sans-serif;
+  --ease:cubic-bezier(0.4,0,0.2,1);
+}
+html,body{width:100%;height:100%;overflow:hidden;font-family:var(--sans);background:var(--cream);}
+
+/* TOPBAR */
+#tb{position:fixed;top:0;left:0;right:0;z-index:200;height:52px;background:rgba(255,255,255,0.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;padding:0 24px;}
+.tb-logo img{height:24px;width:auto;display:block;}
+.tb-logo-f{font-family:var(--serif);font-size:20px;font-weight:600;color:var(--green);display:none;}
+.tb-badge{font-size:11px;font-weight:500;color:var(--mid);background:var(--gp);border:1px solid var(--bd);padding:4px 12px;border-radius:100px;}
+.tb-menu{display:flex;gap:1px;background:var(--gp);border:1px solid var(--bd);border-radius:10px;padding:3px;}
+.tb-i{font-size:10.5px;color:var(--mu);border:none;background:none;padding:5px 10px;border-radius:7px;cursor:pointer;font-family:var(--sans);transition:all 0.2s;white-space:nowrap;}
+.tb-i:hover{color:var(--green);background:var(--gc);}
+.tb-i.on{background:var(--green);color:#fff;}
+
+/* PROGRESS */
+#prog{position:fixed;top:52px;left:0;right:0;height:3px;z-index:200;background:var(--gp);}
+#pf{height:100%;background:var(--green);transition:width 0.4s var(--ease);}
+
+/* DECK */
+#deck{position:fixed;inset:54px 0 64px;z-index:10;overflow:hidden;}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;overflow-y:auto;opacity:0;pointer-events:none;will-change:transform,opacity;}
+.slide.active{opacity:1;pointer-events:all;}
+.slide.el{animation:el 0.38s var(--ease) forwards;}
+.slide.er{animation:er 0.38s var(--ease) forwards;}
+.slide.nl{animation:nl 0.38s var(--ease) forwards;}
+.slide.nr{animation:nr 0.38s var(--ease) forwards;}
+@keyframes el{to{opacity:0;transform:translateX(-48px);}}
+@keyframes er{to{opacity:0;transform:translateX(48px);}}
+@keyframes nl{from{opacity:0;transform:translateX(-48px);}to{opacity:1;transform:none;}}
+@keyframes nr{from{opacity:0;transform:translateX(48px);}to{opacity:1;transform:none;}}
+.fi{opacity:0;transform:translateY(10px);transition:opacity 0.45s var(--ease),transform 0.45s var(--ease);}
+.fi.in{opacity:1;transform:none;}
+
+/* BOTTOM NAV */
+#bnav{position:fixed;bottom:0;left:0;right:0;z-index:200;height:64px;background:rgba(255,255,255,0.96);backdrop-filter:blur(16px);border-top:1px solid var(--bd);display:flex;align-items:center;justify-content:center;gap:20px;}
+.na{width:36px;height:36px;border-radius:50%;background:var(--gp);border:1px solid var(--bd);color:var(--mid);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;transition:all 0.2s;}
+.na:hover:not(:disabled){background:var(--gc);border-color:var(--green);color:var(--green);transform:scale(1.1);}
+.na:disabled{opacity:0.25;cursor:default;}
+.dots{display:flex;gap:6px;align-items:center;}
+.dot{cursor:pointer;border-radius:100px;background:var(--gc);border:1px solid var(--bd);transition:all 0.3s var(--ease);width:8px;height:8px;}
+.dot.on{background:var(--green);border-color:var(--green);width:22px;}
+#ctr{font-size:11px;color:var(--mu);letter-spacing:0.1em;min-width:44px;text-align:center;}
+
+/* SLIDE BACKGROUNDS — Dark / Cream / White / Dark / Cream / White / Dark / Cream / Dark */
+#s0{background:var(--gd);}
+#s1{background:var(--cream);}
+#s2{background:var(--white);}
+#s3{background:var(--gd);}
+#s4{background:var(--cream);}
+#s5{background:var(--white);}
+#s6{background:var(--gd);}
+#s7{background:var(--cream);}
+#s8{background:var(--gd);}
+
+/* LAYOUT */
+.si{max-width:1080px;margin:auto;width:100%;padding:clamp(18px,3.5vh,40px) 56px clamp(14px,2.5vh,28px);position:relative;}
+
+/* TYPOGRAPHY */
+.ey{font-size:10px;letter-spacing:0.24em;text-transform:uppercase;font-weight:500;color:var(--green);display:flex;align-items:center;gap:10px;margin-bottom:12px;}
+.ey::before{content:'';display:block;width:18px;height:1px;background:var(--green);}
+.ey.lt{color:var(--gc);}
+.ey.lt::before{background:var(--gc);opacity:0.5;}
+.hl{font-family:var(--serif);font-weight:300;line-height:1.05;color:var(--ch);}
+.hl em{font-style:italic;color:var(--green);}
+.hl.white{color:#fff;}
+.hl.white em{color:var(--gc);}
+.sub{font-size:14px;font-weight:300;color:var(--mid);line-height:1.65;}
+.sub.lt{color:rgba(255,255,255,0.5);}
+.nl2{font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;font-weight:500;color:var(--mu);margin-bottom:4px;}
+.nl2.lt{color:rgba(255,255,255,0.4);}
+.dn{font-family:var(--serif);font-weight:300;line-height:1;color:var(--green);}
+.dn.white{color:#fff;}
+.dn.gc{color:var(--gc);}
+.ns{font-size:11.5px;color:var(--mu);margin-top:3px;font-weight:300;}
+.ns.lt{color:rgba(255,255,255,0.38);}
+
+/* GRIDS */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start;}
+.t60{display:grid;grid-template-columns:1.35fr 1fr;gap:32px;align-items:start;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.hd{height:1px;background:var(--bd);margin:14px 0;}
+.hd.lt{background:rgba(255,255,255,0.1);}
+
+/* CARDS */
+.card{background:var(--white);border:1px solid var(--bd);border-radius:16px;padding:20px 22px;transition:all 0.2s;}
+.card:hover{box-shadow:0 4px 16px rgba(93,129,86,0.1);transform:translateY(-1px);}
+.card-p{background:var(--gp);border:1px solid var(--bd);border-radius:16px;padding:20px 22px;transition:all 0.2s;}
+.card-p:hover{border-color:rgba(93,129,86,0.28);}
+.card-dk{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:20px 22px;transition:all 0.2s;}
+.card-dk:hover{border-color:rgba(255,255,255,0.18);}
+.card-am{background:var(--amp);border:1px solid rgba(196,124,26,0.2);border-radius:16px;padding:20px 22px;}
+.card-hi{background:rgba(93,129,86,0.1);border:1px solid rgba(93,129,86,0.22);border-radius:16px;padding:20px 22px;}
+
+/* STRIPS */
+.strip{display:flex;border:1px solid var(--bd);border-radius:16px;overflow:hidden;background:var(--white);}
+.sc{flex:1;padding:18px 20px;border-right:1px solid var(--bd);}
+.sc:last-child{border-right:none;}
+.sc.hi{background:var(--gp);}
+.strip-dk{display:flex;border:1px solid rgba(255,255,255,0.1);border-radius:16px;overflow:hidden;background:rgba(255,255,255,0.04);}
+.sc-dk{flex:1;padding:18px 20px;border-right:1px solid rgba(255,255,255,0.08);}
+.sc-dk:last-child{border-right:none;}
+.sc-dk.hi{background:rgba(93,129,86,0.18);}
+
+/* RESP LIST */
+.rl{display:flex;flex-direction:column;gap:6px;}
+.ri{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:9px;}
+.ri.g{background:var(--gc);border:1px solid var(--bd);}
+.ri.n{background:#f5f4f2;border:1px solid rgba(0,0,0,0.05);}
+.ri.dk{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);}
+.rd{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.rd.g{background:var(--green);}
+.rd.w{background:rgba(255,255,255,0.4);}
+.rt{font-size:13px;line-height:1.4;}
+.rt.dk{color:var(--ch);}
+.rt.lt{color:rgba(255,255,255,0.65);}
+.rt.mu{color:var(--mid);}
+.ch2{font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;font-weight:500;margin-bottom:10px;}
+.ch2.g{color:var(--green);}
+.ch2.mu{color:var(--mu);}
+.ch2.lt{color:rgba(255,255,255,0.38);}
+
+/* CHECKLIST */
+.ck{list-style:none;display:flex;flex-direction:column;gap:7px;}
+.ck li{display:flex;align-items:flex-start;gap:9px;font-size:13px;color:var(--mid);font-weight:300;line-height:1.5;}
+.ck li::before{content:'';flex-shrink:0;width:15px;height:15px;margin-top:2px;border-radius:50%;background:var(--gc) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8l3.5 3.5L13 4' stroke='%235d8156' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;}
+.ck.white li{color:rgba(255,255,255,0.65);}
+.ck.white li::before{background:rgba(255,255,255,0.1) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8l3.5 3.5L13 4' stroke='%23e6ebd7' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;}
+
+/* CONTRACT */
+.ctl{display:flex;flex-direction:column;gap:8px;}
+.ct{display:flex;align-items:flex-start;gap:12px;padding:12px 15px;background:var(--gp);border:1px solid var(--bd);border-radius:10px;transition:all 0.2s;}
+.ct:hover{border-color:var(--green);transform:translateX(2px);}
+.ctk{color:var(--green);flex-shrink:0;margin-top:2px;font-size:14px;}
+.ctt{font-size:13px;color:var(--mid);font-weight:300;line-height:1.55;}
+.ctt strong{color:var(--ch);font-weight:500;}
+
+/* STEPS */
+.steps{display:flex;flex-direction:column;gap:10px;}
+.step{display:flex;align-items:center;gap:14px;background:rgba(230,235,215,0.2);border:1px solid rgba(230,235,215,0.3);border-radius:12px;padding:14px 18px;transition:all 0.2s;}
+.step:hover{background:rgba(230,235,215,0.35);transform:translateX(3px);}
+.sn{width:28px;height:28px;flex-shrink:0;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:14px;color:var(--green);}
+.st{font-size:13.5px;color:#fff;}
+.st span{color:rgba(255,255,255,0.5);font-weight:300;font-size:12.5px;}
+
+/* PILLS */
+.pill{background:var(--gc);border:1px solid var(--bd);border-radius:100px;padding:7px 16px;font-size:12px;font-weight:500;color:var(--gd);cursor:pointer;text-decoration:none;font-family:var(--sans);transition:all 0.2s;display:inline-flex;align-items:center;gap:6px;}
+.pill:hover{background:var(--green);border-color:var(--green);color:#fff;transform:translateY(-1px);}
+
+/* BAR CHART */
+.cw{background:var(--gp);border:1px solid var(--bd);border-radius:14px;padding:14px 12px 10px;position:relative;}
+.brs{display:flex;align-items:flex-end;gap:5px;height:72px;margin-bottom:4px;}
+.bw{flex:1;display:flex;flex-direction:column;align-items:center;position:relative;}
+.bar{width:100%;border-radius:3px 3px 0 0;background:var(--green);transition:height 0.9s var(--ease),filter 0.15s;min-height:3px;}
+.bar.lo{background:#7fa679;}
+.bar:hover{filter:brightness(1.2);}
+.bm{font-size:7.5px;color:var(--mu);text-align:center;margin-top:3px;}
+.lr{position:relative;border-top:2px dashed var(--am);margin:2px 0 4px;}
+.ll{position:absolute;right:0;top:-16px;font-size:8.5px;color:var(--am);white-space:nowrap;font-weight:500;}
+.cn{font-size:9px;color:var(--mu);}
+#bar-tip{position:absolute;pointer-events:none;z-index:100;background:var(--gd);border-radius:9px;padding:8px 12px;box-shadow:0 4px 16px rgba(0,0,0,0.22);opacity:0;transform:translateY(4px);transition:opacity 0.15s,transform 0.15s;min-width:80px;}
+#bar-tip.show{opacity:1;transform:translateY(0);}
+.tip-month{font-size:9.5px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.45);font-weight:500;margin-bottom:3px;}
+.tip-val{font-family:var(--serif);font-size:22px;font-weight:300;color:var(--gc);line-height:1;margin-bottom:2px;}
+.tip-vs{font-size:10.5px;color:rgba(255,255,255,0.5);font-weight:300;}
+
+/* STAT BAR */
+.stat-bar{display:flex;border:1px solid var(--bd);border-radius:12px;overflow:hidden;background:var(--white);margin-bottom:12px;}
+.sb-cell{flex:1;padding:14px 16px;border-right:1px solid var(--bd);text-align:center;transition:background 0.2s;}
+.sb-cell:last-child{border-right:none;}
+.sb-cell:hover{background:var(--gp);}
+.sb-num{font-family:var(--serif);font-size:28px;font-weight:300;color:var(--green);line-height:1;}
+.sb-lbl{font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--mu);margin-top:3px;font-weight:500;}
+
+/* CASE STUDIES */
+.cs{background:var(--white);border:1px solid var(--bd);border-radius:13px;padding:12px 12px 10px;display:flex;flex-direction:column;gap:7px;transition:all 0.2s;}
+.cs:hover{border-color:var(--green);box-shadow:0 4px 18px rgba(93,129,86,0.12);transform:translateY(-2px);}
+.cc{font-family:var(--serif);font-size:18px;font-weight:400;color:var(--ch);line-height:1;}
+.cd{font-size:9px;color:var(--mu);}
+.ccp{display:grid;grid-template-columns:1fr 1fr;gap:5px;}
+.ccol{padding:6px 8px;border-radius:6px;}
+.ccol.e{background:var(--gp);}
+.ccol.a{background:var(--gc);}
+.cll{font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--mu);margin-bottom:2px;}
+.cll.g{color:var(--gl);--gl:#4a6a44;}
+.cln{font-family:var(--serif);font-size:16px;font-weight:300;color:var(--ch);}
+.cln.g{color:var(--green);}
+.cb{background:var(--gc);border:1px solid var(--bd);color:var(--gd);border-radius:7px;padding:5px 9px;font-size:10px;font-weight:500;cursor:pointer;text-decoration:none;font-family:var(--sans);display:flex;align-items:center;justify-content:center;gap:3px;transition:all 0.2s;}
+.cb:hover{background:var(--green);border-color:var(--green);color:#fff;}
+
+/* MORTGAGE BANNER */
+.mtg-banner{border-radius:16px;padding:18px 22px;margin-bottom:12px;display:flex;align-items:center;gap:18px;}
+.mtg-banner.covers{background:rgba(93,129,86,0.1);border:1px solid rgba(93,129,86,0.22);}
+.mtg-banner.shortfall{background:var(--amp);border:1px solid rgba(196,124,26,0.2);}
+.mtg-icon{font-size:22px;flex-shrink:0;}
+.mtg-lbl{font-size:9px;letter-spacing:0.14em;text-transform:uppercase;font-weight:500;margin-bottom:3px;}
+.mtg-lbl.g{color:var(--green);}
+.mtg-num{font-family:var(--serif);font-size:26px;font-weight:300;line-height:1;}
+.mtg-num.g{color:var(--green);}
+.mtg-sub{font-size:11.5px;color:var(--mid);margin-top:2px;font-weight:300;}
+
+/* PRE-QUALIFIER RESPONSE CARDS */
+.pq-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
+.pq-card{background:var(--white);border:1px solid var(--bd);border-radius:12px;padding:14px 16px;}
+.pq-label{font-size:8.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--mu);font-weight:500;margin-bottom:6px;}
+.pq-val{font-size:14px;font-weight:500;color:var(--green);line-height:1.35;}
+.pq-empty{font-size:13px;color:var(--mu);font-style:italic;}
+
+/* CONCERN HIGHLIGHT */
+.concern-banner{display:flex;align-items:flex-start;gap:16px;background:rgba(93,129,86,0.08);border:1.5px solid rgba(93,129,86,0.2);border-radius:14px;padding:16px 20px;margin-bottom:20px;}
+.concern-icon{font-size:22px;flex-shrink:0;margin-top:2px;}
+.concern-body{flex:1;}
+.concern-lbl{font-size:9px;letter-spacing:0.14em;text-transform:uppercase;color:var(--green);font-weight:500;margin-bottom:5px;}
+.concern-text{font-size:15px;font-weight:400;color:var(--ch);font-family:var(--serif);}
+.concern-reply{font-size:12.5px;color:var(--mid);font-weight:300;margin-top:4px;line-height:1.55;}
+
+/* CONVERSATION CUE */
+.cue-bar{background:rgba(93,129,86,0.07);border-top:1px solid var(--bd);padding:10px 24px;display:flex;align-items:center;gap:10px;font-size:12px;color:var(--green);font-style:italic;font-weight:400;}
+.cue-bar.dark{background:rgba(0,0,0,0.2);border-top:1px solid rgba(255,255,255,0.08);color:var(--gc);}
+.cue-icon{font-size:14px;flex-shrink:0;}
+
+/* TIMELINE */
+.timeline-steps{display:flex;flex-direction:column;gap:0;position:relative;}
+.timeline-steps::before{content:'';position:absolute;left:19px;top:24px;bottom:24px;width:1px;background:var(--bd);}
+.tl-step{display:flex;gap:18px;align-items:flex-start;padding:12px 0;}
+.tl-dot{width:38px;height:38px;flex-shrink:0;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:16px;color:#fff;position:relative;z-index:1;transition:transform 0.2s;}
+.tl-step:hover .tl-dot{transform:scale(1.1);}
+.tl-body{padding-top:6px;}
+.tl-title{font-size:14px;font-weight:500;color:var(--ch);margin-bottom:2px;}
+.tl-desc{font-size:12px;font-weight:300;color:var(--mid);line-height:1.5;}
+.tl-tag{font-size:9px;letter-spacing:0.12em;text-transform:uppercase;font-weight:500;color:var(--green);margin-top:3px;}
+
+/* MOBILE */
+@media (max-width:768px){
+  .tb-menu{display:none!important;}
+  .si{padding:14px 16px 10px;}
+  .two,.t60,.g2,.g3,.pq-grid{grid-template-columns:1fr!important;gap:10px!important;}
+  .strip,.strip-dk{flex-direction:column;}
+  .sc,.sc-dk{border-right:none!important;border-bottom:1px solid var(--bd)!important;padding:12px 14px;}
+  .sc:last-child,.sc-dk:last-child{border-bottom:none!important;}
+  .stat-bar{flex-wrap:wrap;}
+  .sb-cell{flex:0 0 50%!important;border-bottom:1px solid var(--bd)!important;}
+  .sb-cell:nth-child(even){border-right:none!important;}
+  .mtg-banner{flex-direction:column;gap:8px;padding:14px;}
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div id="tb">
+  <div class="tb-logo">
+    <img src="https://images.squarespace-cdn.com/content/v1/64946e7680c92451dce86167/b6f59d1c-fee6-4f55-948b-3c05b6e18a3b/Stayful_Dark_Green.png?format=300w" alt="Stayful" onerror="this.style.display='none';document.querySelector('.tb-logo-f').style.display='block'">
+    <span class="tb-logo-f">Stayful</span>
+  </div>
+  <div class="tb-menu">
+    <button class="tb-i on"  onclick="go(0)">Overview</button>
+    <button class="tb-i"     onclick="go(1)">Responses</button>
+    <button class="tb-i"     onclick="go(2)">Income</button>
+    <button class="tb-i"     onclick="go(3)">Management</button>
+    <button class="tb-i"     onclick="go(4)">Protection</button>
+    <button class="tb-i"     onclick="go(5)">Proof</button>
+    <button class="tb-i"     onclick="go(6)">First booking</button>
+    <button class="tb-i"     onclick="go(7)">Agreement</button>
+    <button class="tb-i"     onclick="go(8)">Next steps</button>
+  </div>
+  <div class="tb-badge">Web Meeting · Olusina</div>
+</div>
+<div id="prog"><div id="pf"></div></div>
+
+<!-- DECK -->
+<div id="deck">
+
+<!-- S0: COVER (dark) -->
+<div class="slide active" id="s0">
+  <div class="si" style="padding-left:72px;">
+    <div style="position:absolute;left:56px;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,rgba(230,235,215,0.3) 20%,rgba(230,235,215,0.3) 80%,transparent);pointer-events:none;"></div>
+    <div class="ey lt fi">Stayful · Airbnb Management Company</div>
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:100px;padding:5px 14px 5px 10px;margin-bottom:22px;" class="fi">
+      <span style="font-size:10.5px;color:rgba(255,255,255,0.4);">Listed on Airbnb · Booking.com · Managed by Stayful</span>
+    </div>
+    <div class="hl white fi" style="font-size:clamp(40px,5.2vw,64px);margin-bottom:6px;">Olusina's<br>web meeting.</div>
+    <div class="fi" style="font-size:13px;font-weight:300;color:rgba(255,255,255,0.4);margin-bottom:32px;">6 Baobab Drive, Bilston, WV14 0RJ · Existing property for higher return</div>
+    <div class="strip-dk fi" style="max-width:580px;margin-bottom:20px;">
+      <div class="sc-dk hi"><div class="nl2 lt">STL net / month</div><div class="dn gc" style="font-size:40px;">£2,245</div><div class="ns lt">After management & platform fees</div></div>
+      <div class="sc-dk hi"><div class="nl2 lt">vs long-let</div><div class="dn gc" style="font-size:40px;">+£1,295</div><div class="ns lt">per month</div></div>
+      <div class="sc-dk"><div class="nl2 lt">Break-even</div><div class="dn white" style="font-size:40px;">~3 <span style="font-size:18px;color:rgba(255,255,255,0.3);">mo</span></div><div class="ns lt">£2,800 setup</div></div>
+    </div>
+    <div class="fi" style="display:flex;gap:8px;flex-wrap:wrap;">
+      <div style="padding:6px 14px;background:rgba(230,235,215,0.12);border:1px solid rgba(230,235,215,0.18);border-radius:100px;font-size:11px;color:var(--gc);">12 comparables · all within 1.1 miles</div>
+      <div style="padding:6px 14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:11px;color:rgba(255,255,255,0.4);">ADR £172 · 63% occupancy</div>
+    </div>
+  </div>
+  <div class="cue-bar dark">
+    <span class="cue-icon">💬</span>
+    "Before we start — is there anything that's come up since you looked through the presentation that you'd want to address first?"
+  </div>
+</div>
+
+<!-- S1: WHAT YOU TOLD US (cream) -->
+<div class="slide" id="s1">
+  <div class="si">
+    <div class="ey fi">Pre-qualifier responses</div>
+    <div class="hl fi" style="font-size:clamp(26px,3.4vw,42px);margin-bottom:6px;">What you told us<br>before this call.</div>
+    <div class="sub fi" style="margin-bottom:20px;">These are the answers you submitted when you reviewed the Stayful presentation. We've built this call around them.</div>
+
+    <!-- Responses grid — populated from pre-qualifier -->
+    <div class="pq-grid fi" id="pq-responses">
+      <!-- Populated by JS below — or shows placeholder if no responses submitted -->
+    </div>
+
+    <!-- Main concern highlight — used to frame the rest of the call -->
+    <div id="concern-block" class="fi"></div>
+
+    <!-- Footer note about the call structure -->
+    <div class="fi" style="padding:12px 18px;background:var(--gp);border:1px solid var(--bd);border-radius:12px;display:flex;gap:12px;align-items:center;">
+      <span style="font-size:16px;">🎯</span>
+      <div style="font-size:12.5px;color:var(--mid);font-weight:300;line-height:1.6;">
+        <strong style="color:var(--ch);font-weight:500;">How today's call is structured:</strong> 
+        We'll go through the income detail, cover how management and protection work, then give you a chance to see everything in writing before deciding. At any point — stop me.
+      </div>
+    </div>
+  </div>
+  <div class="cue-bar">
+    <span class="cue-icon">💬</span>
+    "Looking at your responses — <span id="cue-concern-text" style="font-weight:600;">income consistency</span> came up as your main concern. Is that still the thing you'd most like us to address today?"
+  </div>
+</div>
+
+<!-- S2: INCOME DEEP-DIVE (white) -->
+<div class="slide" id="s2">
+  <div class="si">
+    <div class="ey fi">Your numbers in full</div>
+    <div class="hl fi" style="font-size:clamp(24px,3.2vw,40px);margin-bottom:16px;">Every single month<br>beats the <em>long-term alternative.</em></div>
+    <div class="two fi" style="gap:28px;">
+      <div style="display:flex;flex-direction:column;gap:10px;">
+
+        <!-- LTL comparison (no mortgage for Olusina) -->
+        <div class="strip">
+          <div class="sc hi">
+            <div class="nl2">STL net / month</div>
+            <div class="dn" style="font-size:42px;">£2,245</div>
+            <div class="ns">After management & platform fees</div>
+            <div style="font-size:10.5px;color:var(--green);margin-top:4px;font-style:italic;">Cleaning charged to guests — not deducted from you</div>
+          </div>
+          <div class="sc">
+            <div class="nl2">Long-let net / month</div>
+            <div class="dn" style="font-size:42px;color:var(--mu);">£950</div>
+            <div class="ns">After letting agent 10%</div>
+            <div style="font-size:10.5px;color:var(--mid);margin-top:4px;font-style:italic;">£1,295 less per month than STL</div>
+          </div>
+        </div>
+
+        <!-- Bar chart -->
+        <div class="cw">
+          <div style="font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--mu);margin-bottom:8px;">12-month net — every month above long-let</div>
+          <div class="brs" id="bars"></div>
+          <div style="display:flex;gap:5px;" id="bnames"></div>
+          <div class="lr" id="lref"><span class="ll" id="lrefl">LTL £950</span></div>
+          <div class="cn">Hover any bar · lighter = quietest month · dashed = long-term alternative</div>
+        </div>
+
+        <!-- Worst month argument -->
+        <div style="padding:12px 16px;background:var(--gp);border:1px solid var(--bd);border-radius:12px;">
+          <div style="font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--mu);margin-bottom:4px;font-weight:500;">The income consistency question</div>
+          <div style="font-size:13.5px;color:var(--ch);font-weight:400;line-height:1.6;">Even October — the worst month — returns <strong style="color:var(--green);">£1,676</strong>. That's still <strong style="color:var(--green);">£726 above long-let</strong>. There is no month where a long tenancy pays more.</div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="card-p">
+          <div class="nl2">Quietest month</div>
+          <div class="dn" style="font-size:40px;">£1,676</div>
+          <div style="font-size:12px;color:var(--mid);margin-top:5px;font-weight:300;">October · still £726 above long-let</div>
+        </div>
+        <div class="card">
+          <div class="nl2">Setup break-even</div>
+          <div style="font-family:var(--serif);font-size:38px;font-weight:300;color:var(--ch);line-height:1;">~3 <span style="font-size:16px;color:var(--mu);font-weight:300;">months</span></div>
+          <div style="font-size:11.5px;color:var(--mu);margin-top:3px;font-weight:300;">£2,800 est. setup ÷ £1,295/mo uplift</div>
+        </div>
+        <div class="card-am">
+          <div style="font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--am);margin-bottom:4px;font-weight:500;">By year 3</div>
+          <div style="font-family:var(--serif);font-size:30px;font-weight:300;color:var(--am);">+£150<span style="font-size:13px;color:rgba(196,124,26,0.5);"> / month extra</span></div>
+          <div style="font-size:11px;color:rgba(196,124,26,0.6);margin-top:2px;font-weight:300;">As direct bookings reduce platform fees</div>
+        </div>
+        <div style="padding:14px 16px;background:rgba(93,129,86,0.07);border:1px solid rgba(93,129,86,0.16);border-radius:12px;">
+          <div style="font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--green);font-weight:500;margin-bottom:4px;">How the fees work</div>
+          <div style="font-size:12.5px;color:var(--mid);font-weight:300;line-height:1.6;">15% platform + 15% management = 30% of gross. Cleaning is billed separately to guests on top — it does not come out of your share.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="cue-bar">
+    <span class="cue-icon">💬</span>
+    "Does seeing every single month above long-let — including the quietest one — change how you're thinking about the consistency question?"
+  </div>
+</div>
+
+<!-- S3: MANAGEMENT (dark) -->
+<div class="slide" id="s3">
+  <div class="si">
+    <div class="ey lt fi">Day to day</div>
+    <div class="hl white fi" style="font-size:clamp(26px,3.4vw,44px);margin-bottom:20px;">You hand over the operation.<br><em>You keep the ownership.</em></div>
+    <div class="two fi">
+      <div>
+        <div class="ch2 lt" style="color:var(--gc);">Stayful handles all of this</div>
+        <div class="rl">
+          <div class="ri dk"><div class="rd w"></div><div class="rt lt">Guest communication — 24/7, every message</div></div>
+          <div class="ri dk"><div class="rd w"></div><div class="rt lt">Cleaning and linen after every stay</div></div>
+          <div class="ri dk"><div class="rd w"></div><div class="rt lt">Dynamic pricing — reviewed and updated daily</div></div>
+          <div class="ri dk"><div class="rd w"></div><div class="rt lt">Key management and guest check-in</div></div>
+          <div class="ri dk"><div class="rd w"></div><div class="rt lt">Listing optimisation across all platforms</div></div>
+          <div class="ri dk"><div class="rd w"></div><div class="rt lt">Maintenance — urgent repairs up to £300 without calling you</div></div>
+          <div class="ri dk"><div class="rd w"></div><div class="rt lt">Monthly payouts · reports · Slack channel for everything</div></div>
+        </div>
+      </div>
+      <div>
+        <div class="ch2 lt">What stays with you</div>
+        <div class="rl" style="margin-bottom:14px;">
+          <div class="ri dk" style="opacity:0.7;"><div class="rd" style="background:rgba(255,255,255,0.3);"></div><div class="rt lt">Mortgage (Olusina has none)</div></div>
+          <div class="ri dk" style="opacity:0.7;"><div class="rd" style="background:rgba(255,255,255,0.3);"></div><div class="rt lt">Short-let building & liability insurance</div></div>
+          <div class="ri dk" style="opacity:0.7;"><div class="rd" style="background:rgba(255,255,255,0.3);"></div><div class="rt lt">Gas & electrical safety certificates (annual)</div></div>
+          <div class="ri dk" style="opacity:0.7;"><div class="rd" style="background:rgba(255,255,255,0.3);"></div><div class="rt lt">Utilities in your name · WiFi active</div></div>
+        </div>
+        <div style="padding:14px 16px;background:rgba(196,124,26,0.12);border:1px solid rgba(196,124,26,0.2);border-radius:12px;margin-bottom:12px;">
+          <div style="font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--am);margin-bottom:3px;font-weight:500;">Before we go live</div>
+          <div style="font-size:12px;color:rgba(212,168,71,0.65);font-weight:300;line-height:1.6;">Gas cert, electrical cert, insurance confirmation — 10 minutes for most landlords.</div>
+        </div>
+        <div style="padding:14px 16px;background:rgba(230,235,215,0.1);border:1px solid rgba(230,235,215,0.15);border-radius:12px;">
+          <div style="font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gc);margin-bottom:3px;">Fee</div>
+          <div style="font-family:var(--serif);font-size:22px;font-weight:300;color:#fff;">15% + VAT <span style="font-size:13px;color:rgba(255,255,255,0.35);">+ £42/mo software</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="cue-bar dark">
+    <span class="cue-icon">💬</span>
+    "Is there anything on the Stayful list you'd want to stay more involved with day-to-day?"
+  </div>
+</div>
+
+<!-- S4: PROTECTION (cream) -->
+<div class="slide" id="s4">
+  <div class="si">
+    <div class="ey fi">Guest screening</div>
+    <div class="hl fi" style="font-size:clamp(26px,3.4vw,44px);margin-bottom:20px;">We treat your property<br>like it's <em>ours.</em></div>
+
+    <!-- Addressing their concern about guests directly -->
+    <div id="protection-concern" class="fi" style="margin-bottom:16px;"></div>
+
+    <div class="stat-bar fi">
+      <div class="sb-cell"><div class="sb-num">£100k</div><div class="sb-lbl">Insurance / stay</div></div>
+      <div class="sb-cell"><div class="sb-num">100%</div><div class="sb-lbl">ID verified</div></div>
+      <div class="sb-cell"><div class="sb-num">£200</div><div class="sb-lbl">Security deposit</div></div>
+      <div class="sb-cell"><div class="sb-num">Quarterly</div><div class="sb-lbl">Inspections</div></div>
+      <div class="sb-cell"><div class="sb-num">30%</div><div class="sb-lbl">Returning guests</div></div>
+    </div>
+    <div class="g2 fi">
+      <div class="card-p">
+        <div class="ch2 g">How we screen every guest</div>
+        <ul class="ck"><li>Government ID verified before booking confirmed</li><li>Profile history and review record checked</li><li>Purpose of stay confirmed for new guests</li><li>Local bookings flagged for additional review</li></ul>
+      </div>
+      <div class="card-p">
+        <div class="ch2 g">If something goes wrong</div>
+        <ul class="ck"><li>Damage documented and reported within 24 hours</li><li>Claim submitted via Airbnb AirCover or insurance</li><li>Contractor arranged and managed by us</li><li>You're kept informed at every step</li></ul>
+      </div>
+    </div>
+    <div class="fi" style="margin-top:12px;padding:12px 18px;background:var(--gp);border:1px solid var(--bd);border-radius:12px;font-size:12.5px;color:var(--mid);font-weight:300;line-height:1.65;">
+      <strong style="color:var(--ch);font-weight:500;">Who actually stays at Baobab Drive:</strong> Based on the demand profile, the majority of guests will be NHS workers on rotation from New Cross Hospital, sports visitors for Molineux, and industrial contractors from the Black Country. Worker guests are significantly lower risk and more predictable than leisure travellers.
+    </div>
+  </div>
+  <div class="cue-bar">
+    <span class="cue-icon">💬</span>
+    "What's your biggest concern about having guests — damage, wrong type, or something else?"
+  </div>
+</div>
+
+<!-- S5: PROOF (white) -->
+<div class="slide" id="s5">
+  <div class="si">
+    <div class="ey fi">Estimate vs actual · 2025</div>
+    <div class="hl fi" style="font-size:clamp(24px,3.2vw,40px);margin-bottom:6px;">We told landlords what to expect.<br><em>Here's what actually happened.</em></div>
+    <div class="sub fi" style="margin-bottom:14px;">Real 2025 Uplisting data. Click any card to open the full case study.</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;" class="fi">
+      <div class="cs"><div><div class="cc">Manchester</div><div class="cd">803 Eastbank Tower · 2 bed · ADR £240 · 85% occ</div></div><div class="ccp"><div class="ccol e"><div class="cll">Estimate / mo</div><div class="cln">£2,997</div></div><div class="ccol a"><div class="cll g">Actual net</div><div class="cln g">£2,997</div></div></div><a href="https://drive.google.com/file/d/1frXc2OHyxca0W6bY0pZ5PSZ_Xk8p3aLM/view?usp=sharing" class="cb" target="_blank">📄 Case study</a></div>
+      <div class="cs"><div><div class="cc">Leeds</div><div class="cd">7 Beechwood Mount · 3 bed · ADR £258 · 72% occ</div></div><div class="ccp"><div class="ccol e"><div class="cll">Estimate / mo</div><div class="cln">£2,713</div></div><div class="ccol a"><div class="cll g">Actual net</div><div class="cln g">£3,085</div></div></div><a href="https://drive.google.com/file/d/1DJ8GnYj39yjjp1kCFaaqgKSwFbWUhZgP/view?usp=sharing" class="cb" target="_blank">📄 Case study</a></div>
+      <div class="cs"><div><div class="cc">York</div><div class="cd">Chapel Apartments · 2 bed · ADR £170 · 90% occ</div></div><div class="ccp"><div class="ccol e"><div class="cll">Estimate / mo</div><div class="cln">£2,278</div></div><div class="ccol a"><div class="cll g">Actual net</div><div class="cln g">£2,545</div></div></div><a href="https://drive.google.com/file/d/1RDj1K8ZfTQqlS0gIhO771BleSeAgTPdL/view?usp=sharing" class="cb" target="_blank">📄 Case study</a></div>
+      <div class="cs"><div><div class="cc">Lincoln</div><div class="cd">9 Museum Court · 2 bed · ADR £133 · 82% occ</div></div><div class="ccp"><div class="ccol e"><div class="cll">Estimate / mo</div><div class="cln">£1,611</div></div><div class="ccol a"><div class="cll g">Actual net</div><div class="cln g">£1,852</div></div></div><a href="https://drive.google.com/file/d/1Dq4FvFxe9Mot0NuaFUMJ8zGu50hC1wiv/view?usp=sharing" class="cb" target="_blank">📄 Case study</a></div>
+    </div>
+    <div class="fi" style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
+      <a class="pill" href="https://drive.google.com/file/d/1OMLH73P0I4UdsoK8g7kMUDX9u4s46jF2/view" target="_blank">📊 Monthly report demo</a>
+      <a class="pill" href="https://app.slack.com/client/T061GPD7ZB8/C09LDM5GY86" target="_blank">💬 Owner Slack channel</a>
+      <a class="pill" href="https://app.uplisting.io/calendar/" target="_blank">🗓 Owner calendar</a>
+    </div>
+  </div>
+  <div class="cue-bar">
+    <span class="cue-icon">💬</span>
+    "Want to open one of those case studies now, or shall I show you what you'd actually see as a Stayful customer?"
+  </div>
+</div>
+
+<!-- S6: FIRST BOOKING (dark) -->
+<div class="slide" id="s6">
+  <div class="si">
+    <div class="ey lt fi">Going live</div>
+    <div class="hl white fi" style="font-size:clamp(26px,3.4vw,44px);margin-bottom:18px;">Your first booking<br>arrives <em>sooner than you think.</em></div>
+    <div class="two fi" style="align-items:start;">
+      <div>
+        <div style="background:rgba(230,235,215,0.1);border:1px solid rgba(230,235,215,0.15);border-radius:16px;padding:22px;margin-bottom:12px;">
+          <div class="nl2 lt" style="margin-bottom:8px;">Probability of first booking</div>
+          <div style="font-family:var(--serif);font-size:56px;font-weight:300;color:var(--gc);line-height:1;">80%</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.5);margin-top:4px;font-weight:300;">within 24–72 hours of going live</div>
+          <div style="height:8px;border-radius:100px;background:rgba(255,255,255,0.1);overflow:hidden;margin:12px 0 4px;">
+            <div style="height:100%;width:80%;border-radius:100px;background:var(--green);"></div>
+          </div>
+        </div>
+        <div class="strip-dk">
+          <div class="sc-dk"><div class="nl2 lt">Avg booking lead time</div><div class="dn gc" style="font-size:30px;">30–45</div><div class="ns lt">days in advance</div></div>
+          <div class="sc-dk"><div class="nl2 lt">New listing boost</div><div class="dn gc" style="font-size:30px;">↑</div><div class="ns lt">Airbnb algorithm priority</div></div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:14px;font-weight:500;">From today to first guest</div>
+        <div class="timeline-steps" style="--bd:rgba(255,255,255,0.1);">
+          <div class="tl-step"><div class="tl-dot" style="background:var(--green);">1</div><div class="tl-body"><div class="tl-title" style="color:#fff;">Sign today</div><div class="tl-desc" style="color:rgba(255,255,255,0.5);">Agreement sent by email. Signed digitally.</div><div class="tl-tag" style="color:var(--gc);">Day 1</div></div></div>
+          <div class="tl-step"><div class="tl-dot" style="background:var(--green);">2</div><div class="tl-body"><div class="tl-title" style="color:#fff;">Kick-off call & setup</div><div class="tl-desc" style="color:rgba(255,255,255,0.5);">Photography, staging, listing. Your Slack channel created.</div><div class="tl-tag" style="color:var(--gc);">Week 1–2</div></div></div>
+          <div class="tl-step"><div class="tl-dot" style="background:var(--green);">3</div><div class="tl-body"><div class="tl-title" style="color:#fff;">Live on Airbnb & Booking.com</div><div class="tl-desc" style="color:rgba(255,255,255,0.5);">New listing algorithm boost from day one.</div><div class="tl-tag" style="color:var(--gc);">Week 3</div></div></div>
+          <div class="tl-step"><div class="tl-dot" style="background:rgba(230,235,215,0.25);border:1px solid rgba(230,235,215,0.2);">★</div><div class="tl-body"><div class="tl-title" style="color:var(--gc);font-family:var(--serif);font-size:18px;font-weight:300;font-style:italic;">First booking arrives</div><div class="tl-desc" style="color:rgba(255,255,255,0.5);">80% within 24–72 hours of going live. Rarely more than 5–6 days.</div><div class="tl-tag" style="color:var(--gc);">Within 72hrs of going live</div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="cue-bar dark">
+    <span class="cue-icon">💬</span>
+    "If we signed today, you'd be live in roughly three weeks. Does that timeline work for your situation?"
+  </div>
+</div>
+
+<!-- S7: AGREEMENT (cream) -->
+<div class="slide" id="s7">
+  <div class="si">
+    <div class="ey fi">The agreement</div>
+    <div class="hl fi" style="font-size:clamp(26px,3.4vw,44px);margin-bottom:20px;">What you're<br><em>actually agreeing to.</em></div>
+
+    <!-- Highlight any term they flagged in pre-qualifier -->
+    <div id="agreement-concern" class="fi" style="margin-bottom:14px;"></div>
+
+    <div class="two fi">
+      <div class="ctl">
+        <div class="ct"><span class="ctk">✓</span><div class="ctt"><strong>6-month initial term.</strong> Exit early: £1,000 fee. After 6 months: 3 months written notice, no penalty.</div></div>
+        <div class="ct"><span class="ctk">✓</span><div class="ctt"><strong>15% + VAT</strong> on gross revenue. Plus <strong>£42/month</strong> software. No other fees unless quoted in advance.</div></div>
+        <div class="ct"><span class="ctk">✓</span><div class="ctt"><strong>72 hours Slack notice</strong> to access your property — to protect guest privacy. Genuine emergencies excepted.</div></div>
+        <div class="ct"><span class="ctk">✓</span><div class="ctt">We <strong>authorise repairs up to £300</strong> without calling you. Above £300, we get your sign-off first.</div></div>
+        <div class="ct"><span class="ctk">✓</span><div class="ctt"><strong>All communication via Slack</strong> — your dedicated channel. 24-hour response in office hours.</div></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div class="card-p">
+          <div style="font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--mu);margin-bottom:10px;">Questions to sort before going live</div>
+          <ul class="ck"><li>Does mortgage allow short-term letting? (No mortgage — not applicable)</li><li>Short-let building & liability insurance in place?</li><li>Gas and electrical certificates current?</li></ul>
+        </div>
+        <div class="card-p" style="display:flex;flex-direction:column;gap:8px;">
+          <div style="font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--green);">Read the full agreement now</div>
+          <a href="https://drive.google.com/file/d/1ct_Br_7XR69s6beyFfqHSnSPoRouKkG6/view?usp=sharing" class="pill" target="_blank" style="align-self:flex-start;">📄 View management agreement</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="cue-bar">
+    <span class="cue-icon">💬</span>
+    "Any of those terms you'd want to go through in more detail? The 6-month commitment is the one most people ask about."
+  </div>
+</div>
+
+<!-- S8: NEXT STEPS (dark) -->
+<div class="slide" id="s8">
+  <div class="si">
+    <div class="ey lt fi">Next steps</div>
+    <div class="hl white fi" style="font-size:clamp(26px,3.4vw,44px);margin-bottom:6px;">Ready to move forward,<br><em>Olusina?</em></div>
+    <div class="sub lt fi" style="margin-bottom:24px;">Every month you wait is +£1,295 you don't collect. First booking in 72 hours. Break-even in month 3.</div>
+    <div class="t60 fi">
+      <div class="steps">
+        <div class="step"><div class="sn">1</div><div class="st">Sign today <span>— we send the agreement by email now</span></div></div>
+        <div class="step"><div class="sn">2</div><div class="st">Kick-off call booked <span>— within 3–5 days</span></div></div>
+        <div class="step"><div class="sn">3</div><div class="st">Live in 3 weeks <span>— first booking typically within 72 hours</span></div></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+
+        <!-- Pre-qualifier summary recap -->
+        <div class="card-dk">
+          <div class="ch2 lt">What you told us you care about</div>
+          <div id="s8-recap" style="font-size:12.5px;color:rgba(255,255,255,0.55);font-weight:300;line-height:1.7;margin-top:4px;">
+            <!-- Populated by JS from pre-qualifier responses -->
+          </div>
+        </div>
+
+        <!-- Not ready -->
+        <div class="card-dk">
+          <div class="ch2 lt">Not ready today?</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.55);font-weight:300;line-height:1.6;margin-top:4px;">The pre-qualifier presentation stays live at your link. Everything is saved. Take the time you need — but the numbers don't change.</div>
+        </div>
+
+        <!-- Contact -->
+        <div class="card-dk" style="padding:16px 18px;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <div style="font-size:24px;">📅</div>
+            <div>
+              <div style="font-size:9.5px;color:rgba(255,255,255,0.3);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:4px;">Book a follow-up call</div>
+              <a href="https://calendly.com/zac-stayful/call" target="_blank" style="font-size:14px;font-weight:600;color:var(--gc);text-decoration:none;display:block;">calendly.com/zac-stayful/call</a>
+              <a href="mailto:zac@stayful.co.uk" style="font-size:11.5px;color:rgba(255,255,255,0.38);text-decoration:none;display:block;margin-top:2px;">zac@stayful.co.uk</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="cue-bar dark">
+    <span class="cue-icon">💬</span>
+    "What would you need to see or know to feel confident moving forward today?"
+  </div>
+</div>
+
+</div><!-- /deck -->
+
+<!-- BOTTOM NAV -->
+<div id="bnav">
+  <button class="na" id="prev" onclick="nav(-1)" disabled>←</button>
+  <div class="dots" id="dots"></div>
+  <span id="ctr">1 / 9</span>
+  <button class="na" id="next" onclick="nav(1)">→</button>
+</div>
+
+<script>
+const MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const FC=[2575,1987,1964,2592,2493,2234,2477,1676,2232,2372,2048,2297];
+const ltl=950;
+let TOTAL=9,cur=0,anim=false;
+const slides=Array.from(document.querySelectorAll('.slide'));
+
+// ── PRE-QUALIFIER RESPONSES ──────────────────────────────────
+// These are pulled from Monday long_text_mm2pse8d.
+// Format: "Label:\nAnswer\n\n" — parsed below.
+// Replace the string below with the actual column value when building.
+const PQ_RAW = `RESPONSES_PLACEHOLDER`;
+
+const PQ_LABELS = ['Main concern','Guest type','Income picture','Management involvement','Biggest worry about guests','Most useful to see','First booking timing','Agreement terms','Final question / concern'];
+
+// Parse the raw response text into an object {label: answer}
+function parsePQResponses(raw){
+  const out = {};
+  if(!raw || raw === 'RESPONSES_PLACEHOLDER' || raw.trim() === '') return out;
+  const lines = raw.split('\n');
+  let currentLabel = null;
+  lines.forEach(line => {
+    const trimmed = line.trim();
+    if(!trimmed) return;
+    // Lines starting with "→ " are answers
+    if(trimmed.startsWith('→ ')){
+      if(currentLabel) out[currentLabel] = trimmed.slice(2).trim();
+    } else {
+      // Check if this line is a known label
+      const match = PQ_LABELS.find(l => trimmed.startsWith(l));
+      if(match) currentLabel = match;
+    }
+  });
+  return out;
+}
+
+const PQ = parsePQResponses(PQ_RAW);
+const hasResponses = Object.keys(PQ).length > 0;
+
+// ── BUILD "WHAT YOU TOLD US" SLIDE ──────────────────────────
+function buildResponsesSlide(){
+  const container = document.getElementById('pq-responses');
+  const concernBlock = document.getElementById('concern-block');
+
+  if(!hasResponses){
+    // No responses yet — show placeholder
+    container.innerHTML = `
+      <div style="grid-column:1/-1;padding:20px 24px;background:var(--gp);border:1.5px dashed rgba(93,129,86,0.3);border-radius:14px;text-align:center;">
+        <div style="font-size:22px;margin-bottom:8px;">📬</div>
+        <div style="font-size:14px;font-weight:500;color:var(--mid);">Pre-qualifier responses not yet submitted</div>
+        <div style="font-size:12.5px;color:var(--mu);margin-top:4px;font-weight:300;">Once Zapier is connected, Olusina's answers will appear here automatically. For now, ask them directly what concerned them most when they looked through the presentation.</div>
+      </div>`;
+    concernBlock.innerHTML = '';
+    document.getElementById('cue-concern-text').textContent = 'your main concern';
+    return;
+  }
+
+  // Render response cards
+  const shown = Object.entries(PQ).slice(0,6); // max 6 in grid
+  container.innerHTML = shown.map(([label, val]) => `
+    <div class="pq-card">
+      <div class="pq-label">${label}</div>
+      <div class="pq-val">${val}</div>
+    </div>
+  `).join('');
+
+  // Main concern highlight
+  const mainConcern = PQ['Main concern'] || PQ['Final question / concern'] || null;
+  if(mainConcern){
+    document.getElementById('cue-concern-text').textContent = mainConcern.toLowerCase();
+    concernBlock.innerHTML = `
+      <div class="concern-banner">
+        <span class="concern-icon">🎯</span>
+        <div class="concern-body">
+          <div class="concern-lbl">Their primary concern — address this first</div>
+          <div class="concern-text">${mainConcern}</div>
+          <div class="concern-reply">This has been built into the income slide. The bar chart and worst-month card address this directly.</div>
+        </div>
+      </div>`;
+  }
+}
+
+// ── BUILD PROTECTION CONCERN CALLOUT ────────────────────────
+function buildProtectionConcern(){
+  const worryEl = document.getElementById('protection-concern');
+  const worry = PQ['Biggest worry about guests'];
+  if(!worry || !worryEl) return;
+  worryEl.innerHTML = `
+    <div class="concern-banner">
+      <span class="concern-icon">🔒</span>
+      <div class="concern-body">
+        <div class="concern-lbl">You said your biggest worry was</div>
+        <div class="concern-text">${worry}</div>
+        <div class="concern-reply">Here's exactly how Stayful addresses that:</div>
+      </div>
+    </div>`;
+}
+
+// ── BUILD AGREEMENT CONCERN CALLOUT ─────────────────────────
+function buildAgreementConcern(){
+  const el = document.getElementById('agreement-concern');
+  const concern = PQ['Agreement terms'];
+  if(!concern || !el) return;
+  el.innerHTML = `
+    <div class="concern-banner">
+      <span class="concern-icon">📋</span>
+      <div class="concern-body">
+        <div class="concern-lbl">You flagged this term</div>
+        <div class="concern-text">${concern}</div>
+        <div class="concern-reply">Let's go through that one in detail.</div>
+      </div>
+    </div>`;
+}
+
+// ── BUILD S8 RECAP ───────────────────────────────────────────
+function buildS8Recap(){
+  const el = document.getElementById('s8-recap');
+  if(!el) return;
+  if(!hasResponses){
+    el.textContent = 'Pre-qualifier responses not yet submitted — ask Olusina directly what their main questions are.';
+    return;
+  }
+  const lines = Object.entries(PQ).map(([l,v]) => `• ${l}: ${v}`).join('\n');
+  el.style.whiteSpace = 'pre-line';
+  el.textContent = lines;
+}
+
+// ── NAVIGATION ───────────────────────────────────────────────
+function go(idx){
+  if(anim||idx===cur||idx<0||idx>=TOTAL)return;
+  anim=true;
+  const d=idx>cur?1:-1;
+  const lv=slides[cur],en=slides[idx];
+  lv.classList.add(d>0?'el':'er');
+  en.classList.add(d>0?'nl':'nr');
+  en.classList.add('active');
+  setTimeout(()=>{lv.classList.remove('active','el','er');en.classList.remove('nl','nr');cur=idx;anim=false;update();stagger(en);},380);
+}
+function nav(d){go(cur+d);}
+function stagger(sl){
+  const els=sl.querySelectorAll('.fi');
+  els.forEach((el,i)=>{el.classList.remove('in');setTimeout(()=>el.classList.add('in'),i*70);});
+}
+function update(){
+  document.getElementById('ctr').textContent=(cur+1)+' / '+TOTAL;
+  document.getElementById('prev').disabled=cur===0;
+  document.getElementById('next').disabled=cur===TOTAL-1;
+  document.getElementById('pf').style.width=((cur+1)/TOTAL*100)+'%';
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('on',i===cur));
+  document.querySelectorAll('.tb-i').forEach((b,i)=>b.classList.toggle('on',i===cur));
+}
+function buildDots(){
+  const c=document.getElementById('dots');
+  for(let i=0;i<TOTAL;i++){const d=document.createElement('div');d.className='dot'+(i===0?' on':'');d.onclick=()=>go(i);c.appendChild(d);}
+}
+function buildBars(){
+  const bc=document.getElementById('bars'),bn=document.getElementById('bnames'),max=Math.max(...FC),min=Math.min(...FC);
+  const tip=document.createElement('div');tip.id='bar-tip';
+  tip.innerHTML='<div class="tip-month"></div><div class="tip-val"></div><div class="tip-vs"></div>';
+  document.getElementById('s2').appendChild(tip);
+  FC.forEach((v,i)=>{
+    const bw=document.createElement('div');bw.className='bw';bw.style.position='relative';
+    const b=document.createElement('div');b.className='bar'+(v===min?' lo':'');b.style.height='0';
+    b.style.transition='height 0.9s cubic-bezier(0.4,0,0.2,1),filter 0.15s ease';
+    bw.addEventListener('mouseenter',function(){
+      tip.querySelector('.tip-month').textContent=MN[i];
+      tip.querySelector('.tip-val').textContent='£'+v.toLocaleString('en-GB');
+      const diff=v-ltl;
+      tip.querySelector('.tip-vs').textContent=(diff>=0?'+':'')+'£'+diff.toLocaleString('en-GB')+' vs long-let';
+      const cw=bc.parentElement.getBoundingClientRect();
+      const bRect=bw.getBoundingClientRect();
+      tip.style.left=Math.max(0,(bRect.left+bRect.width/2)-cw.left-40)+'px';
+      tip.style.top=((bRect.top-cw.top)-50)+'px';
+      tip.classList.add('show');
+    });
+    bw.addEventListener('mouseleave',()=>tip.classList.remove('show'));
+    bw.appendChild(b);bc.appendChild(bw);
+    const l=document.createElement('div');l.className='bm';l.textContent=MN[i];bn.appendChild(l);
+    setTimeout(()=>{b.style.height=Math.round((v/max)*72)+'px';},400+i*45);
+  });
+}
+function updateLTL(){
+  const max=Math.max(...FC),h=Math.round((ltl/max)*72);
+  const r=document.getElementById('lref');if(r)r.style.marginTop=(72-h)+'px';
+}
+document.addEventListener('keydown',e=>{
+  const tag=document.activeElement&&document.activeElement.tagName;
+  if(tag==='INPUT'||tag==='TEXTAREA'||document.activeElement.isContentEditable)return;
+  if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();nav(1);}
+  if(e.key==='ArrowLeft'){e.preventDefault();nav(-1);}
+  if(e.key==='f'||e.key==='F'){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}
+});
+let tx=0;
+document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;},{passive:true});
+document.addEventListener('touchend',e=>{const dx=tx-e.changedTouches[0].clientX;if(Math.abs(dx)>55)nav(dx>0?1:-1);});
+
+// INIT
+buildDots();buildBars();updateLTL();
+buildResponsesSlide();
+buildProtectionConcern();
+buildAgreementConcern();
+buildS8Recap();
+update();stagger(slides[0]);
+</script>
+</body>
+</html>
