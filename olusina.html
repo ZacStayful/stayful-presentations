@@ -1241,6 +1241,13 @@ a.pill:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.2
 </div>
 
 <script>
+// Declared early as var so sfCanAdvance, sfBuildMailto and sfSelect
+// can all reference these safely before the interactive block executes.
+var sfR = {};
+var SF_LABELS = ['Main concern','Guest type','Income picture','Management involvement',
+                 'Biggest worry about guests','Most useful to see','First booking timing',
+                 'Agreement terms','Final question / concern'];
+
 const MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const FC=[2575,1987,1964,2592,2493,2234,2477,1676,2232,2372,2048,2297];
 let ltl=950,mtg=0,TOTAL=9,cur=0,anim=false;
@@ -1464,7 +1471,7 @@ updateLTL();
 sfShowAsk(0);
 updateMortgage(2245,950,0);
 wireLinks();update();stagger(slides[0]);
-sfUpdateEmailLink(); // prime the email link on load
+try{sfUpdateEmailLink();}catch(e){} // prime email link — sfR is {} at this point
 
 /* ══════════════════════════════════════════════════════════════
    INTERACTIVE QUESTION LAYER — JAVASCRIPT
@@ -1476,8 +1483,7 @@ const SF_LEAD    = 'Olusina';
 const SF_ADDR    = '6 Baobab Drive, Bilston, WV14 0RJ';
 const SF_ZAPIER  = 'ZAPIER_WEBHOOK_URL'; // Replace with your Zapier Catch Hook URL
 
-const SF_LABELS  = ['Main concern', 'Guest type', 'Income picture', 'Management involvement', 'Biggest worry about guests', 'Most useful to see', 'First booking timing', 'Agreement terms', 'Final question / concern'];
-const sfR = {}; // responses store
+// sfR and SF_LABELS declared at top of script (see var declarations above)
 
 function sfShowAsk(idx){
   document.querySelectorAll('.sf-ask').forEach(el=>{
