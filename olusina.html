@@ -84,7 +84,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--sans);backgro
 #s8{background:var(--gd);}
 
 /* LAYOUT */
-.si{max-width:1080px;margin:auto;width:100%;padding:clamp(20px,4vh,44px) 56px clamp(16px,3vh,32px);padding-bottom:170px;position:relative;}
+.si{max-width:1080px;margin:auto;width:100%;padding:clamp(20px,4vh,44px) 56px clamp(16px,3vh,32px);position:relative;}
 
 /* TYPOGRAPHY */
 .ey{font-size:10px;letter-spacing:0.24em;text-transform:uppercase;font-weight:500;color:var(--green);display:flex;align-items:center;gap:10px;margin-bottom:14px;}
@@ -390,60 +390,61 @@ a.pill:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.2
    INTERACTIVE QUESTION LAYER
 ══════════════════════════════════════════════════════════════ */
 .sf-ask{
-  /* Sticky bar — fixed above bottom nav, centered, small width */
-  position:fixed;
-  bottom:80px;                        /* sit above the 64px nav bar */
-  left:50%;
-  transform:translateX(-50%);
-  width:calc(100% - 32px);
-  max-width:520px;
-  z-index:190;
   display:none;
+  margin:28px auto 0;
+  max-width:560px;
   border-radius:14px;
-  padding:13px 18px 15px;
+  padding:16px 20px;
   text-align:center;
-  box-shadow:0 8px 32px rgba(0,0,0,0.18),0 2px 8px rgba(0,0,0,0.1);
+  transition:box-shadow 0.2s;
 }
 /* Light slide variant (cream / white slides) */
 .sf-ask.light{
-  background:rgba(250,248,244,0.97);
-  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  background:rgba(250,248,244,0.94);
+  backdrop-filter:blur(14px);
   border:1.5px solid var(--bd);
 }
 .sf-ask.dark{
-  background:rgba(22,40,22,0.97);
-  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  border:1.5px solid rgba(230,235,215,0.2);
+  background:rgba(30,50,30,0.94);
+  backdrop-filter:blur(14px);
+  border:1.5px solid rgba(230,235,215,0.15);
 }
 
-/* ── ERROR STATE — shake + amber glow ───────────────────── */
-.sf-ask.sf-error{
-  animation:sfShake 0.38s ease,sfGlowAmber 0.4s ease;
-  border-color:rgba(196,124,26,0.6)!important;
+/* Needs-answer: amber glow pulse — draws eye to question */
+.sf-ask.sf-needs-answer{
+  animation:sfGlowPulse 0.5s ease forwards;
+  border-color:rgba(196,124,26,0.55)!important;
 }
-@keyframes sfShake{
-  0%,100%{transform:translateX(-50%);}
-  20%{transform:translateX(calc(-50% - 7px));}
-  40%{transform:translateX(calc(-50% + 7px));}
-  60%{transform:translateX(calc(-50% - 4px));}
-  80%{transform:translateX(calc(-50% + 4px));}
-}
-@keyframes sfGlowAmber{
-  0%  {box-shadow:0 8px 32px rgba(0,0,0,0.18),0 0 0 0 rgba(196,124,26,0.7);}
-  50% {box-shadow:0 8px 32px rgba(0,0,0,0.18),0 0 0 10px rgba(196,124,26,0.15);}
-  100%{box-shadow:0 8px 32px rgba(0,0,0,0.18),0 0 0 4px rgba(196,124,26,0.3);}
+@keyframes sfGlowPulse{
+  0%  {box-shadow:0 0 0 0 rgba(196,124,26,0.7);}
+  40% {box-shadow:0 0 0 10px rgba(196,124,26,0.2);}
+  100%{box-shadow:0 0 0 4px rgba(196,124,26,0.3);}
 }
 
-/* ── ERROR MESSAGE inside bar ────────────────────────────── */
+/* Error message strip inside the question block */
 .sf-err-msg{
-  display:none;font-size:11px;font-weight:600;
-  color:var(--am);letter-spacing:0.03em;
-  margin-bottom:8px;padding:4px 12px;
-  background:rgba(196,124,26,0.1);border-radius:6px;
+  display:none;font-size:11px;font-weight:600;color:var(--am);
+  margin-bottom:9px;padding:5px 12px;
+  background:rgba(196,124,26,0.1);border-radius:7px;
+  letter-spacing:0.02em;
 }
 .sf-err-msg.show{display:block;}
-.sf-ask.answered.light{background:rgba(240,244,232,0.97);border-color:rgba(93,129,86,0.4);}
-.sf-ask.answered.dark{background:rgba(30,54,30,0.97);border-color:rgba(230,235,215,0.3);}
+
+/* Fixed top toast — appears briefly when they try to skip */
+#sf-toast{
+  position:fixed;top:60px;left:50%;transform:translateX(-50%) translateY(-8px);
+  background:var(--am);color:#fff;
+  border-radius:100px;padding:7px 18px;
+  font-size:12px;font-weight:600;letter-spacing:0.02em;
+  z-index:300;pointer-events:none;white-space:nowrap;
+  opacity:0;transition:opacity 0.2s,transform 0.2s;
+  box-shadow:0 4px 16px rgba(196,124,26,0.4);
+}
+#sf-toast.show{
+  opacity:1;transform:translateX(-50%) translateY(0);
+}
+.sf-ask.answered.light{background:rgba(240,244,232,0.94);border-color:rgba(93,129,86,0.3);}
+.sf-ask.answered.dark{background:rgba(35,58,35,0.94);border-color:rgba(230,235,215,0.25);}
 
 .sf-ask-q{font-size:13.5px;font-weight:500;margin-bottom:12px;line-height:1.4;display:flex;align-items:center;justify-content:center;gap:7px;}
 .sf-ask-q::before{content:"💬";font-size:14px;}
@@ -621,7 +622,7 @@ a.pill:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.2
   .cw { padding: 12px 10px 8px; }
 
   /* SF-ASK QUESTION BLOCKS */
-  .sf-ask { padding: 11px 14px 13px; max-width: calc(100% - 24px); bottom: 72px; }
+  .sf-ask { padding: 12px 14px; margin: 16px auto 0; max-width: 100%; }
   .sf-ask-q { font-size: 13px; margin-bottom: 10px; }
   .sf-opt { font-size: 11.5px; padding: 6px 11px; }
   .sf-send { font-size: 12.5px; padding: 8px 16px; }
@@ -1228,6 +1229,9 @@ a.pill:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.2
 
 </div><!-- /deck -->
 
+<!-- ERROR TOAST -->
+<div id="sf-toast">↓ Please answer the question below</div>
+
 <!-- BOTTOM NAV -->
 <div id="bnav">
   <button class="na" id="prev" onclick="nav(-1)" disabled>←</button>
@@ -1420,15 +1424,29 @@ function sfCanAdvance(idx){
 function sfTriggerError(idx){
   const el=document.querySelector(`.sf-ask[data-q="${idx}"]`);
   if(!el) return;
-  // Restart animation by removing then re-adding class
-  el.classList.remove('sf-error');
-  void el.offsetWidth; // force reflow
-  el.classList.add('sf-error');
-  // Show error message
+
+  // 1. Show toast at top of screen
+  const toast=document.getElementById('sf-toast');
+  if(toast){
+    toast.classList.add('show');
+    clearTimeout(toast._t);
+    toast._t=setTimeout(()=>toast.classList.remove('show'),2800);
+  }
+
+  // 2. Scroll question into view inside the slide
+  el.scrollIntoView({behavior:'smooth',block:'center'});
+
+  // 3. Pulse amber glow on the question block
+  el.classList.remove('sf-needs-answer');
+  void el.offsetWidth; // force reflow to restart animation
+  el.classList.add('sf-needs-answer');
+
+  // 4. Show inline error message inside the block
   const em=el.querySelector('.sf-err-msg');
   if(em) em.classList.add('show');
-  // Remove animation class after it finishes (keep border + message)
-  setTimeout(()=>el.classList.remove('sf-error'),420);
+
+  // Keep border highlighted until answered — clear animation class after it finishes
+  setTimeout(()=>el.classList.remove('sf-needs-answer'),520);
 }
 
 var SLIDE_NAMES=['Property','Who books?','Income','Management','Protection','Proof','First booking','Agreement','Next steps'];
@@ -1464,12 +1482,15 @@ const sfR = {}; // responses store
 function sfShowAsk(idx){
   document.querySelectorAll('.sf-ask').forEach(el=>{
     el.style.display='none';
-    el.classList.remove('sf-error');
+    el.classList.remove('sf-needs-answer');
     const em=el.querySelector('.sf-err-msg');
     if(em)em.classList.remove('show');
   });
   const el=document.querySelector(`.sf-ask[data-q="${idx}"]`);
   if(el)el.style.display='block';
+  // Clear toast on slide change
+  const toast=document.getElementById('sf-toast');
+  if(toast){ toast.classList.remove('show'); clearTimeout(toast._t); }
 }
 
 function sfSelect(btn, qIdx){
@@ -1478,10 +1499,12 @@ function sfSelect(btn, qIdx){
   btn.classList.add('sel');
   sfR[qIdx]=btn.textContent.trim();
   parent.classList.add('answered');
-  // Clear any error state immediately on answer
-  parent.classList.remove('sf-error');
+  // Clear error state on answer
+  parent.classList.remove('sf-needs-answer');
   const em=parent.querySelector('.sf-err-msg');
   if(em) em.classList.remove('show');
+  const toast=document.getElementById('sf-toast');
+  if(toast){ toast.classList.remove('show'); clearTimeout(toast._t); }
   const ct=document.getElementById('sfct-'+qIdx);
   const cf=document.getElementById('sfc-'+qIdx);
   if(ct)ct.textContent='✓ '+sfR[qIdx];
