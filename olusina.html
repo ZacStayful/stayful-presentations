@@ -84,7 +84,7 @@ html,body{width:100%;height:100%;overflow:hidden;font-family:var(--sans);backgro
 #s8{background:var(--gd);}
 
 /* LAYOUT */
-.si{max-width:1080px;margin:auto;width:100%;padding:clamp(20px,4vh,44px) 56px clamp(16px,3vh,32px);position:relative;}
+.si{max-width:1080px;margin:auto;width:100%;padding:clamp(20px,4vh,44px) 56px clamp(16px,3vh,32px);padding-bottom:170px;position:relative;}
 
 /* TYPOGRAPHY */
 .ey{font-size:10px;letter-spacing:0.24em;text-transform:uppercase;font-weight:500;color:var(--green);display:flex;align-items:center;gap:10px;margin-bottom:14px;}
@@ -390,25 +390,60 @@ a.pill:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.2
    INTERACTIVE QUESTION LAYER
 ══════════════════════════════════════════════════════════════ */
 .sf-ask{
+  /* Sticky bar — fixed above bottom nav, centered, small width */
+  position:fixed;
+  bottom:80px;                        /* sit above the 64px nav bar */
+  left:50%;
+  transform:translateX(-50%);
+  width:calc(100% - 32px);
+  max-width:520px;
+  z-index:190;
   display:none;
-  margin:24px auto 0;
-  max-width:580px;
-  border-radius:14px;padding:16px 20px;
-  transition:all 0.3s var(--ease);
+  border-radius:14px;
+  padding:13px 18px 15px;
   text-align:center;
+  box-shadow:0 8px 32px rgba(0,0,0,0.18),0 2px 8px rgba(0,0,0,0.1);
 }
 /* Light slide variant (cream / white slides) */
 .sf-ask.light{
-  background:rgba(250,248,244,0.92);backdrop-filter:blur(14px);
+  background:rgba(250,248,244,0.97);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
   border:1.5px solid var(--bd);
 }
-/* Dark slide variant (dark green slides) */
 .sf-ask.dark{
-  background:rgba(30,50,30,0.92);backdrop-filter:blur(14px);
-  border:1.5px solid rgba(230,235,215,0.15);
+  background:rgba(22,40,22,0.97);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  border:1.5px solid rgba(230,235,215,0.2);
 }
-.sf-ask.answered.light{background:rgba(240,244,232,0.94);border-color:rgba(93,129,86,0.3);}
-.sf-ask.answered.dark{background:rgba(35,58,35,0.94);border-color:rgba(230,235,215,0.25);}
+
+/* ── ERROR STATE — shake + amber glow ───────────────────── */
+.sf-ask.sf-error{
+  animation:sfShake 0.38s ease,sfGlowAmber 0.4s ease;
+  border-color:rgba(196,124,26,0.6)!important;
+}
+@keyframes sfShake{
+  0%,100%{transform:translateX(-50%);}
+  20%{transform:translateX(calc(-50% - 7px));}
+  40%{transform:translateX(calc(-50% + 7px));}
+  60%{transform:translateX(calc(-50% - 4px));}
+  80%{transform:translateX(calc(-50% + 4px));}
+}
+@keyframes sfGlowAmber{
+  0%  {box-shadow:0 8px 32px rgba(0,0,0,0.18),0 0 0 0 rgba(196,124,26,0.7);}
+  50% {box-shadow:0 8px 32px rgba(0,0,0,0.18),0 0 0 10px rgba(196,124,26,0.15);}
+  100%{box-shadow:0 8px 32px rgba(0,0,0,0.18),0 0 0 4px rgba(196,124,26,0.3);}
+}
+
+/* ── ERROR MESSAGE inside bar ────────────────────────────── */
+.sf-err-msg{
+  display:none;font-size:11px;font-weight:600;
+  color:var(--am);letter-spacing:0.03em;
+  margin-bottom:8px;padding:4px 12px;
+  background:rgba(196,124,26,0.1);border-radius:6px;
+}
+.sf-err-msg.show{display:block;}
+.sf-ask.answered.light{background:rgba(240,244,232,0.97);border-color:rgba(93,129,86,0.4);}
+.sf-ask.answered.dark{background:rgba(30,54,30,0.97);border-color:rgba(230,235,215,0.3);}
 
 .sf-ask-q{font-size:13.5px;font-weight:500;margin-bottom:12px;line-height:1.4;display:flex;align-items:center;justify-content:center;gap:7px;}
 .sf-ask-q::before{content:"💬";font-size:14px;}
@@ -586,7 +621,7 @@ a.pill:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.2
   .cw { padding: 12px 10px 8px; }
 
   /* SF-ASK QUESTION BLOCKS */
-  .sf-ask { padding: 12px 14px; margin: 16px auto 0; max-width: 100%; }
+  .sf-ask { padding: 11px 14px 13px; max-width: calc(100% - 24px); bottom: 72px; }
   .sf-ask-q { font-size: 13px; margin-bottom: 10px; }
   .sf-opt { font-size: 11.5px; padding: 6px 11px; }
   .sf-send { font-size: 12.5px; padding: 8px 16px; }
@@ -1218,7 +1253,11 @@ function go(idx){
   en.classList.add('active');
   setTimeout(()=>{lv.classList.remove('active','el','er');en.classList.remove('nl','nr');cur=idx;anim=false;update();stagger(en);},440);
 }
-function nav(d){go(cur+d);}
+function nav(d){
+  // Block forward navigation if current slide's question is unanswered
+  if(d>0 && !sfCanAdvance(cur)){ sfTriggerError(cur); return; }
+  go(cur+d);
+}
 function stagger(sl){const els=sl.querySelectorAll('.fi');els.forEach((el,i)=>{el.classList.remove('in');setTimeout(()=>el.classList.add('in'),i*85);});}
 function update(){
   document.getElementById('ctr').textContent=(cur+1)+' / '+TOTAL;
@@ -1236,10 +1275,12 @@ function buildBars(){
   const bc=document.getElementById('bars'),bn=document.getElementById('bnames'),max=Math.max(...FC),min=Math.min(...FC);
 
   // Shared tooltip element
+  // Append tooltip to .cw (position:relative) so coordinates are correct
+  const cwEl=bc.parentElement;  // the .cw container
   const tip=document.createElement('div');
   tip.id='bar-tip';
   tip.innerHTML='<div class="tip-month"></div><div class="tip-val"></div><div class="tip-vs"></div>';
-  document.getElementById('s2').appendChild(tip);
+  cwEl.appendChild(tip);
 
   FC.forEach((v,i)=>{
     const bw=document.createElement('div');bw.className='bw';bw.style.position='relative';
@@ -1253,12 +1294,13 @@ function buildBars(){
       tip.querySelector('.tip-val').textContent='£'+v.toLocaleString('en-GB');
       const diff=v-ltl;
       tip.querySelector('.tip-vs').textContent=(diff>=0?'+':'')+'£'+diff.toLocaleString('en-GB')+' vs long-let';
-      const cw=bc.parentElement.getBoundingClientRect();
+      // Coordinates relative to .cw (tooltip's offsetParent)
+      const cwRect=cwEl.getBoundingClientRect();
       const bRect=bw.getBoundingClientRect();
-      const tipL=(bRect.left+bRect.width/2)-cw.left;
-      const tipT=(bRect.top-cw.top)-50;
-      tip.style.left=Math.max(0,tipL-40)+'px';
-      tip.style.top=tipT+'px';
+      const tipL=(bRect.left+bRect.width/2)-cwRect.left;
+      const tipT=(bRect.top-cwRect.top)-62;  // 62px above bar top
+      tip.style.left=Math.max(4,tipL-40)+'px';
+      tip.style.top=Math.max(4,tipT)+'px';
       tip.classList.add('show');
     });
     bw.addEventListener('mouseleave',()=>tip.classList.remove('show'));
@@ -1361,10 +1403,43 @@ document.addEventListener('keydown',e=>{
 });
 let tx=0;
 document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;},{passive:true});
-document.addEventListener('touchend',e=>{const dx=tx-e.changedTouches[0].clientX;if(Math.abs(dx)>55)nav(dx>0?1:-1);});
+document.addEventListener('touchend',e=>{const dx=tx-e.changedTouches[0].clientX;if(Math.abs(dx)>55)nav(dx>0?1:-1);},{ passive:true });
 // Init with Olusina's data
 // Slide names for mobile label — must be defined before update() runs
+// ── BLOCKER LOGIC ────────────────────────────────────────────
+function sfCanAdvance(idx){
+  // Last slide — always allow
+  if(idx>=TOTAL-1) return true;
+  // No question on this slide — allow
+  const el=document.querySelector(`.sf-ask[data-q="${idx}"]`);
+  if(!el) return true;
+  // Has an answered response — allow
+  return sfR[idx]!==undefined;
+}
+
+function sfTriggerError(idx){
+  const el=document.querySelector(`.sf-ask[data-q="${idx}"]`);
+  if(!el) return;
+  // Restart animation by removing then re-adding class
+  el.classList.remove('sf-error');
+  void el.offsetWidth; // force reflow
+  el.classList.add('sf-error');
+  // Show error message
+  const em=el.querySelector('.sf-err-msg');
+  if(em) em.classList.add('show');
+  // Remove animation class after it finishes (keep border + message)
+  setTimeout(()=>el.classList.remove('sf-error'),420);
+}
+
 var SLIDE_NAMES=['Property','Who books?','Income','Management','Protection','Proof','First booking','Agreement','Next steps'];
+
+// Inject error message div into each question block
+document.querySelectorAll('.sf-ask').forEach(el=>{
+  const em=document.createElement('div');
+  em.className='sf-err-msg';
+  em.textContent='Please answer before continuing →';
+  el.insertBefore(em,el.firstChild);
+});
 
 buildDots();buildBars();
 updateLTL();
@@ -1387,7 +1462,12 @@ const SF_LABELS  = ['Main concern', 'Guest type', 'Income picture', 'Management 
 const sfR = {}; // responses store
 
 function sfShowAsk(idx){
-  document.querySelectorAll('.sf-ask').forEach(el=>el.style.display='none');
+  document.querySelectorAll('.sf-ask').forEach(el=>{
+    el.style.display='none';
+    el.classList.remove('sf-error');
+    const em=el.querySelector('.sf-err-msg');
+    if(em)em.classList.remove('show');
+  });
   const el=document.querySelector(`.sf-ask[data-q="${idx}"]`);
   if(el)el.style.display='block';
 }
@@ -1398,6 +1478,10 @@ function sfSelect(btn, qIdx){
   btn.classList.add('sel');
   sfR[qIdx]=btn.textContent.trim();
   parent.classList.add('answered');
+  // Clear any error state immediately on answer
+  parent.classList.remove('sf-error');
+  const em=parent.querySelector('.sf-err-msg');
+  if(em) em.classList.remove('show');
   const ct=document.getElementById('sfct-'+qIdx);
   const cf=document.getElementById('sfc-'+qIdx);
   if(ct)ct.textContent='✓ '+sfR[qIdx];
