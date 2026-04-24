@@ -859,6 +859,26 @@ a.pill:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.2
 </div>
 
 <script>
+
+// ── Stayful Presentation Tracking ────────────────────────────────────────────
+const _LID = new URLSearchParams(window.location.search).get('lid') || '';
+const _TRACK = 'https://stayful-voice-api.vercel.app/api/tracking/presentation';
+let _firstSlide = true;
+
+function _track(event, data) {
+  if (!_LID) return;
+  fetch(_TRACK, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(Object.assign({ monday_item_id: _LID, event }, data))
+  }).catch(() => {});
+}
+
+// Track initial page view
+window.addEventListener('load', function() {
+  _track('viewed', { slide: 0, total: TOTAL });
+});
+// ─────────────────────────────────────────────────────────────────────────────
 const MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 const FC=[1581,1669,1488,2029,1864,2158,2420,2130,2139,2072,1834,1984];
 let ltl=1190,mtg=1300,TOTAL=9,cur=0,anim=false;
@@ -867,6 +887,11 @@ const LINKS={manchester:'https://drive.google.com/file/d/REPLACE_MANCHESTER/view
 
 function go(idx){
   if(anim||idx===cur||idx<0||idx>=TOTAL)return;
+  // Track slide view
+  if (!_firstSlide) {
+    _track(idx === TOTAL - 1 ? 'completed' : 'slide_viewed', { slide: idx, total: TOTAL });
+  }
+  _firstSlide = false;
   anim=true;
   const d=idx>cur?1:-1;
   const lv=slides[cur],en=slides[idx];

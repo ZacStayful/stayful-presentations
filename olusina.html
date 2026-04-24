@@ -1268,6 +1268,26 @@ a.pill:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.2
 </div>
 
 <script>
+
+// ── Stayful Presentation Tracking ────────────────────────────────────────────
+const _LID = new URLSearchParams(window.location.search).get('lid') || '';
+const _TRACK = 'https://stayful-voice-api.vercel.app/api/tracking/presentation';
+let _firstSlide = true;
+
+function _track(event, data) {
+  if (!_LID) return;
+  fetch(_TRACK, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(Object.assign({ monday_item_id: _LID, event }, data))
+  }).catch(() => {});
+}
+
+// Track initial page view
+window.addEventListener('load', function() {
+  _track('viewed', { slide: 0, total: TOTAL });
+});
+// ─────────────────────────────────────────────────────────────────────────────
 // Declared early as var so sfCanAdvance, sfBuildMailto and sfSelect
 // can all reference these safely before the interactive block executes.
 var sfR = {};
@@ -1283,6 +1303,11 @@ const LINKS={manchester:'https://drive.google.com/file/d/1frXc2OHyxca0W6bY0pZ5PS
 
 function go(idx){
   if(anim||idx===cur||idx<0||idx>=TOTAL)return;
+  // Track slide view
+  if (!_firstSlide) {
+    _track(idx === TOTAL - 1 ? 'completed' : 'slide_viewed', { slide: idx, total: TOTAL });
+  }
+  _firstSlide = false;
   anim=true;
   const d=idx>cur?1:-1;
   const lv=slides[cur],en=slides[idx];
