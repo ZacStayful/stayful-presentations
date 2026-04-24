@@ -1539,7 +1539,7 @@ try{sfUpdateEmailLink();}catch(e){} // prime email link — sfR is {} at this po
 const SF_ITEM_ID = '11755194647';
 const SF_LEAD    = 'Olusina';
 const SF_ADDR    = '6 Baobab Drive, Bilston, WV14 0RJ';
-const SF_ZAPIER  = 'ZAPIER_WEBHOOK_URL'; // Replace with your Zapier Catch Hook URL
+const SF_ZAPIER  = 'https://stayful-voice-api.vercel.app/api/presentation/sync';
 
 // sfR and SF_LABELS declared at top of script (see var declarations above)
 
@@ -1646,7 +1646,7 @@ function sfSync(){
   sfUpdateEmailLink();
 
   // Fire Zapier webhook — writes to Monday column long_text_mm2pse8d
-  if(SF_ZAPIER&&SF_ZAPIER!=='ZAPIER_WEBHOOK_URL'){
+  if(SF_ZAPIER&&SF_ZAPIER!==''){
     fetch(SF_ZAPIER,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
