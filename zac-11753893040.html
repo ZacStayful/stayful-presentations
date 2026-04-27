@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stayful — Ancoats, Manchester | Property Income Analysis</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+--green:#5d8156;--dark:#2d4a2d;--card-bg:#e6ebd7;--pale:#f0f4e8;--cream:#faf8f4;--white:#ffffff;--amber:#c47c1a;--amber-pale:#fdf3e3;
+--trans:420ms cubic-bezier(0.4,0,0.2,1);
+}
+html,body{width:100%;height:100%;overflow:hidden;font-family:'Inter',sans-serif;background:#000}
+.slide{position:absolute;inset:0;width:100vw;height:100vh;overflow:hidden;display:flex;flex-direction:column;opacity:0;pointer-events:none;transform:translateX(60px);transition:opacity var(--trans),transform var(--trans)}
+.slide.active{opacity:1;pointer-events:all;transform:translateX(0)}
+.slide.exit-left{opacity:0;transform:translateX(-60px)}
+.slide.exit-right{opacity:0;transform:translateX(60px)}
+
+/* FI stagger */
+.fi{opacity:0;transform:translateY(12px);transition:opacity 0.5s ease,transform 0.5s ease}
+.slide.active .fi{opacity:1;transform:translateY(0)}
+.slide.active .fi:nth-child(1){transition-delay:0.05s}
+.slide.active .fi:nth-child(2){transition-delay:0.12s}
+.slide.active .fi:nth-child(3){transition-delay:0.19s}
+.slide.active .fi:nth-child(4){transition-delay:0.26s}
+.slide.active .fi:nth-child(5){transition-delay:0.33s}
+.slide.active .fi:nth-child(6){transition-delay:0.40s}
+.slide.active .fi:nth-child(7){transition-delay:0.47s}
+.slide.active .fi:nth-child(8){transition-delay:0.54s}
+.slide.active .fi:nth-child(9){transition-delay:0.61s}
+
+/* TOP NAV */
+#top-nav{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(45,74,45,0.97);backdrop-filter:blur(8px);display:flex;align-items:center;gap:4px;padding:6px 12px;overflow-x:auto;scrollbar-width:none}
+#top-nav::-webkit-scrollbar{display:none}
+.nav-btn{font-family:'Inter',sans-serif;font-size:10px;font-weight:500;color:rgba(255,255,255,0.65);background:transparent;border:1px solid rgba(255,255,255,0.15);border-radius:20px;padding:4px 10px;cursor:pointer;white-space:nowrap;transition:all 0.2s}
+.nav-btn:hover,.nav-btn.active{background:rgba(255,255,255,0.15);color:#fff;border-color:rgba(255,255,255,0.35)}
+.nav-logo{height:22px;filter:brightness(10);margin-right:8px;flex-shrink:0}
+
+/* CUE BAR */
+.cue-bar{position:absolute;bottom:56px;left:0;right:0;z-index:50;padding:6px 20px;background:rgba(0,0,0,0.55);backdrop-filter:blur(4px);text-align:center}
+.cue-bar span{font-family:'Inter',sans-serif;font-size:11px;font-style:italic;color:rgba(255,255,255,0.85);letter-spacing:0.01em}
+
+/* BOTTOM NAV */
+#bottom-nav{position:fixed;bottom:0;left:0;right:0;z-index:1000;background:rgba(45,74,45,0.97);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:space-between;padding:8px 20px;height:48px}
+.bn-arrow{background:none;border:none;color:#fff;cursor:pointer;font-size:18px;padding:4px 8px;opacity:0.8;transition:opacity 0.2s}
+.bn-arrow:hover{opacity:1}
+.bn-dots{display:flex;gap:6px;align-items:center}
+.bn-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,0.3);cursor:pointer;transition:all 0.2s}
+.bn-dot.active{background:#fff;transform:scale(1.3)}
+.bn-counter{font-size:11px;color:rgba(255,255,255,0.7);font-family:'Inter',sans-serif;min-width:44px;text-align:center}
+
+/* SLIDE CONTENT AREA */
+.slide-inner{flex:1;overflow:hidden;padding-top:44px;padding-bottom:96px;display:flex;flex-direction:column}
+
+/* COMMON */
+.pill{display:inline-flex;align-items:center;gap:5px;border-radius:20px;padding:3px 10px;font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase}
+.pill-green{background:var(--green);color:#fff}
+.pill-dark{background:var(--dark);color:#fff}
+.pill-amber{background:var(--amber-pale);color:var(--amber)}
+.pill-white{background:rgba(255,255,255,0.15);color:#fff;border:1px solid rgba(255,255,255,0.25)}
+.pill-high{background:#dcf0d8;color:#2d6b27}
+.tag-high{background:#dcf0d8;color:#2d6b27;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;letter-spacing:0.05em}
+.tag-medium{background:#fef3cd;color:#856404;font-size:10px;font-weight:700;padding:2px 7px;border-radius:10px;letter-spacing:0.05em}
+.serif{font-family:'Playfair Display',serif}
+
+/* PERSONALISE PANEL */
+#p-panel{position:fixed;top:0;right:-360px;width:340px;height:100vh;background:#fff;z-index:2000;box-shadow:-4px 0 24px rgba(0,0,0,0.18);transition:right 0.35s cubic-bezier(0.4,0,0.2,1);overflow-y:auto;padding:60px 24px 24px}
+#p-panel.open{right:0}
+#p-panel h3{font-family:'Playfair Display',serif;font-size:20px;color:var(--dark);margin-bottom:16px}
+#p-panel label{display:block;font-size:12px;font-weight:600;color:#555;margin-top:12px;margin-bottom:4px}
+#p-panel input{width:100%;border:1px solid #ddd;border-radius:6px;padding:8px 10px;font-size:13px;font-family:'Inter',sans-serif}
+#p-panel button.apply-btn{margin-top:20px;width:100%;background:var(--green);color:#fff;border:none;border-radius:8px;padding:11px;font-size:14px;font-weight:600;cursor:pointer}
+#p-panel .close-p{position:absolute;top:16px;right:16px;background:none;border:none;font-size:20px;cursor:pointer;color:#666}
+
+/* ===== SLIDE 0 — COVER ===== */
+#s0{background:var(--dark)}
+#s0 .cover-wrap{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:0 32px;gap:0}
+#s0 .eyebrow{margin-bottom:18px}
+#s0 .lead-name{font-family:'Playfair Display',serif;font-size:clamp(36px,5vw,60px);font-weight:700;color:#fff;line-height:1.1;margin-bottom:4px}
+#s0 .lead-addr{font-size:14px;color:rgba(255,255,255,0.6);margin-bottom:24px}
+#s0 .stats-strip{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-bottom:20px}
+#s0 .stat-box{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:12px;padding:14px 20px;text-align:center;min-width:130px}
+#s0 .stat-box .sv{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:#fff}
+#s0 .stat-box .sl{font-size:10px;color:rgba(255,255,255,0.55);text-transform:uppercase;letter-spacing:0.06em;margin-top:2px}
+#s0 .adr-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:20px}
+#s0 .adr-item{font-size:13px;color:rgba(255,255,255,0.7)}
+#s0 .adr-item strong{color:#fff}
+
+/* ===== SLIDE 1 — WHO BOOKS ===== */
+#s1{background:var(--cream)}
+#s1 .s1-inner{flex:1;display:flex;flex-direction:column;padding:16px 28px 0}
+#s1 h2{font-family:'Playfair Display',serif;font-size:clamp(24px,3vw,36px);color:var(--dark);margin-bottom:6px}
+#s1 .sub{font-size:13px;color:#666;margin-bottom:16px}
+#s1 .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;flex:1}
+#s1 .gcard{background:#fff;border-radius:14px;padding:18px;border:1px solid #e8e8e8;display:flex;flex-direction:column;gap:8px}
+#s1 .gcard .emoji{font-size:28px}
+#s1 .gcard .gtype{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--green)}
+#s1 .gcard .gtitle{font-family:'Playfair Display',serif;font-size:17px;color:var(--dark);font-weight:600}
+#s1 .gcard .gdesc{font-size:12px;color:#555;line-height:1.5}
+#s1 .gcard .gloc{display:inline-flex;align-items:center;gap:5px;background:var(--pale);border-radius:20px;padding:4px 10px;font-size:11px;font-weight:600;color:var(--dark);margin-top:4px}
+#s1 .footer-note{background:var(--card-bg);border-radius:10px;padding:10px 16px;font-size:12px;color:var(--dark);margin-top:12px;font-style:italic}
+
+/* ===== SLIDE 2 — INCOME ===== */
+#s2{background:#fff}
+#s2 .s2-inner{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:20px;padding:16px 28px 0;align-items:start}
+#s2 .left h2{font-family:'Playfair Display',serif;font-size:clamp(22px,2.5vw,32px);color:var(--dark);margin-bottom:12px}
+#s2 .compare-row{display:flex;gap:12px;margin-bottom:10px}
+#s2 .cbox{border-radius:12px;padding:14px 16px;flex:1}
+#s2 .cbox.stl{background:var(--dark);color:#fff}
+#s2 .cbox.ltl{background:var(--pale);color:var(--dark)}
+#s2 .cbox .cv{font-family:'Playfair Display',serif;font-size:28px;font-weight:700}
+#s2 .cbox .cl{font-size:10px;text-transform:uppercase;letter-spacing:0.06em;opacity:0.7;margin-top:2px}
+#s2 .uplift-badge{background:var(--amber-pale);color:var(--amber);border-radius:10px;padding:10px 14px;font-size:13px;font-weight:600;margin-bottom:10px}
+#s2 .cleaning-note{font-size:12px;color:var(--green);font-style:italic;margin-bottom:10px}
+#s2 .right-col{display:flex;flex-direction:column;gap:10px}
+#s2 .chart-wrap{flex:1;position:relative;min-height:160px}
+#s2 .chart-bars{display:flex;align-items:flex-end;gap:3px;height:160px;position:relative}
+#s2 .bar-col{display:flex;flex-direction:column;align-items:center;flex:1;gap:2px}
+#s2 .bar{width:100%;background:var(--green);border-radius:3px 3px 0 0;transition:height 1s cubic-bezier(0.4,0,0.2,1);position:relative}
+#s2 .bar.peak{background:var(--dark)}
+#s2 .bar-label{font-size:8px;color:#666;text-align:center;line-height:1.1}
+#s2 .ltl-line{position:absolute;left:0;right:0;border-top:2px dashed var(--amber);pointer-events:none}
+#s2 .ltl-line-label{position:absolute;right:0;top:-16px;font-size:9px;color:var(--amber);font-weight:600;background:#fff;padding:0 3px}
+#s2 .stat-mini{background:var(--pale);border-radius:10px;padding:10px 14px}
+#s2 .stat-mini .sm-label{font-size:10px;text-transform:uppercase;letter-spacing:0.05em;color:#666;margin-bottom:2px}
+#s2 .stat-mini .sm-val{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--dark)}
+
+/* ===== SLIDE 3 — MANAGEMENT ===== */
+#s3{background:var(--dark)}
+#s3 .s3-inner{flex:1;display:grid;grid-template-columns:1fr 1fr;gap:16px;padding:16px 28px 0}
+#s3 h2{font-family:'Playfair Display',serif;font-size:clamp(22px,2.5vw,32px);color:#fff;margin-bottom:12px}
+#s3 .col-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.07em;color:rgba(255,255,255,0.5);margin-bottom:8px}
+#s3 .task-list{display:flex;flex-direction:column;gap:6px}
+#s3 .task-item{background:rgba(255,255,255,0.08);border-radius:8px;padding:9px 12px;font-size:13px;color:#fff;display:flex;align-items:center;gap:8px}
+#s3 .task-item .ti{font-size:14px}
+#s3 .owner-item{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:8px;padding:9px 12px;font-size:13px;color:rgba(255,255,255,0.75);display:flex;align-items:center;gap:8px}
+#s3 .amber-note{background:var(--amber-pale);border-radius:10px;padding:10px 14px;margin-top:10px;font-size:12px;color:var(--amber);font-weight:500}
+#s3 .fee-bar{background:rgba(255,255,255,0.1);border-radius:10px;padding:12px 16px;margin-top:10px;display:flex;align-items:center;justify-content:space-between}
+#s3 .fee-bar .fv{font-family:'Playfair Display',serif;font-size:20px;color:#fff;font-weight:700}
+#s3 .fee-bar .fl{font-size:11px;color:rgba(255,255,255,0.6)}
+
+/* ===== SLIDE 4 — PROTECTION ===== */
+#s4{background:var(--cream)}
+#s4 .s4-inner{flex:1;display:flex;flex-direction:column;padding:16px 28px 0;gap:12px}
+#s4 h2{font-family:'Playfair Display',serif;font-size:clamp(22px,2.5vw,32px);color:var(--dark)}
+#s4 .stat-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+#s4 .pstat{background:#fff;border-radius:12px;padding:14px 10px;text-align:center;border:1px solid #e8e8e8}
+#s4 .pstat .pv{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--green)}
+#s4 .pstat .pl{font-size:10px;color:#666;margin-top:3px;line-height:1.3}
+#s4 .detail-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+#s4 .dcard{background:#fff;border-radius:12px;padding:16px;border:1px solid #e8e8e8}
+#s4 .dcard h4{font-family:'Playfair Display',serif;font-size:15px;color:var(--dark);margin-bottom:8px}
+#s4 .dcard ul{padding-left:16px;font-size:12px;color:#555;line-height:1.7}
+#s4 .dcard p{font-size:12px;color:#555;line-height:1.6}
+
+/* ===== SLIDE 5 — PROOF ===== */
+#s5{background:#fff}
+#s5 .s5-inner{flex:1;display:flex;flex-direction:column;padding:16px 28px 0;gap:12px}
+#s5 h2{font-family:'Playfair Display',serif;font-size:clamp(22px,2.5vw,32px);color:var(--dark)}
+#s5 .case-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;flex:1}
+#s5 .ccase{background:var(--pale);border-radius:12px;padding:14px;border:1px solid #dde7cc}
+#s5 .ccase .city{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--green);margin-bottom:4px}
+#s5 .ccase .rev-row{display:flex;gap:8px;align-items:baseline;margin-bottom:4px}
+#s5 .ccase .before{font-size:16px;font-weight:600;color:#999;text-decoration:line-through}
+#s5 .ccase .after{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--dark)}
+#s5 .ccase .period{font-size:11px;color:#888}
+#s5 .demo-row{display:flex;gap:10px;flex-wrap:wrap}
+#s5 .demo-pill{background:var(--dark);color:#fff;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:600;text-decoration:none;transition:background 0.2s;display:flex;align-items:center;gap:6px}
+#s5 .demo-pill:hover{background:var(--green)}
+
+/* ===== SLIDE 6 — FIRST BOOKING ===== */
+#s6{background:var(--dark)}
+#s6 .s6-inner{flex:1;display:flex;flex-direction:column;padding:16px 28px 0;gap:16px;justify-content:center;align-items:center;text-align:center}
+#s6 .big-stat{font-family:'Playfair Display',serif;font-size:clamp(64px,10vw,100px);font-weight:900;color:#fff;line-height:1}
+#s6 .big-label{font-size:16px;color:rgba(255,255,255,0.7);margin-top:-8px;margin-bottom:20px}
+#s6 .timeline{display:flex;gap:0;width:100%;max-width:700px}
+#s6 .tstep{flex:1;position:relative;text-align:center;padding:16px 10px}
+#s6 .tstep::before{content:'';position:absolute;top:22px;left:50%;right:-50%;height:2px;background:rgba(255,255,255,0.2)}
+#s6 .tstep:last-child::before{display:none}
+#s6 .tstep .tnum{width:36px;height:36px;border-radius:50%;background:var(--green);color:#fff;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;margin:0 auto 8px;position:relative;z-index:1}
+#s6 .tstep .ttitle{font-weight:700;color:#fff;font-size:13px;margin-bottom:4px}
+#s6 .tstep .tdesc{font-size:11px;color:rgba(255,255,255,0.6)}
+
+/* ===== SLIDE 7 — AGREEMENT ===== */
+#s7{background:var(--cream)}
+#s7 .s7-inner{flex:1;display:grid;grid-template-columns:3fr 2fr;gap:16px;padding:16px 28px 0}
+#s7 h2{font-family:'Playfair Display',serif;font-size:clamp(22px,2.5vw,32px);color:var(--dark);margin-bottom:12px}
+#s7 .term-grid{display:flex;flex-direction:column;gap:8px}
+#s7 .tcard{background:#fff;border-radius:10px;padding:12px 14px;border:1px solid #e4e4e4;display:flex;gap:10px;align-items:flex-start}
+#s7 .tcard .ticon{font-size:18px;flex-shrink:0;margin-top:1px}
+#s7 .tcard .tcontent strong{font-size:13px;color:var(--dark);display:block;margin-bottom:2px}
+#s7 .tcard .tcontent span{font-size:12px;color:#666}
+#s7 .q-card{background:var(--amber-pale);border-radius:12px;padding:16px;border:1px solid #f0d5a0}
+#s7 .q-card h4{font-family:'Playfair Display',serif;font-size:15px;color:var(--amber);margin-bottom:8px}
+#s7 .q-card ul{padding-left:16px;font-size:13px;color:#7a5a20;line-height:1.8}
+
+/* ===== SLIDE 8 — NEXT STEPS ===== */
+#s8{background:var(--dark)}
+#s8 .s8-inner{flex:1;display:flex;flex-direction:column;padding:16px 28px 0;gap:14px}
+#s8 h2{font-family:'Playfair Display',serif;font-size:clamp(22px,2.5vw,32px);color:#fff}
+#s8 .step-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+#s8 .step-card{background:rgba(255,255,255,0.08);border-radius:14px;padding:18px;border:1px solid rgba(255,255,255,0.12)}
+#s8 .step-card .snum{font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:var(--green);margin-bottom:6px}
+#s8 .step-card h4{font-weight:700;color:#fff;font-size:15px;margin-bottom:6px}
+#s8 .step-card p{font-size:12px;color:rgba(255,255,255,0.65);line-height:1.5}
+#s8 .not-ready{background:rgba(255,255,255,0.06);border-radius:12px;padding:14px 18px;border:1px solid rgba(255,255,255,0.1)}
+#s8 .not-ready h4{font-size:13px;color:rgba(255,255,255,0.7);margin-bottom:6px;font-weight:600}
+#s8 .not-ready p{font-size:12px;color:rgba(255,255,255,0.5)}
+#s8 .contact-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+#s8 .contact-item{background:rgba(255,255,255,0.1);border-radius:8px;padding:8px 14px;font-size:13px;color:#fff;font-weight:600}
+#s8 .closing{font-family:'Playfair Display',serif;font-size:clamp(14px,2vw,20px);color:rgba(255,255,255,0.9);font-style:italic}
+
+/* Scrollbar hide */
+::-webkit-scrollbar{display:none}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav id="top-nav">
+  <img src="https://images.squarespace-cdn.com/content/v1/64fa32f1e7e53d5e08cdc5fe/1e73cad4-f8a8-4e95-8f79-dc4c0e62f6c0/Stayful+Logo.png" class="nav-logo" alt="Stayful" onerror="this.style.display='none';this.nextElementSibling.style.display='inline'">
+  <span style="display:none;color:#fff;font-weight:700;font-size:14px;margin-right:8px">Stayful</span>
+  <button class="nav-btn active" onclick="goTo(0)">Cover</button>
+  <button class="nav-btn" onclick="goTo(1)">Who Books</button>
+  <button class="nav-btn" onclick="goTo(2)">Income</button>
+  <button class="nav-btn" onclick="goTo(3)">Management</button>
+  <button class="nav-btn" onclick="goTo(4)">Protection</button>
+  <button class="nav-btn" onclick="goTo(5)">Proof</button>
+  <button class="nav-btn" onclick="goTo(6)">First Booking</button>
+  <button class="nav-btn" onclick="goTo(7)">Agreement</button>
+  <button class="nav-btn" onclick="goTo(8)">Next Steps</button>
+</nav>
+
+<!-- ===== SLIDE 0: COVER ===== -->
+<div class="slide active" id="s0">
+  <div class="slide-inner">
+    <div class="cover-wrap">
+      <div class="eyebrow fi">
+        <span class="pill pill-white">📊 Property Income Analysis · Confidential</span>
+      </div>
+      <div class="fi" style="margin-bottom:6px">
+        <img src="https://images.squarespace-cdn.com/content/v1/64fa32f1e7e53d5e08cdc5fe/1e73cad4-f8a8-4e95-8f79-dc4c0e62f6c0/Stayful+Logo.png" style="height:36px;filter:brightness(10)" alt="Stayful" onerror="this.outerHTML='<span style=\'font-family:Playfair Display,serif;font-size:24px;font-weight:700;color:#fff\'>Stayful</span>'">
+      </div>
+      <div class="lead-name fi" id="cv-name">Ancoats, Manchester</div>
+      <div class="lead-addr fi" id="cv-addr">3 Bedrooms · Sleeps 8 · Short-Term Rental Analysis</div>
+      <div class="stats-strip fi">
+        <div class="stat-box">
+          <div class="sv" id="cv-stl">£2,533</div>
+          <div class="sl">STL Net / Month</div>
+        </div>
+        <div class="stat-box">
+          <div class="sv" id="cv-uplift">+£1,480</div>
+          <div class="sl">Uplift vs Long-Let</div>
+        </div>
+        <div class="stat-box">
+          <div class="sv" style="color:#5dce8a">3/100</div>
+          <div class="sl">Risk Score (Low)</div>
+        </div>
+      </div>
+      <div class="adr-row fi">
+        <div class="adr-item">ADR <strong id="cv-adr">£222</strong></div>
+        <div style="color:rgba(255,255,255,0.3)">·</div>
+        <div class="adr-item">Occupancy <strong id="cv-occ">72%</strong></div>
+        <div style="color:rgba(255,255,255,0.3)">·</div>
+        <div class="adr-item">Gross/mo <strong>£4,871</strong></div>
+      </div>
+      <div class="fi">
+        <span class="pill pill-white">📍 12 comparable properties within 1.14 km</span>
+      </div>
+    </div>
+  </div>
+  <div class="cue-bar"><span>💬 Before we go through the numbers — what is your main concern about making this change?</span></div>
+</div>
+
+<!-- ===== SLIDE 1: WHO BOOKS ===== -->
+<div class="slide" id="s1">
+  <div class="slide-inner">
+    <div class="s1-inner">
+      <h2 class="fi">Who Books Properties Like Yours?</h2>
+      <p class="sub fi">Three guest types drive demand in Ancoats, Manchester — all verified, all high-value.</p>
+      <div class="cards">
+        <div class="gcard fi">
+          <div class="emoji">🏥</div>
+          <div class="gtype">Healthcare</div>
+          <div class="gtitle">Medical Professionals</div>
+          <div class="gdesc">Doctors, nurses and visiting consultants on rotation book 5–14 night stays with precision lead times. They are clean, quiet and repeat-book when they return for further placements.</div>
+          <div class="gloc">🏥 Manchester Royal Infirmary · 1.93 km · <span class="tag-high">HIGH</span></div>
+        </div>
+        <div class="gcard fi">
+          <div class="emoji">🎓</div>
+          <div class="gtype">Academic</div>
+          <div class="gtitle">University Visitors</div>
+          <div class="gdesc">Researchers, visiting lecturers and conference delegates attending the University of Manchester book mid-week blocks. They prioritise reliability and workspace over entertainment.</div>
+          <div class="gloc">🎓 University of Manchester · 1.65 km · <span class="tag-high">HIGH</span></div>
+        </div>
+        <div class="gcard fi">
+          <div class="emoji">🚄</div>
+          <div class="gtype">Commuter & Events</div>
+          <div class="gtitle">City & Event Travellers</div>
+          <div class="gdesc">Weekend visitors attending 1,237+ annual events plus daily commuters use Piccadilly as their anchor. Strong Friday–Sunday demand with premium weekend pricing.</div>
+          <div class="gloc">🚉 Manchester Piccadilly · 0.73 km · <span class="tag-high">HIGH</span></div>
+        </div>
+      </div>
+      <div class="footer-note fi">💡 Corporate and healthcare guests are the most predictable bookers — longer stays, less turnover, higher net margin per booking.</div>
+    </div>
+  </div>
+  <div class="cue-bar"><span>💬 Which guest type do you think suits your property best?</span></div>
+</div>
+
+<!-- ===== SLIDE 2: INCOME ===== -->
+<div class="slide" id="s2">
+  <div class="slide-inner">
+    <div class="s2-inner">
+      <div class="left">
+        <h2 class="fi">Your Income Potential</h2>
+        <div class="compare-row fi">
+          <div class="cbox stl">
+            <div class="cl">Short-Term Let</div>
+            <div class="cv" id="s2-stl">£2,533</div>
+            <div style="font-size:11px;opacity:0.7;margin-top:2px">net / month</div>
+          </div>
+          <div class="cbox ltl">
+            <div class="cl">Long-Term Let</div>
+            <div class="cv" id="s2-ltl">£1,053</div>
+            <div style="font-size:11px;opacity:0.6;margin-top:2px">net / month</div>
+          </div>
+        </div>
+        <div class="uplift-badge fi">🚀 +£1,480/mo · +141% more than long-let · +£17,759/year</div>
+        <div class="cleaning-note fi">✓ Cleaning charged to guests — not deducted from your net.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px">
+          <div class="stat-mini fi">
+            <div class="sm-label">Quietest Month</div>
+            <div class="sm-val">Jan</div>
+            <div style="font-size:11px;color:#888;margin-top:2px">£1,998 — still +£945 vs LTL</div>
+          </div>
+          <div class="stat-mini fi">
+            <div class="sm-label">Peak Month</div>
+            <div class="sm-val">July</div>
+            <div style="font-size:11px;color:#888;margin-top:2px">£3,264 net</div>
+          </div>
+          <div class="stat-mini fi">
+            <div class="sm-label">Break-Even vs LTL</div>
+            <div class="sm-val">Every month</div>
+            <div style="font-size:11px;color:#888;margin-top:2px">Min £1,998 in Jan</div>
+          </div>
+          <div class="stat-mini fi">
+            <div class="sm-label">Year 3 Bonus</div>
+            <div class="sm-val">+£304/mo</div>
+            <div style="font-size:11px;color:#888;margin-top:2px">Direct booking savings</div>
+          </div>
+        </div>
+      </div>
+      <div class="right-col fi">
+        <div style="font-size:12px;font-weight:600;color:#555;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.05em">12-Month Net Forecast</div>
+        <div class="chart-wrap">
+          <div class="chart-bars" id="chart-bars"></div>
+        </div>
+        <div style="font-size:10px;color:#888;text-align:center;margin-top:4px">— dashed line = Long-let benchmark (£1,053/mo)</div>
+      </div>
+    </div>
+  </div>
+  <div class="cue-bar"><span>💬 Does knowing it covers costs even in the quietest month change how you see the risk?</span></div>
+</div>
+
+<!-- ===== SLIDE 3: MANAGEMENT ===== -->
+<div class="slide" id="s3">
+  <div class="slide-inner">
+    <div class="s3-inner">
+      <div class="col-left">
+        <h2 class="fi">What Stayful Handles</h2>
+        <div class="col-title fi">We take care of everything</div>
+        <div class="task-list fi">
+          <div class="task-item"><span class="ti">📈</span> Dynamic pricing — daily rate optimisation</div>
+          <div class="task-item"><span class="ti">📋</span> Multi-platform listings — Airbnb + Booking.com</div>
+          <div class="task-item"><span class="ti">💬</span> 24/7 guest communications — check-in to check-out</div>
+          <div class="task-item"><span class="ti">🧹</span> Cleaning coordination — professional changeover</div>
+          <div class="task-item"><span class="ti">🔧</span> Maintenance management — issues resolved fast</div>
+          <div class="task-item"><span class="ti">⭐</span> Review management — protecting your rating</div>
+          <div class="task-item"><span class="ti">📊</span> Monthly reports — full income transparency</div>
+        </div>
+        <div class="fee-bar fi">
+          <div>
+            <div class="fl">Management Fee</div>
+            <div class="fv">15% + VAT</div>
+          </div>
+          <div style="text-align:right">
+            <div class="fl">Software</div>
+            <div class="fv">£42/mo</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-right">
+        <h2 class="fi" style="color:rgba(255,255,255,0.3);font-size:20px">Owner Responsibilities</h2>
+        <div class="col-title fi">You retain control of</div>
+        <div class="task-list fi">
+          <div class="owner-item"><span class="ti">🏠</span> Buildings insurance</div>
+          <div class="owner-item"><span class="ti">📜</span> Safety certificates</div>
+          <div class="owner-item"><span class="ti">💡</span> Utilities</div>
+          <div class="owner-item"><span class="ti">📋</span> Landlord compliance</div>
+        </div>
+        <div class="amber-note fi">
+          ⚠️ <strong>Before going live:</strong> Gas Safety Certificate + Electrical Installation Condition Report (EICR) + appropriate landlord / short-let insurance required.
+        </div>
+        <div style="margin-top:14px;background:rgba(255,255,255,0.07);border-radius:10px;padding:12px 14px" class="fi">
+          <div style="font-size:10px;text-transform:uppercase;letter-spacing:0.06em;color:rgba(255,255,255,0.45);margin-bottom:6px">Repairs Policy</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.8)">Repairs under <strong style="color:#fff">£300</strong> handled without owner approval — keeping guests happy without bothering you.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="cue-bar"><span>💬 Is there anything you would want to stay involved with day-to-day?</span></div>
+</div>
+
+<!-- ===== SLIDE 4: PROTECTION ===== -->
+<div class="slide" id="s4">
+  <div class="slide-inner">
+    <div class="s4-inner">
+      <h2 class="fi">Your Property is Protected</h2>
+      <div class="stat-grid fi">
+        <div class="pstat">
+          <div class="pv">£100k</div>
+          <div class="pl">AirCover damage protection per booking</div>
+        </div>
+        <div class="pstat">
+          <div class="pv">100%</div>
+          <div class="pl">Guests ID-verified before booking confirms</div>
+        </div>
+        <div class="pstat">
+          <div class="pv">£200</div>
+          <div class="pl">Security deposit held on every booking</div>
+        </div>
+        <div class="pstat">
+          <div class="pv">Quarterly</div>
+          <div class="pl">Property inspections — documented with photos</div>
+        </div>
+        <div class="pstat">
+          <div class="pv">30%+</div>
+          <div class="pl">Returning guest rate in comparable properties</div>
+        </div>
+      </div>
+      <div class="detail-row fi">
+        <div class="dcard">
+          <h4>🔍 How We Screen Guests</h4>
+          <ul>
+            <li>Government-issued ID verified by Airbnb</li>
+            <li>Profile history and review score checked</li>
+            <li>Instant reject of unverified or flagged accounts</li>
+            <li>Booking purpose confirmed for longer stays</li>
+            <li>House rules agreed at time of booking</li>
+          </ul>
+        </div>
+        <div class="dcard">
+          <h4>🛡️ If Something Goes Wrong</h4>
+          <p>AirCover provides up to £100,000 in property damage protection. We document property condition before and after every stay. Any issue is raised immediately with the platform and resolved within 48 hours. You are notified at every step via Slack — your direct line to our team.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="cue-bar"><span>💬 What is your biggest worry about having guests in your property?</span></div>
+</div>
+
+<!-- ===== SLIDE 5: PROOF ===== -->
+<div class="slide" id="s5">
+  <div class="slide-inner">
+    <div class="s5-inner">
+      <h2 class="fi">Results From Properties Like Yours</h2>
+      <div class="case-grid">
+        <div class="ccase fi">
+          <div class="city">Manchester · 2025</div>
+          <div class="rev-row">
+            <span class="before">£3,200</span>
+            <span class="after">£3,800</span>
+          </div>
+          <div class="period">Forecast → Actual / month</div>
+        </div>
+        <div class="ccase fi">
+          <div class="city">Newcastle</div>
+          <div class="rev-row">
+            <span class="before">£2,100</span>
+            <span class="after">£2,600</span>
+          </div>
+          <div class="period">Forecast → Actual / month</div>
+        </div>
+        <div class="ccase fi">
+          <div class="city">London</div>
+          <div class="rev-row">
+            <span class="before">£4,100</span>
+            <span class="after">£4,900</span>
+          </div>
+          <div class="period">Forecast → Actual / month</div>
+        </div>
+        <div class="ccase fi">
+          <div class="city">Bristol</div>
+          <div class="rev-row">
+            <span class="before">£2,800</span>
+            <span class="after">£3,100</span>
+          </div>
+          <div class="period">Forecast → Actual / month</div>
+        </div>
+        <div class="ccase fi">
+          <div class="city">Liverpool</div>
+          <div class="rev-row">
+            <span class="before">£2,300</span>
+            <span class="after">£2,700</span>
+          </div>
+          <div class="period">Forecast → Actual / month</div>
+        </div>
+        <div class="ccase fi">
+          <div class="city">Derby</div>
+          <div class="rev-row">
+            <span class="before">£1,900</span>
+            <span class="after">£2,200</span>
+          </div>
+          <div class="period">Forecast → Actual / month</div>
+        </div>
+      </div>
+      <div class="demo-row fi">
+        <a href="https://drive.google.com/file/d/1OMLH73P0I4UdsoK8g7kMUDX9u4s46jF2/view" target="_blank" class="demo-pill">📄 Sample Monthly Report</a>
+        <a href="https://app.slack.com/client/T061GPD7ZB8/C09LDM5GY86" target="_blank" class="demo-pill">💬 Owner Slack Channel</a>
+        <a href="https://app.uplisting.io/calendar/" target="_blank" class="demo-pill">📅 Live Calendar Demo</a>
+      </div>
+    </div>
+  </div>
+  <div class="cue-bar"><span>💬 Would you like to see what a similar Manchester property is currently earning?</span></div>
+</div>
+
+<!-- ===== SLIDE 6: FIRST BOOKING ===== -->
+<div class="slide" id="s6">
+  <div class="slide-inner">
+    <div class="s6-inner">
+      <div class="fi">
+        <span class="pill pill-white">⚡ Speed to Revenue</span>
+      </div>
+      <div class="big-stat fi">80%</div>
+      <div class="big-label fi">of properties receive their first booking within 72 hours of going live</div>
+      <div class="timeline fi">
+        <div class="tstep">
+          <div class="tnum">1</div>
+          <div class="ttitle">Sign</div>
+          <div class="tdesc">Agreement signed today — onboarding begins immediately</div>
+        </div>
+        <div class="tstep">
+          <div class="tnum">2</div>
+          <div class="ttitle">Setup</div>
+          <div class="tdesc">Photos, listing, pricing strategy — all handled by us</div>
+        </div>
+        <div class="tstep">
+          <div class="tnum">3</div>
+          <div class="ttitle">Live</div>
+          <div class="tdesc">Your property goes live on Airbnb & Booking.com</div>
+        </div>
+        <div class="tstep">
+          <div class="tnum">4</div>
+          <div class="ttitle">First Booking</div>
+          <div class="tdesc">First booking arrives — typically within 72 hours</div>
+        </div>
+      </div>
+      <div class="fi" style="background:rgba(255,255,255,0.08);border-radius:12px;padding:14px 24px;max-width:600px;text-align:center">
+        <div style="font-size:13px;color:rgba(255,255,255,0.7)">From today to earning: <strong style="color:#fff">approximately 3 weeks to go live</strong>, first booking within 72 hours of launch</div>
+      </div>
+    </div>
+  </div>
+  <div class="cue-bar"><span>💬 Does knowing the first booking arrives within 72 hours change how you think about timing?</span></div>
+</div>
+
+<!-- ===== SLIDE 7: AGREEMENT ===== -->
+<div class="slide" id="s7">
+  <div class="slide-inner">
+    <div class="s7-inner">
+      <div>
+        <h2 class="fi">Agreement Terms</h2>
+        <div class="term-grid">
+          <div class="tcard fi">
+            <div class="ticon">📅</div>
+            <div class="tcontent">
+              <strong>Contract Length</strong>
+              <span>6-month initial term, then rolling monthly — cancel with 30 days notice</span>
+            </div>
+          </div>
+          <div class="tcard fi">
+            <div class="ticon">💰</div>
+            <div class="tcontent">
+              <strong>Fee Structure</strong>
+              <span>15% + VAT management fee on revenue · £42/mo software (Uplisting)</span>
+            </div>
+          </div>
+          <div class="tcard fi">
+            <div class="ticon">🔑</div>
+            <div class="tcontent">
+              <strong>Property Access</strong>
+              <span>72-hour access notice for inspections and scheduled maintenance</span>
+            </div>
+          </div>
+          <div class="tcard fi">
+            <div class="ticon">🔧</div>
+            <div class="tcontent">
+              <strong>Repairs Authorisation</strong>
+              <span>Repairs under £300 actioned without prior approval to protect guest experience</span>
+            </div>
+          </div>
+          <div class="tcard fi">
+            <div class="ticon">💬</div>
+            <div class="tcontent">
+              <strong>Owner Communications</strong>
+              <span>Dedicated Slack channel — direct line to your account manager, 7 days a week</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="height:40px"></div>
+        <div class="q-card fi">
+          <h4>📋 Pre-Launch Checklist</h4>
+          <ul>
+            <li>Mortgage lender permission (if applicable)</li>
+            <li>Short-let / landlord insurance in place</li>
+            <li>Gas Safety Certificate (annual)</li>
+            <li>EICR Electrical Certificate (every 5 years)</li>
+            <li>Smoke & CO detectors installed</li>
+          </ul>
+        </div>
+        <div style="margin-top:12px;background:#f5f5f5;border-radius:10px;padding:14px" class="fi">
+          <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:#888;margin-bottom:6px">No mortgage on this property</div>
+          <div style="font-size:12px;color:#555">No mortgage permission required — one less step before going live.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="cue-bar"><span>💬 Are there any terms you would like to talk through before we move forward?</span></div>
+</div>
+
+<!-- ===== SLIDE 8: NEXT STEPS ===== -->
+<div class="slide" id="s8">
+  <div class="slide-inner">
+    <div class="s8-inner">
+      <h2 class="fi">Ready to Move Forward?</h2>
+      <div class="step-row fi">
+        <div class="step-card">
+          <div class="snum">01</div>
+          <h4>Sign Today</h4>
+          <p>Agreement signed — onboarding team notified immediately. No upfront fees. Setup begins within 24 hours.</p>
+        </div>
+        <div class="step-card">
+          <div class="snum">02</div>
+          <h4>Kick-Off Call This Week</h4>
+          <p>60-minute call with your account manager. Professional photography booked. Listing copy drafted. Pricing strategy set.</p>
+        </div>
+        <div class="step-card">
+          <div class="snum">03</div>
+          <h4>Live in 3 Weeks</h4>
+          <p>Property listed live on Airbnb & Booking.com. First booking typically within 72 hours. You start earning.</p>
+        </div>
+      </div>
+      <div class="not-ready fi">
+        <h4>Not quite ready yet?</h4>
+        <p>No pressure. We can hold your analysis, answer any remaining questions, and pick this up whenever you are ready. There is no obligation and no deadline — we are here when you want to move.</p>
+      </div>
+      <div class="contact-row fi">
+        <div class="contact-item">📞 0113 479 0251</div>
+        <div class="contact-item">✉️ zac@stayful.co.uk</div>
+        <div class="contact-item">🌐 stayful.co.uk</div>
+      </div>
+      <div class="closing fi">Your Ancoats property could earn <strong>£1,480/mo more</strong> than a long-let — every month, managed entirely by us.</div>
+    </div>
+  </div>
+  <div class="cue-bar"><span>💬 What would you need to feel confident moving forward today?</span></div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div id="bottom-nav">
+  <button class="bn-arrow" onclick="prev()" aria-label="Previous">&#8592;</button>
+  <div class="bn-dots" id="bn-dots"></div>
+  <div class="bn-counter" id="bn-counter">1 / 9</div>
+  <button class="bn-arrow" onclick="next()" aria-label="Next">&#8594;</button>
+</div>
+
+<!-- PERSONALISE PANEL -->
+<div id="p-panel">
+  <button class="close-p" onclick="togglePanel()">✕</button>
+  <h3>Personalise</h3>
+  <label>Lead Name</label>
+  <input id="p-name" type="text" value="Ancoats, Manchester" placeholder="Name">
+  <label>Address / Property</label>
+  <input id="p-addr" type="text" value="3 Bedrooms · Sleeps 8" placeholder="Address">
+  <label>Gross Monthly Revenue (£)</label>
+  <input id="p-rev" type="number" value="4871">
+  <label>Occupancy (%)</label>
+  <input id="p-occ" type="number" value="72">
+  <label>Avg Nightly Rate (£)</label>
+  <input id="p-adr" type="number" value="222">
+  <label>Long-Let Net Monthly (£)</label>
+  <input id="p-ltl" type="number" value="1053">
+  <label>Mortgage Monthly (£) — 0 if none</label>
+  <input id="p-mort" type="number" value="0">
+  <button class="apply-btn" onclick="applyPersonalise()">Apply Changes</button>
+</div>
+
+<script>
+// === DATA ===
+const FC = [1998,2060,2409,2648,2521,2438,3264,2842,2326,2688,2435,2765];
+const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const TOTAL_SLIDES = 9;
+let current = 0;
+let panelOpen = false;
+
+// === BUILD CHART ===
+function buildChart(){
+  const container = document.getElementById('chart-bars');
+  if(!container) return;
+  container.innerHTML = '';
+  const max = Math.max(...FC);
+  const h = 160;
+  const ltl = 1053;
+  const ltlPct = (ltl/max)*100;
+  FC.forEach((v,i)=>{
+    const col = document.createElement('div');
+    col.className='bar-col';
+    const bar = document.createElement('div');
+    bar.className='bar'+(v===max?' peak':'');
+    bar.style.height='0px';
+    bar.style.maxHeight=(h-18)+'px';
+    bar.title='£'+v.toLocaleString();
+    const lbl = document.createElement('div');
+    lbl.className='bar-label';
+    lbl.textContent=MONTHS[i];
+    col.appendChild(bar);
+    col.appendChild(lbl);
+    container.appendChild(col);
+    setTimeout(()=>{
+      const pct=((v/max)*(h-18));
+      bar.style.height=pct+'px';
+    },400+i*60);
+  });
+  // LTL dashed line
+  const line = document.createElement('div');
+  line.className='ltl-line';
+  line.style.bottom=(ltlPct/100*(h-18))+'px';
+  const lineLbl = document.createElement('div');
+  lineLbl.className='ltl-line-label';
+  lineLbl.textContent='LTL £1,053';
+  line.appendChild(lineLbl);
+  container.style.position='relative';
+  container.appendChild(line);
+}
+
+// === NAVIGATION ===
+function goTo(n, dir){
+  if(n<0||n>=TOTAL_SLIDES||n===current) return;
+  const slides = document.querySelectorAll('.slide');
+  const fromSlide = slides[current];
+  const toSlide = slides[n];
+  const goingRight = n > current;
+  fromSlide.classList.remove('active');
+  fromSlide.classList.add(goingRight?'exit-left':'exit-right');
+  setTimeout(()=>{ fromSlide.classList.remove('exit-left','exit-right'); },440);
+  toSlide.style.transform = goingRight?'translateX(60px)':'translateX(-60px)';
+  toSlide.style.opacity='0';
+  toSlide.classList.add('active');
+  setTimeout(()=>{
+    toSlide.style.transform='';
+    toSlide.style.opacity='';
+  },20);
+  current = n;
+  updateNav();
+  if(n===2){ setTimeout(buildChart,500); }
+}
+function next(){ goTo(current+1); }
+function prev(){ goTo(current-1); }
+
+function updateNav(){
+  // top nav
+  document.querySelectorAll('.nav-btn').forEach((b,i)=>b.classList.toggle('active',i===current));
+  // dots
+  const dots = document.getElementById('bn-dots');
+  dots.innerHTML='';
+  for(let i=0;i<TOTAL_SLIDES;i++){
+    const d=document.createElement('div');
+    d.className='bn-dot'+(i===current?' active':'');
+    d.onclick=()=>goTo(i);
+    dots.appendChild(d);
+  }
+  document.getElementById('bn-counter').textContent=(current+1)+' / '+TOTAL_SLIDES;
+}
+
+// === KEYBOARD ===
+document.addEventListener('keydown',e=>{
+  if(e.target.tagName==='INPUT') return;
+  if(e.key==='ArrowRight'||e.key===' '){ e.preventDefault(); next(); }
+  else if(e.key==='ArrowLeft'){ e.preventDefault(); prev(); }
+  else if(e.key==='p'||e.key==='P'){ togglePanel(); }
+  else if(e.key==='f'||e.key==='F'){ toggleFullscreen(); }
+});
+
+// === TOUCH SWIPE ===
+let touchX=0;
+document.addEventListener('touchstart',e=>{ touchX=e.touches[0].clientX; },{passive:true});
+document.addEventListener('touchend',e=>{
+  const dx=touchX-e.changedTouches[0].clientX;
+  if(Math.abs(dx)>50){ dx>0?next():prev(); }
+},{passive:true});
+
+// === FULLSCREEN ===
+function toggleFullscreen(){
+  if(!document.fullscreenElement) document.documentElement.requestFullscreen().catch(()=>{});
+  else document.exitFullscreen();
+}
+
+// === PERSONALISE PANEL ===
+function togglePanel(){
+  panelOpen=!panelOpen;
+  document.getElementById('p-panel').classList.toggle('open',panelOpen);
+}
+function applyPersonalise(){
+  const name=document.getElementById('p-name').value;
+  const addr=document.getElementById('p-addr').value;
+  const rev=parseInt(document.getElementById('p-rev').value)||4871;
+  const occ=document.getElementById('p-occ').value;
+  const adr=document.getElementById('p-adr').value;
+  const ltl=parseInt(document.getElementById('p-ltl').value)||1053;
+  const mort=parseInt(document.getElementById('p-mort').value)||0;
+  const stlNet=Math.round(rev*0.52);
+  const uplift=stlNet-ltl;
+  // S0
+  document.getElementById('cv-name').textContent=name;
+  document.getElementById('cv-addr').textContent=addr;
+  document.getElementById('cv-stl').textContent='£'+stlNet.toLocaleString();
+  document.getElementById('cv-uplift').textContent='+£'+uplift.toLocaleString();
+  document.getElementById('cv-adr').textContent='£'+adr;
+  document.getElementById('cv-occ').textContent=occ+'%';
+  // S2
+  document.getElementById('s2-stl').textContent='£'+stlNet.toLocaleString();
+  document.getElementById('s2-ltl').textContent='£'+ltl.toLocaleString();
+  togglePanel();
+}
+
+// === INIT ===
+buildChart();
+updateNav();
+</script>
+</body>
+</html>
