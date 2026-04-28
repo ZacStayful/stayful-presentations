@@ -1271,7 +1271,7 @@ a.pill:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.2
 
 // ── Stayful Presentation Tracking ────────────────────────────────────────────
 const _LID = new URLSearchParams(window.location.search).get('lid') || '';
-const _TRACK = 'https://stayful-voice-api.vercel.app/api/tracking/presentation';
+const _TRACK = 'https://stayful.app.n8n.cloud/webhook/presentation-track';
 let _firstSlide = true;
 
 function _track(event, data) {
@@ -1539,7 +1539,7 @@ try{sfUpdateEmailLink();}catch(e){} // prime email link — sfR is {} at this po
 const SF_ITEM_ID = 'STAYFUL_ITEM_ID';
 const SF_LEAD    = 'STAYFUL_FIRST_NAME';
 const SF_ADDR    = 'STAYFUL_ADDRESS';
-const SF_ZAPIER  = 'https://stayful-voice-api.vercel.app/api/presentation/sync';
+const SF_ZAPIER  = 'https://stayful.app.n8n.cloud/webhook/presentation-track';
 
 // sfR and SF_LABELS declared at top of script (see var declarations above)
 
