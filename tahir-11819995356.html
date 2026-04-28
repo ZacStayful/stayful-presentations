@@ -515,7 +515,7 @@ a.pill:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.2
 /* ══════════════════════════════════════════════════════════════
    MOBILE RESPONSIVE — primary target 390px (iPhone)
 ══════════════════════════════════════════════════════════════ */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
 
   /* SLIDE LABEL (mobile only — shows current slide name) */
   #tb-slide-lbl { display: block !important; }
@@ -1526,8 +1526,8 @@ document.querySelectorAll('.sf-ask').forEach(el=>{
   el.insertBefore(em,el.firstChild);
 });
 
-buildDots();
-try{buildBars();updateLTL();}catch(e){console.warn("Bar chart error:",e);}
+buildDots();buildBars();
+updateLTL();
 sfShowAsk(0);
 updateMortgage(2245,950,0);
 wireLinks();update();stagger(slides[0]);
