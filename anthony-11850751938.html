@@ -769,19 +769,19 @@ a.pill:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.2
       <div class="guest-card">
         <span class="guest-icon">🏥</span>
         <div class="guest-type">Healthcare</div>
-        <div class="guest-title">Hospital Visitors & Medical Professionals</div>
-        <div class="guest-desc">Families and professionals visiting or working at Royal United Hospital book extended stays in the Keynsham area for comfort and convenience. This demand is consistent year-round, providing a reliable baseline occupancy independent of seasonal trends.</div>
+        <div class="guest-title">Hospital Visitors & Medical Contractors</div>
+        <div class="guest-desc">Families and professionals visiting or working at Royal United Hospital book extended stays and mid-week nights consistently throughout the year. This demand driver provides reliable off-peak occupancy that smooths seasonal dips.</div>
         <div class="guest-driver">📍 <strong>Royal United Hospital</strong> · 8.04 km · High demand</div>
       </div>
       <div class="guest-card">
-        <span class="guest-icon">🚆</span>
-        <div class="guest-type">Transport Links</div>
+        <span class="guest-icon">🚉</span>
+        <div class="guest-type">Transport</div>
         <div class="guest-title">Away fans, corporate guests &amp; event attendees</div>
         <div class="guest-desc">Molineux Stadium (Wolverhampton Wanderers) draws thousands of away fans and corporate guests every match week. Events at the Wolverhampton Civic Halls and surrounding venues generate consistent short-break demand.</div>
         <div class="guest-driver">📍 <strong>Molineux Stadium</strong> · 2.5km · High demand</div>
       </div>
       <div class="guest-card">
-        <span class="guest-icon">🎶</span>
+        <span class="guest-icon">🎪</span>
         <div class="guest-type">Industrial &amp; business contractors</div>
         <div class="guest-title">Manufacturing, logistics &amp; project workers</div>
         <div class="guest-desc">The Black Country and West Midlands is a major hub for manufacturing, logistics, and automotive supply chain (JLR at Solihull, Stellantis at Ellesmere Port). Contractors and project workers on multi-week placements need accommodation close to sites.</div>
@@ -790,7 +790,7 @@ a.pill:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.2
     </div>
     <div class="fi" style="margin-top:14px;padding:12px 18px;background:var(--gp);border:1px solid var(--bd);border-radius:12px;display:flex;gap:16px;align-items:center;">
       <span style="font-size:18px;">💡</span>
-      <div style="font-size:12.5px;color:var(--mid);font-weight:300;line-height:1.6;"><strong style="color:var(--ch);font-weight:500;">This area has year-round demand.</strong> Bookings in the Keynsham area are driven year-round by visitors to Royal United Hospital, travellers using Keynsham rail links, and attendees of the 541+ annual events at The Fleece in Bristol.</div>
+      <div style="font-size:12.5px;color:var(--mid);font-weight:300;line-height:1.6;"><strong style="color:var(--ch);font-weight:500;">This area has year-round demand.</strong> Bookings around Keynsham are driven year-round by healthcare visitors and contractors attending Royal United Hospital, rail commuters and travellers using Keynsham station, and event-goers attending the 541+ annual events at The Fleece in Bristol.</div>
     </div>
 
   <div class="sf-ask light" data-q="1">
@@ -1271,7 +1271,7 @@ a.pill:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.2
 
 // ── Stayful Presentation Tracking ────────────────────────────────────────────
 const _LID = new URLSearchParams(window.location.search).get('lid') || '';
-const _TRACK = 'https://stayful-voice-api.vercel.app/api/tracking/presentation';
+const _TRACK = 'https://stayful.app.n8n.cloud/webhook/stayful-presentation-track';
 let _firstSlide = true;
 
 function _track(event, data) {
