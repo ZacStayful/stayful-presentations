@@ -1,0 +1,1762 @@
+<!DOCTYPE html><!-- v20260423-084824 -->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stayful · Tamara · Flat 1, 128 High Street</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --green:#5d8156;--gd:#2d4a2d;--gl:#4a6a44;--gc:#e6ebd7;--gp:#f0f4e8;
+  --cream:#faf8f4;--white:#ffffff;--ch:#1c2420;--mid:#4a5e52;--mu:#8a9e92;
+  --bd:rgba(93,129,86,0.15);--am:#c47c1a;--amp:#fdf3e3;
+  --serif:'Cormorant Garamond',Georgia,serif;--sans:'DM Sans',system-ui,sans-serif;
+  --ease:cubic-bezier(0.4,0,0.2,1);
+}
+html,body{width:100%;height:100%;overflow:hidden;font-family:var(--sans);background:var(--cream);}
+
+/* TOPBAR */
+#tb{position:fixed;top:0;left:0;right:0;z-index:200;height:52px;background:rgba(255,255,255,0.95);backdrop-filter:blur(16px);border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;padding:0 24px;}
+.tb-logo img{height:24px;width:auto;display:block;}
+.tb-logo-f{font-family:var(--serif);font-size:20px;font-weight:600;color:var(--green);display:none;}
+.tb-menu{display:flex;gap:1px;background:var(--gp);border:1px solid var(--bd);border-radius:10px;padding:3px;}
+.tb-i{font-size:10.5px;color:var(--mu);border:none;background:none;padding:5px 10px;border-radius:7px;cursor:pointer;font-family:var(--sans);transition:all 0.2s;white-space:nowrap;}
+.tb-i:hover{color:var(--green);}
+.tb-i.on{background:var(--green);color:#fff;}
+.tb-r{display:flex;align-items:center;gap:8px;}
+.tb-badge{font-size:11px;color:var(--mu);}
+.btn-e{background:var(--gc);border:1px solid var(--bd);color:var(--gd);border-radius:8px;padding:5px 12px;font-size:11px;font-weight:500;cursor:pointer;font-family:var(--sans);transition:all 0.2s;}
+.btn-e:hover{background:var(--gp);}
+
+/* PROGRESS */
+#prog{position:fixed;top:52px;left:0;right:0;height:3px;z-index:200;background:var(--gp);}
+#pf{height:100%;background:var(--green);transition:width 0.4s var(--ease);}
+
+/* PERSONALISE PANEL */
+#pp{position:fixed;top:54px;left:0;right:0;z-index:190;background:var(--gd);overflow:hidden;max-height:0;transition:max-height 0.35s var(--ease),padding 0.35s;}
+#pp.open{max-height:130px;padding:16px 32px;}
+.pp-r{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;}
+.ppf label{display:block;font-size:9px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:4px;}
+.ppf input{background:rgba(255,255,255,0.09);border:1px solid rgba(255,255,255,0.15);border-radius:7px;padding:7px 10px;font-size:12px;color:#fff;font-family:var(--sans);outline:none;transition:border-color 0.2s;}
+.ppf input:focus{border-color:rgba(230,235,215,0.5);}
+.ppf input::placeholder{color:rgba(255,255,255,0.25);}
+.pp-ok{background:var(--green);color:#fff;border:none;border-radius:7px;padding:8px 16px;font-size:12px;font-weight:500;cursor:pointer;font-family:var(--sans);white-space:nowrap;align-self:flex-end;transition:background 0.2s;}
+.pp-ok:hover{background:var(--gl);}
+
+/* DECK */
+#deck{position:fixed;inset:54px 0 64px;z-index:10;overflow:hidden;}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;overflow-y:auto;opacity:0;pointer-events:none;will-change:transform,opacity;}
+.slide.active{opacity:1;pointer-events:all;}
+.slide.el{animation:el 0.42s var(--ease) forwards;}
+.slide.er{animation:er 0.42s var(--ease) forwards;}
+.slide.nl{animation:nl 0.42s var(--ease) forwards;}
+.slide.nr{animation:nr 0.42s var(--ease) forwards;}
+@keyframes el{to{opacity:0;transform:translateX(-54px);}}
+@keyframes er{to{opacity:0;transform:translateX(54px);}}
+@keyframes nl{from{opacity:0;transform:translateX(-54px);}to{opacity:1;transform:none;}}
+@keyframes nr{from{opacity:0;transform:translateX(54px);}to{opacity:1;transform:none;}}
+
+/* ENTRY ANIMS */
+.fi{opacity:0;transform:translateY(12px);transition:opacity 0.5s var(--ease),transform 0.5s var(--ease);}
+.fi.in{opacity:1;transform:none;}
+
+/* BOTTOM NAV */
+#bnav{position:fixed;bottom:0;left:0;right:0;z-index:200;height:64px;background:rgba(255,255,255,0.96);backdrop-filter:blur(16px);border-top:1px solid var(--bd);display:flex;align-items:center;justify-content:center;gap:20px;}
+.na{width:36px;height:36px;border-radius:50%;background:var(--gp);border:1px solid var(--bd);color:var(--mid);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;transition:all 0.2s;}
+.na:hover:not(:disabled){background:var(--gc);border-color:var(--green);color:var(--green);}
+.na:disabled{opacity:0.25;cursor:default;}
+.dots{display:flex;gap:6px;align-items:center;}
+.dot{cursor:pointer;border-radius:100px;background:var(--gc);border:1px solid var(--bd);transition:all 0.3s var(--ease);width:8px;height:8px;}
+.dot.on{background:var(--green);border-color:var(--green);width:22px;}
+#ctr{font-size:11px;color:var(--mu);letter-spacing:0.1em;min-width:44px;text-align:center;}
+
+/* SLIDE BACKGROUNDS */
+#s0{background:var(--gd);}
+#s1{background:var(--cream);}
+#s2{background:var(--white);}
+#s3{background:var(--gd);}
+#s4{background:var(--cream);}
+#s5{background:var(--white);}
+#s6{background:var(--gd);}
+#s7{background:var(--cream);}
+#s8{background:var(--gd);}
+
+/* LAYOUT */
+.si{max-width:1080px;margin:auto;width:100%;padding:clamp(20px,4vh,44px) 56px clamp(16px,3vh,32px);position:relative;}
+
+/* TYPOGRAPHY */
+.ey{font-size:10px;letter-spacing:0.24em;text-transform:uppercase;font-weight:500;color:var(--green);display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.ey::before{content:'';display:block;width:18px;height:1px;background:var(--green);}
+.ey.lt{color:var(--gc);}
+.ey.lt::before{background:var(--gc);opacity:0.5;}
+.hl{font-family:var(--serif);font-weight:300;line-height:1.05;color:var(--ch);}
+.hl em{font-style:italic;color:var(--green);}
+.hl.white{color:#fff;}
+.hl.white em{color:var(--gc);}
+.sub{font-size:14px;font-weight:300;color:var(--mid);line-height:1.65;}
+.sub.lt{color:rgba(255,255,255,0.5);}
+
+/* NUMBERS */
+.nl2{font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;font-weight:500;color:var(--mu);margin-bottom:4px;}
+.nl2.lt{color:rgba(255,255,255,0.4);}
+.dn{font-family:var(--serif);font-weight:300;line-height:1;color:var(--green);}
+.dn.white{color:#fff;}
+.dn.gc{color:var(--gc);}
+.ns{font-size:11.5px;color:var(--mu);margin-top:3px;font-weight:300;}
+.ns.lt{color:rgba(255,255,255,0.38);}
+
+/* CARDS */
+.card{background:var(--white);border:1px solid var(--bd);border-radius:16px;padding:20px 22px;}
+.card-p{background:var(--gp);border:1px solid var(--bd);border-radius:16px;padding:20px 22px;}
+.card-dk{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:20px 22px;}
+.card-am{background:var(--amp);border:1px solid rgba(196,124,26,0.2);border-radius:16px;padding:20px 22px;}
+.card-green{background:rgba(93,129,86,0.12);border:1px solid rgba(93,129,86,0.22);border-radius:16px;padding:20px 22px;}
+
+/* GRIDS */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.g6{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:38px;align-items:start;}
+.t60{display:grid;grid-template-columns:1.35fr 1fr;gap:38px;align-items:start;}
+
+/* STRIP */
+.strip{display:flex;border:1px solid var(--bd);border-radius:16px;overflow:hidden;background:var(--white);}
+.sc{flex:1;padding:18px 20px;border-right:1px solid var(--bd);}
+.sc:last-child{border-right:none;}
+.sc.hi{background:var(--gp);}
+.strip-dk{display:flex;border:1px solid rgba(255,255,255,0.1);border-radius:16px;overflow:hidden;background:rgba(255,255,255,0.04);}
+.sc-dk{flex:1;padding:18px 20px;border-right:1px solid rgba(255,255,255,0.08);}
+.sc-dk:last-child{border-right:none;}
+.sc-dk.hi{background:rgba(93,129,86,0.18);}
+
+/* RESP LIST */
+.rl{display:flex;flex-direction:column;gap:6px;}
+.ri{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:9px;}
+.ri.g{background:var(--gc);border:1px solid var(--bd);}
+.ri.n{background:#f5f4f2;border:1px solid rgba(0,0,0,0.05);}
+.ri.dk{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);}
+.rd{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.rd.g{background:var(--green);}
+.rd.n{background:#b0bab5;}
+.rd.w{background:rgba(255,255,255,0.4);}
+.rt{font-size:13px;line-height:1.4;}
+.rt.dk{color:var(--ch);}
+.rt.lt{color:rgba(255,255,255,0.65);}
+.rt.mu{color:var(--mid);}
+.ch2{font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;font-weight:500;margin-bottom:10px;}
+.ch2.g{color:var(--green);}
+.ch2.mu{color:var(--mu);}
+.ch2.lt{color:rgba(255,255,255,0.38);}
+
+/* PROTECTION */
+.pr{display:flex;gap:10px;}
+.pt{flex:1;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:18px 12px;text-align:center;transition:background 0.2s;}
+.pt:hover{background:rgba(255,255,255,0.12);}
+.pi{font-size:22px;display:block;margin-bottom:9px;}
+.pv{font-family:var(--serif);font-size:28px;font-weight:300;color:#fff;line-height:1;margin-bottom:4px;}
+.pl{font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.38);}
+
+/* BAR CHART */
+.cw{background:var(--gp);border:1px solid var(--bd);border-radius:14px;padding:14px 12px 10px;position:relative;}
+.brs{display:flex;align-items:flex-end;gap:5px;height:64px;margin-bottom:4px;}
+.bw{flex:1;display:flex;flex-direction:column;align-items:center;}
+.bar{width:100%;border-radius:3px 3px 0 0;background:var(--green);transition:height 0.9s var(--ease);min-height:3px;}
+.bar.lo{background:#7fa679;}
+.bm{font-size:7.5px;color:var(--mu);text-align:center;margin-top:3px;}
+.lr{position:relative;border-top:2px dashed var(--am);margin:2px 0 4px;}
+.ll{position:absolute;right:0;top:-16px;font-size:8.5px;color:var(--am);white-space:nowrap;font-weight:500;}
+.cn{font-size:9px;color:var(--mu);}
+
+/* CASE STUDIES */
+.cs{background:var(--white);border:1px solid var(--bd);border-radius:13px;padding:12px 12px 10px;display:flex;flex-direction:column;gap:7px;transition:all 0.2s;}
+.cs:hover{border-color:var(--green);box-shadow:0 2px 12px rgba(93,129,86,0.1);}
+.cc{font-family:var(--serif);font-size:18px;font-weight:400;color:var(--ch);line-height:1;}
+.cd{font-size:9px;color:var(--mu);}
+.ccp{display:grid;grid-template-columns:1fr 1fr;gap:5px;}
+.ccol{padding:6px 8px;border-radius:6px;}
+.ccol.e{background:var(--gp);}
+.ccol.a{background:var(--gc);}
+.cll{font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:var(--mu);margin-bottom:2px;}
+.cll.g{color:var(--gl);}
+.cln{font-family:var(--serif);font-size:16px;font-weight:300;color:var(--ch);}
+.cln.g{color:var(--green);}
+.cb{background:var(--gc);border:1px solid var(--bd);color:var(--gd);border-radius:7px;padding:5px 9px;font-size:10px;font-weight:500;cursor:pointer;text-decoration:none;font-family:var(--sans);display:flex;align-items:center;justify-content:center;gap:3px;transition:all 0.2s;}
+.cb:hover{background:var(--green);border-color:var(--green);color:#fff;}
+
+/* CHECKLIST */
+.ck{list-style:none;display:flex;flex-direction:column;gap:7px;}
+.ck li{display:flex;align-items:flex-start;gap:9px;font-size:13px;color:var(--mid);font-weight:300;line-height:1.5;}
+.ck li::before{content:'';flex-shrink:0;width:15px;height:15px;margin-top:2px;border-radius:50%;background:var(--gc) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8l3.5 3.5L13 4' stroke='%235d8156' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;}
+.ck.white li{color:rgba(255,255,255,0.65);}
+.ck.white li::before{background:rgba(255,255,255,0.1) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8l3.5 3.5L13 4' stroke='%23e6ebd7' stroke-width='1.8' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;}
+
+/* CONTRACT */
+.ctl{display:flex;flex-direction:column;gap:8px;}
+.ct{display:flex;align-items:flex-start;gap:12px;padding:12px 15px;background:var(--gp);border:1px solid var(--bd);border-radius:10px;transition:border-color 0.2s;}
+.ct:hover{border-color:var(--green);}
+.ctk{color:var(--green);flex-shrink:0;margin-top:2px;font-size:14px;}
+.ctt{font-size:13px;color:var(--mid);font-weight:300;line-height:1.55;}
+.ctt strong{color:var(--ch);font-weight:500;}
+
+/* STEPS */
+.steps{display:flex;flex-direction:column;gap:10px;}
+.step{display:flex;align-items:center;gap:14px;background:rgba(230,235,215,0.2);border:1px solid rgba(230,235,215,0.3);border-radius:12px;padding:14px 18px;transition:all 0.2s;}
+.step:hover{background:rgba(230,235,215,0.35);}
+.sn{width:28px;height:28px;flex-shrink:0;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:14px;color:var(--green);}
+.st{font-size:13.5px;color:#fff;}
+.st span{color:rgba(255,255,255,0.5);font-weight:300;font-size:12.5px;}
+
+/* PILLS */
+.pill{background:var(--gc);border:1px solid var(--bd);border-radius:100px;padding:8px 18px;font-size:12px;font-weight:500;color:var(--gd);cursor:pointer;text-decoration:none;font-family:var(--sans);transition:all 0.2s;display:inline-flex;align-items:center;gap:6px;}
+.pill:hover{background:var(--green);border-color:var(--green);color:#fff;}
+.pill-dk{background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:100px;padding:7px 16px;font-size:12px;font-weight:500;color:rgba(255,255,255,0.7);cursor:pointer;text-decoration:none;font-family:var(--sans);transition:all 0.2s;display:inline-flex;align-items:center;gap:6px;}
+.pill-dk:hover{background:rgba(255,255,255,0.16);color:#fff;}
+
+/* PULL QUOTE */
+.pq{border-left:2px solid var(--green);padding:12px 20px;margin-top:14px;}
+.pq p{font-family:var(--serif);font-size:19px;font-weight:300;font-style:italic;color:var(--ch);line-height:1.5;}
+.pq cite{display:block;margin-top:5px;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--mu);font-style:normal;}
+
+/* CUE */
+.cue{position:fixed;bottom:72px;left:50%;transform:translateX(-50%);font-size:10.5px;color:rgba(93,129,86,0.4);font-style:italic;white-space:nowrap;pointer-events:none;letter-spacing:0.03em;}
+.cue.lt{color:rgba(230,235,215,0.3);}
+
+/* GUEST TYPE CARDS */
+.guest-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
+.guest-card{background:var(--white);border:1px solid var(--bd);border-radius:16px;padding:24px 22px;transition:all 0.2s;}
+.guest-card:hover{border-color:var(--green);box-shadow:0 2px 16px rgba(93,129,86,0.1);}
+.guest-icon{font-size:32px;margin-bottom:12px;display:block;}
+.guest-type{font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;font-weight:500;color:var(--green);margin-bottom:6px;}
+.guest-title{font-family:var(--serif);font-size:22px;font-weight:400;color:var(--ch);margin-bottom:8px;line-height:1.15;}
+.guest-desc{font-size:12.5px;color:var(--mid);font-weight:300;line-height:1.65;margin-bottom:12px;}
+.guest-driver{font-size:11px;color:var(--mu);padding:6px 10px;background:var(--gp);border-radius:7px;display:inline-flex;align-items:center;gap:5px;}
+.guest-driver strong{color:var(--green);font-weight:500;}
+
+/* BOOKING TIMELINE */
+.timeline-steps{display:flex;flex-direction:column;gap:0;position:relative;}
+.timeline-steps::before{content:'';position:absolute;left:19px;top:24px;bottom:24px;width:1px;background:var(--bd);}
+.tl-step{display:flex;gap:18px;align-items:flex-start;padding:12px 0;}
+.tl-dot{width:38px;height:38px;flex-shrink:0;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:16px;color:#fff;position:relative;z-index:1;}
+.tl-dot.outline{background:var(--white);border:2px solid var(--bd);color:var(--mu);}
+.tl-body{padding-top:6px;}
+.tl-title{font-size:14px;font-weight:500;color:var(--ch);margin-bottom:2px;}
+.tl-desc{font-size:12px;font-weight:300;color:var(--mid);line-height:1.5;}
+.tl-tag{font-size:9px;letter-spacing:0.12em;text-transform:uppercase;font-weight:500;color:var(--green);margin-top:3px;}
+
+/* MORTGAGE COVERAGE */
+.mtg-banner{
+  border-radius:16px;padding:20px 22px;margin-bottom:12px;
+  display:flex;align-items:center;gap:20px;
+}
+.mtg-banner.covers{background:rgba(93,129,86,0.1);border:1px solid rgba(93,129,86,0.22);}
+.mtg-banner.shortfall{background:var(--amp);border:1px solid rgba(196,124,26,0.2);}
+.mtg-icon{font-size:24px;flex-shrink:0;}
+.mtg-body{flex:1;}
+.mtg-lbl{font-size:9px;letter-spacing:0.14em;text-transform:uppercase;font-weight:500;margin-bottom:4px;}
+.mtg-lbl.g{color:var(--green);}
+.mtg-lbl.am{color:var(--am);}
+.mtg-num{font-family:var(--serif);font-size:28px;font-weight:300;line-height:1;}
+.mtg-num.g{color:var(--green);}
+.mtg-num.am{color:var(--am);}
+.mtg-sub{font-size:11.5px;color:var(--mid);margin-top:3px;font-weight:300;}
+
+/* STAT BAR */
+.stat-bar{display:flex;gap:0;border:1px solid var(--bd);border-radius:12px;overflow:hidden;background:var(--white);margin-bottom:12px;}
+.sb-cell{flex:1;padding:14px 16px;border-right:1px solid var(--bd);text-align:center;}
+.sb-cell:last-child{border-right:none;}
+.sb-num{font-family:var(--serif);font-size:30px;font-weight:300;color:var(--green);line-height:1;}
+.sb-lbl{font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--mu);margin-top:3px;font-weight:500;}
+
+/* BOOKING PROB */
+.prob-bar{height:8px;border-radius:100px;background:var(--gp);overflow:hidden;margin:8px 0;}
+.prob-fill{height:100%;border-radius:100px;background:var(--green);}
+
+/* ── GLOBAL HOVER UPGRADES ──────────────────────────────────── */
+/* Nav menu buttons */
+.tb-i:hover{color:var(--green);background:var(--gp);}
+.tb-i.on:hover{background:var(--gl);}
+
+/* Edit button */
+.btn-e:hover{background:var(--gp);border-color:var(--green);color:var(--green);transform:translateY(-1px);box-shadow:0 2px 8px rgba(93,129,86,0.15);}
+
+/* Bottom nav arrows */
+.na:hover:not(:disabled){background:var(--gc);border-color:var(--green);color:var(--green);transform:scale(1.1);box-shadow:0 2px 10px rgba(93,129,86,0.2);}
+
+/* Dot indicators */
+.dot:hover{background:var(--gl);transform:scale(1.4);}
+.dot.on:hover{background:var(--gl);}
+
+/* Pill buttons */
+.pill:hover{background:var(--green);border-color:var(--green);color:#fff;transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.25);}
+.pill-dk:hover{background:rgba(255,255,255,0.16);color:#fff;transform:translateY(-1px);}
+
+/* Case study cards */
+.cs:hover{border-color:var(--green);box-shadow:0 4px 20px rgba(93,129,86,0.12);transform:translateY(-2px);}
+.cb:hover{background:var(--green);border-color:var(--green);color:#fff;transform:translateY(-1px);}
+
+/* Contract items */
+.ct:hover{border-color:var(--green);background:var(--gc);transform:translateX(3px);}
+
+/* Steps */
+.step:hover{background:rgba(230,235,215,0.35);transform:translateX(3px);box-shadow:0 2px 12px rgba(93,129,86,0.1);}
+
+/* Guest cards */
+.guest-card:hover{border-color:var(--green);box-shadow:0 6px 24px rgba(93,129,86,0.13);transform:translateY(-3px);}
+
+/* Protection stat cards */
+.pt:hover{background:rgba(255,255,255,0.14);transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,0.15);}
+
+/* Stat bar cells */
+.sb-cell:hover{background:var(--gp);}
+
+/* All card types — subtle lift */
+.card:hover,.card-p:hover,.card-dk:hover,.card-am:hover,.card-green:hover{
+  box-shadow:0 4px 16px rgba(93,129,86,0.1);
+  transform:translateY(-1px);
+  transition:all 0.2s var(--ease);
+}
+.card,.card-p,.card-dk,.card-am,.card-green{transition:all 0.2s var(--ease);}
+
+/* Checklist items hover */
+.ck li:hover{color:var(--ch);}
+.ck.white li:hover{color:#fff;}
+
+/* Demo/live links in proof slide */
+a.pill:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.25);}
+
+/* Apply button */
+.pp-ok:hover{background:var(--gl);transform:translateY(-1px);box-shadow:0 2px 8px rgba(93,129,86,0.3);}
+
+/* Timeline steps hover */
+.tl-step:hover .tl-dot{transform:scale(1.1);}
+.tl-dot{transition:transform 0.2s var(--ease);}
+
+/* Bar hover handled by shared tooltip above */
+
+/* ── BAR CHART SHARED TOOLTIP ─────────────────────────────── */
+#bar-tip{
+  position:absolute;pointer-events:none;z-index:100;
+  background:var(--gd);border-radius:9px;padding:8px 12px;
+  box-shadow:0 4px 16px rgba(0,0,0,0.22);
+  opacity:0;transform:translateY(4px);
+  transition:opacity 0.15s,transform 0.15s;
+  min-width:80px;
+}
+#bar-tip.show{opacity:1;transform:translateY(0);}
+.tip-month{font-size:9.5px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.45);font-weight:500;margin-bottom:3px;}
+.tip-val{font-family:var(--serif);font-size:22px;font-weight:300;color:var(--gc);line-height:1;margin-bottom:2px;}
+.tip-vs{font-size:10.5px;color:rgba(255,255,255,0.5);font-weight:300;}
+
+/* ── UNIVERSAL HOVER SYSTEM ─────────────────────────────── */
+.tb-i:hover{color:var(--green);background:var(--gc);}
+.btn-e:hover{background:var(--green);color:#fff;border-color:var(--green);}
+.dot:hover{background:rgba(93,129,86,0.55);transform:scale(1.5);}
+.dot.on:hover{background:var(--green);}
+.na:hover:not(:disabled){background:var(--gc);border-color:var(--green);color:var(--green);transform:scale(1.08);}
+.pill:hover{background:var(--green);border-color:var(--green);color:#fff;transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.25);}
+.pill-dk:hover{background:rgba(255,255,255,0.18);color:#fff;transform:translateY(-1px);}
+.cb:hover{background:var(--green);border-color:var(--green);color:#fff;transform:translateY(-1px);}
+.cs:hover{border-color:var(--green);box-shadow:0 4px 18px rgba(93,129,86,0.13);transform:translateY(-2px);}
+.guest-card:hover{border-color:var(--green);box-shadow:0 6px 24px rgba(93,129,86,0.14);transform:translateY(-2px);}
+.guest-driver:hover{background:var(--gc);color:var(--gd);}
+.pt:hover{background:rgba(255,255,255,0.16);transform:translateY(-2px);}
+.ct:hover{border-color:var(--green);background:var(--gc);}
+.step:hover{background:rgba(230,235,215,0.32);transform:translateX(3px);}
+.ri.g:hover{background:#d8e4c8;border-color:rgba(93,129,86,0.3);}
+.ri.n:hover{background:#eeecea;border-color:rgba(0,0,0,0.1);}
+.ri.dk:hover{background:rgba(255,255,255,0.1);}
+.sc:hover{background:rgba(93,129,86,0.08);}
+.sc.hi:hover{background:#e8f0da;}
+.sc-dk:hover{background:rgba(93,129,86,0.25);}
+.sb-cell:hover{background:rgba(93,129,86,0.07);}
+.card:hover{border-color:rgba(93,129,86,0.3);box-shadow:0 2px 12px rgba(93,129,86,0.08);}
+.card-p:hover{border-color:rgba(93,129,86,0.28);box-shadow:0 2px 12px rgba(93,129,86,0.09);}
+.card-dk:hover{border-color:rgba(255,255,255,0.18);}
+.card-am:hover{border-color:rgba(196,124,26,0.35);}
+.card-green:hover{border-color:rgba(93,129,86,0.4);}
+.mtg-banner:hover{filter:brightness(1.03);}
+.tl-step:hover .tl-body .tl-title{color:var(--green);}
+.bar:hover{filter:brightness(1.25);cursor:crosshair;}
+.bw:hover .bm{color:var(--green);font-weight:500;}
+#bar-tip{position:absolute;background:var(--gd);color:#fff;padding:6px 10px;border-radius:8px;font-size:11.5px;font-weight:500;font-family:var(--sans);pointer-events:none;white-space:nowrap;opacity:0;transform:translateY(4px);transition:opacity 0.15s ease,transform 0.15s ease;z-index:500;box-shadow:0 4px 14px rgba(0,0,0,0.2);}
+#bar-tip::after{content:'';position:absolute;bottom:-5px;left:50%;transform:translateX(-50%);border:5px solid transparent;border-bottom:none;border-top-color:var(--gd);}
+#bar-tip.show{opacity:1;transform:translateY(0);}
+#bar-tip .tip-val{color:var(--gc);font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:300;}
+#bar-tip .tip-vs{font-size:10px;opacity:0.6;margin-top:2px;}
+
+/* ══════════════════════════════════════════════════════════════
+   INTERACTIVE QUESTION LAYER
+══════════════════════════════════════════════════════════════ */
+.sf-ask{
+  display:none;
+  margin:28px auto 0;
+  max-width:560px;
+  border-radius:14px;
+  padding:16px 20px;
+  text-align:center;
+  transition:box-shadow 0.2s;
+}
+/* Light slide variant (cream / white slides) */
+.sf-ask.light{
+  background:rgba(250,248,244,0.94);
+  backdrop-filter:blur(14px);
+  border:1.5px solid var(--bd);
+}
+.sf-ask.dark{
+  background:rgba(30,50,30,0.94);
+  backdrop-filter:blur(14px);
+  border:1.5px solid rgba(230,235,215,0.15);
+}
+
+/* Needs-answer: amber glow pulse — draws eye to question */
+.sf-ask.sf-needs-answer{
+  animation:sfGlowPulse 0.5s ease forwards;
+  border-color:rgba(196,124,26,0.55)!important;
+}
+@keyframes sfGlowPulse{
+  0%  {box-shadow:0 0 0 0 rgba(196,124,26,0.7);}
+  40% {box-shadow:0 0 0 10px rgba(196,124,26,0.2);}
+  100%{box-shadow:0 0 0 4px rgba(196,124,26,0.3);}
+}
+
+/* Error message strip inside the question block */
+.sf-err-msg{
+  display:none;font-size:11px;font-weight:600;color:var(--am);
+  margin-bottom:9px;padding:5px 12px;
+  background:rgba(196,124,26,0.1);border-radius:7px;
+  letter-spacing:0.02em;
+}
+.sf-err-msg.show{display:block;}
+
+/* Fixed top toast — appears briefly when they try to skip */
+#sf-toast{
+  position:fixed;top:60px;left:50%;transform:translateX(-50%) translateY(-8px);
+  background:var(--am);color:#fff;
+  border-radius:100px;padding:7px 18px;
+  font-size:12px;font-weight:600;letter-spacing:0.02em;
+  z-index:300;pointer-events:none;white-space:nowrap;
+  opacity:0;transition:opacity 0.2s,transform 0.2s;
+  box-shadow:0 4px 16px rgba(196,124,26,0.4);
+}
+#sf-toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+/* Welcome back banner — slides down from top bar */
+#sf-welcome-back{
+  position:fixed;top:55px;left:50%;
+  transform:translateX(-50%) translateY(-12px);
+  background:var(--gd);color:#fff;
+  border:1px solid rgba(230,235,215,0.2);
+  border-radius:100px;padding:8px 18px;
+  font-size:12px;font-weight:500;
+  z-index:299;white-space:nowrap;
+  display:flex;align-items:center;gap:8px;
+  opacity:0;pointer-events:none;
+  transition:opacity 0.3s,transform 0.3s;
+  box-shadow:0 4px 18px rgba(0,0,0,0.25);
+}
+#sf-welcome-back.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+  pointer-events:all;
+}
+.sf-ask.answered.light{background:rgba(240,244,232,0.94);border-color:rgba(93,129,86,0.3);}
+.sf-ask.answered.dark{background:rgba(35,58,35,0.94);border-color:rgba(230,235,215,0.25);}
+
+.sf-ask-q{font-size:13.5px;font-weight:500;margin-bottom:12px;line-height:1.4;display:flex;align-items:center;justify-content:center;gap:7px;}
+.sf-ask-q::before{content:"💬";font-size:14px;}
+.sf-ask.light .sf-ask-q{color:var(--ch);}
+.sf-ask.dark  .sf-ask-q{color:var(--gc);}
+
+.sf-options{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;}
+.sf-opt{
+  padding:7px 14px;border-radius:100px;font-size:12px;font-weight:500;
+  cursor:pointer;transition:all 0.18s;font-family:var(--sans);
+}
+.sf-ask.light .sf-opt{border:1.5px solid var(--bd);background:#fff;color:var(--ch);}
+.sf-ask.light .sf-opt:hover{border-color:var(--green);color:var(--green);transform:translateY(-1px);}
+.sf-ask.light .sf-opt.sel{background:var(--green);border-color:var(--green);color:#fff;}
+.sf-ask.dark  .sf-opt{border:1.5px solid rgba(230,235,215,0.18);background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.75);}
+.sf-ask.dark  .sf-opt:hover{border-color:var(--gc);color:var(--gc);transform:translateY(-1px);}
+.sf-ask.dark  .sf-opt.sel{background:var(--g);border-color:var(--gc);color:#fff;}
+
+.sf-open-input{
+  width:100%;padding:10px 13px;border-radius:9px;font-size:13px;
+  resize:none;outline:none;transition:border 0.2s;font-family:var(--sans);
+}
+.sf-ask.light .sf-open-input{border:1.5px solid var(--bd);background:#fff;color:var(--ch);}
+.sf-ask.light .sf-open-input:focus{border-color:var(--green);}
+.sf-ask.dark  .sf-open-input{border:1.5px solid rgba(230,235,215,0.18);background:rgba(255,255,255,0.08);color:#fff;}
+.sf-ask.dark  .sf-open-input:focus{border-color:var(--gc);}
+.sf-open-input::placeholder{color:var(--mu);}
+
+.sf-send{
+  margin-top:7px;padding:8px 18px;background:var(--green);color:#fff;
+  border:none;border-radius:8px;cursor:pointer;font-size:12.5px;
+  font-weight:600;font-family:var(--sans);transition:opacity 0.2s,transform 0.2s;
+}
+.sf-send:hover{opacity:0.88;transform:translateY(-1px);}
+.sf-send:disabled{opacity:0.45;cursor:default;transform:none;}
+
+.sf-confirm{
+  display:none;align-items:center;gap:8px;
+  font-size:12.5px;font-weight:500;margin-top:8px;
+}
+.sf-confirm.show{display:flex;justify-content:center;}
+.sf-ask.light .sf-confirm{color:var(--green);}
+.sf-ask.dark  .sf-confirm{color:var(--gc);}
+.sf-confirm-dot{width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0;}
+.sf-ask.dark .sf-confirm-dot{background:var(--gc);}
+.sf-change{font-size:11px;color:var(--mu);cursor:pointer;text-decoration:underline;margin-left:auto;}
+.sf-change:hover{color:var(--green);}
+
+
+/* ══════════════════════════════════════════════════════════════
+   MOBILE RESPONSIVE — primary target 390px (iPhone)
+══════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  /* SLIDE LABEL (mobile only — shows current slide name) */
+  #tb-slide-lbl { display: block !important; }
+
+  /* TOP BAR — hide 9-button nav, keep logo + edit */
+  .tb-menu { display: none !important; }
+  .tb-badge { display: none !important; }
+  #tb { padding: 0 16px; }
+
+  /* SLIDE CONTAINER — reduce side padding from 56px → 18px */
+  .si { padding: 16px 18px 12px; }
+
+  /* PERSONALISE PANEL — stack inputs vertically */
+  #pp.open { max-height: 420px; overflow-y: auto; padding: 14px 18px; }
+  .pp-r { flex-direction: column; gap: 8px; }
+  .ppf { width: 100%; }
+  .ppf input { width: 100% !important; box-sizing: border-box; }
+  .pp-ok { width: 100%; margin-top: 4px; }
+
+  /* COVER — fix absolute right column (nightly rate / occ) */
+  #s0 .si > div[style*="right:56px"] {
+    position: static !important;
+    transform: none !important;
+    text-align: left !important;
+    display: flex !important;
+    gap: 24px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+  /* Vertical accent line — off-screen on mobile, hide */
+  #s0 .si > div[style*="position:absolute;left:56px"] { display: none; }
+  /* Cover heading padding-left no longer needed */
+  #s0 .si { padding-left: 18px !important; }
+  /* Cover stat strip — stack */
+  #s0 .strip-dk { flex-direction: column; }
+  #s0 .sc-dk {
+    border-right: none !important;
+    border-bottom: 1px solid rgba(255,255,255,0.08) !important;
+    padding: 12px 16px;
+  }
+  #s0 .sc-dk:last-child { border-bottom: none !important; }
+
+  /* ALL MULTI-COLUMN GRIDS → single column */
+  .two        { grid-template-columns: 1fr !important; gap: 12px !important; }
+  .t60        { grid-template-columns: 1fr !important; gap: 12px !important; }
+  .g2         { grid-template-columns: 1fr !important; gap: 10px !important; }
+  .g3         { grid-template-columns: 1fr 1fr !important; gap: 8px !important; }
+  .guest-grid { grid-template-columns: 1fr !important; gap: 12px !important; }
+
+  /* Case study grid — inline style override */
+  #s5 div[style*="grid-template-columns:1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  /* STL/LTL STRIPS → stack */
+  .strip      { flex-direction: column; }
+  .strip-dk   { flex-direction: column; }
+  .sc {
+    border-right: none !important;
+    border-bottom: 1px solid var(--bd) !important;
+    padding: 14px 16px;
+  }
+  .sc:last-child  { border-bottom: none !important; }
+  .sc-dk {
+    border-right: none !important;
+    border-bottom: 1px solid rgba(255,255,255,0.08) !important;
+    padding: 14px 16px;
+  }
+  .sc-dk:last-child { border-bottom: none !important; }
+
+  /* PROTECTION STAT BAR → 2×3 wrap */
+  .stat-bar { flex-wrap: wrap; border-radius: 12px; }
+  .sb-cell {
+    flex: 0 0 50% !important;
+    border-bottom: 1px solid var(--bd) !important;
+  }
+  .sb-cell:nth-child(even)  { border-right: none !important; }
+  .sb-cell:nth-last-child(-n+1):nth-child(odd),
+  .sb-cell:last-child { border-bottom: none !important; }
+
+  /* PROTECTION STAT CIRCLES */
+  .pr { flex-wrap: wrap; gap: 8px; }
+  .pt { flex: 0 0 calc(50% - 4px) !important; }
+
+  /* MORTGAGE BANNER — stack icon + text */
+  .mtg-banner { flex-direction: column; align-items: flex-start; gap: 8px; padding: 16px; }
+  .mtg-num { font-size: 26px !important; }
+
+  /* GUEST CARDS */
+  .guest-card { padding: 16px 16px; }
+  .guest-icon { font-size: 26px; margin-bottom: 8px; }
+  .guest-title { font-size: 18px; }
+  .guest-desc { font-size: 12px; }
+
+  /* TIMELINE */
+  .timeline-steps::before { left: 15px; }
+  .tl-dot { width: 30px; height: 30px; font-size: 14px; flex-shrink: 0; }
+  .tl-step { gap: 12px; padding: 10px 0; }
+  .tl-title { font-size: 13px; }
+  .tl-desc { font-size: 11.5px; }
+
+  /* CONTRACT ITEMS */
+  .ct { padding: 10px 12px; }
+  .ctt { font-size: 12.5px; }
+
+  /* STEPS (S8) */
+  .step { padding: 11px 14px; gap: 10px; }
+  .st { font-size: 13px; }
+
+  /* CHECKLIST */
+  .ck li { font-size: 12.5px; }
+
+  /* RESP LIST */
+  .rt { font-size: 12.5px; }
+
+  /* DEMO PILLS */
+  .pill { font-size: 11.5px; padding: 7px 14px; }
+  .pill-dk { font-size: 11.5px; padding: 6px 13px; }
+
+  /* BAR CHART */
+  .cw { padding: 12px 10px 8px; }
+
+  /* SF-ASK QUESTION BLOCKS */
+  .sf-ask { padding: 12px 14px; margin: 16px auto 0; max-width: 100%; }
+  .sf-ask-q { font-size: 13px; margin-bottom: 10px; }
+  .sf-opt { font-size: 11.5px; padding: 6px 11px; }
+  .sf-send { font-size: 12.5px; padding: 8px 16px; }
+  .sf-open-input { font-size: 13.5px; }
+
+  /* BOTTOM NAV */
+  #bnav { gap: 12px; }
+  .dots { gap: 5px; }
+
+  /* PULL QUOTE */
+  .pq p { font-size: 16px; }
+
+  /* PROOF SLIDE — case study cards smaller */
+  .cs { padding: 12px 12px 10px; }
+  .cc { font-size: 16px; }
+}
+
+@media (max-width: 480px) {
+  /* Phones — collapse any remaining 2-col to 1-col */
+  .g3    { grid-template-columns: 1fr !important; }
+  .pr    { flex-wrap: wrap; }
+  .pt    { flex: 0 0 calc(50% - 4px) !important; }
+  .stat-bar { flex-direction: column; }
+  .sb-cell  { flex: none !important; width: 100%; border-right: none !important; }
+  /* Tighten padding further */
+  .si    { padding: 12px 14px 10px; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div id="tb">
+  <div class="tb-logo">
+    <img src="https://images.squarespace-cdn.com/content/v1/64946e7680c92451dce86167/b6f59d1c-fee6-4f55-948b-3c05b6e18a3b/Stayful_Dark_Green.png?format=300w" alt="Stayful" onerror="this.style.display='none';document.querySelector('.tb-logo-f').style.display='block'">
+    <span class="tb-logo-f">Stayful</span>
+  </div>
+  <div class="tb-menu">
+    <button class="tb-i on"  onclick="go(0)">Property</button>
+    <button class="tb-i"     onclick="go(1)">Who books?</button>
+    <button class="tb-i"     onclick="go(2)">Income</button>
+    <button class="tb-i"     onclick="go(3)">Management</button>
+    <button class="tb-i"     onclick="go(4)">Protection</button>
+    <button class="tb-i"     onclick="go(5)">Proof</button>
+    <button class="tb-i"     onclick="go(6)">First booking</button>
+    <button class="tb-i"     onclick="go(7)">Agreement</button>
+    <button class="tb-i"     onclick="go(8)">Next steps</button>
+  </div>
+  <div class="tb-r">
+    <span class="tb-badge" id="tb-b">Tamara · Flat 1, 128 High Street</span>
+    <span id="tb-slide-lbl" style="display:none;font-size:11px;font-weight:500;color:var(--green);"></span>
+    <button class="btn-e" onclick="togglePP()">✏ Edit</button>
+  </div>
+</div>
+<div id="prog"><div id="pf"></div></div>
+
+<!-- PERSONALISE PANEL -->
+<div id="pp">
+  <div class="pp-r">
+    <div class="ppf"><label>Name</label><input id="p-n" value="Tamara" style="width:90px"></div>
+    <div class="ppf"><label>Address</label><input id="p-a" value="6 Flat 1, 128 High Street WV14 0RJ" style="width:210px"></div>
+    <div class="ppf"><label>Monthly rev (£)</label><input id="p-r" type="number" value="3208" style="width:88px"></div>
+    <div class="ppf"><label>Occupancy (%)</label><input id="p-o" type="number" value="63" style="width:72px"></div>
+    <div class="ppf"><label>Nightly (£)</label><input id="p-d" type="number" value="172" style="width:72px"></div>
+    <div class="ppf"><label>LTL net/mo (£)</label><input id="p-l" type="number" value="950" style="width:82px"></div>
+    <div class="ppf"><label>Mortgage/mo (£)</label><input id="p-m" type="number" value="0" style="width:88px"></div>
+    <button class="pp-ok" onclick="applyPP()">Apply →</button>
+  </div>
+</div>
+
+<!-- DECK -->
+<div id="deck">
+
+<!-- ── S0: COVER (dark) ──────────────────────────────────── -->
+<div class="slide active" id="s0">
+  <div class="si" style="padding-left:72px;">
+    <div style="position:absolute;left:56px;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,rgba(230,235,215,0.3) 20%,rgba(230,235,215,0.3) 80%,transparent);pointer-events:none;"></div>
+    <!-- GAP 1: Stayful = Airbnb management company -->
+    <div class="ey lt fi" style="margin-bottom:8px;">Stayful · Airbnb Management Company</div>
+    <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:100px;padding:5px 14px 5px 10px;margin-bottom:24px;" class="fi">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Airbnb_Logo_B%C3%A9lo.svg/120px-Airbnb_Logo_B%C3%A9lo.svg.png" alt="Airbnb" style="height:14px;filter:brightness(0) invert(1);opacity:0.5;">
+      <span style="font-size:10.5px;color:rgba(255,255,255,0.4);">Listed on Airbnb · Booking.com · Managed by Stayful</span>
+    </div>
+    <div class="hl white fi" style="font-size:clamp(42px,5.5vw,68px);margin-bottom:6px;"><span id="s0n">Tamara</span>'s<br>property <em>review.</em></div>
+    <div class="fi" style="font-size:14px;font-weight:300;color:rgba(255,255,255,0.4);margin-bottom:34px;" id="s0a">Flat 1, 128 High Street, Cheltenham GL50 1EG</div>
+    <div class="strip-dk fi" style="max-width:560px;margin-bottom:20px;">
+      <div class="sc-dk hi"><div class="nl2 lt">Est. monthly revenue</div><div class="dn gc" style="font-size:44px;" id="s0r">£4,795</div></div>
+      <div class="sc-dk hi"><div class="nl2 lt">Monthly vs long-let</div><div class="dn gc" style="font-size:44px;" id="s0u">+£1,514</div></div>
+      <div class="sc-dk"><div class="nl2 lt">Comparable properties</div><div class="dn white" style="font-size:44px;">12<span style="font-size:18px;color:rgba(255,255,255,0.3);"></span></div><div class="ns lt">All within 1.1 miles</div></div>
+    </div>
+    <div class="fi" style="display:flex;gap:8px;flex-wrap:wrap;">
+      <div style="padding:6px 14px;background:rgba(230,235,215,0.12);border:1px solid rgba(230,235,215,0.18);border-radius:100px;font-size:11px;color:var(--gc);">12 comparable properties</div>
+      <div style="padding:6px 14px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:100px;font-size:11px;color:rgba(255,255,255,0.4);">Airbtics · AirDNA · Live Airbnb</div>
+    </div>
+    <div class="fi" style="position:absolute;right:56px;top:50%;transform:translateY(-50%);text-align:right;">
+      <div style="margin-bottom:18px;"><div class="nl2 lt">Nightly rate</div><div class="dn gc" style="font-size:34px;" id="s0d">£241</div></div>
+      <div style="height:1px;background:rgba(255,255,255,0.1);margin:14px 0;"></div>
+      <div><div class="nl2 lt">Occupancy</div><div class="dn gc" style="font-size:34px;" id="s0o">65%</div></div>
+    </div>
+  </div>
+
+  <div class="sf-ask dark" data-q="0">
+    <div class="sf-ask-q">What's your main concern about making this change?</div>
+    <div class="sf-options">
+    <button class="sf-opt" onclick="sfSelect(this,0)">Income consistency</button>
+    <button class="sf-opt" onclick="sfSelect(this,0)">Managing the property remotely</button>
+    <button class="sf-opt" onclick="sfSelect(this,0)">Understanding all the costs</button>
+    <button class="sf-opt" onclick="sfSelect(this,0)">Getting the right type of guests</button>
+    </div>
+    <div class="sf-confirm" id="sfc-0">
+      <div class="sf-confirm-dot"></div>
+      <span id="sfct-0">Recorded</span>
+      <span class="sf-change" onclick="sfChange(0)">change</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── S1: WHO BOOKS? (cream) ────────────────────────────── -->
+<div class="slide" id="s1">
+  <div class="si">
+    <div class="ey fi">Demand intelligence</div>
+    <div class="hl fi" style="font-size:clamp(28px,3.6vw,46px);margin-bottom:8px;">Who actually <em>stays</em><br>at your property.</div>
+    <div class="sub fi" style="margin-bottom:22px;">Demand for your area comes from three consistent sources — not just tourism. These guests book year-round and specifically need properties in your location.</div>
+    <div class="guest-grid fi">
+      <div class="guest-card">
+        <span class="guest-icon">🏥</span>
+        <div class="guest-type">Healthcare</div>
+        <div class="guest-title">Hospital Visitors & Medical Staff</div>
+        <div class="guest-desc">Guests visiting or working at Cheltenham General Hospital book medium-length stays year-round, providing consistent off-peak demand. Proximity of just 0.70 km makes this property highly convenient for contractors, locum staff and family visitors.</div>
+        <div class="guest-driver">📍 <strong>Cheltenham General Hospital</strong> · 0.70km · High demand</div>
+      </div>
+      <div class="guest-card">
+        <span class="guest-icon">🎓</span>
+        <div class="guest-type">Education</div>
+        <div class="guest-title">Away fans, corporate guests &amp; event attendees</div>
+        <div class="guest-desc">Molineux Stadium (Wolverhampton Wanderers) draws thousands of away fans and corporate guests every match week. Events at the Wolverhampton Civic Halls and surrounding venues generate consistent short-break demand.</div>
+        <div class="guest-driver">📍 <strong>Molineux Stadium</strong> · 2.5km · High demand</div>
+      </div>
+      <div class="guest-card">
+        <span class="guest-icon">🎪</span>
+        <div class="guest-type">Industrial &amp; business contractors</div>
+        <div class="guest-title">Manufacturing, logistics &amp; project workers</div>
+        <div class="guest-desc">The Black Country and West Midlands is a major hub for manufacturing, logistics, and automotive supply chain (JLR at Solihull, Stellantis at Ellesmere Port). Contractors and project workers on multi-week placements need accommodation close to sites.</div>
+        <div class="guest-driver">📍 <strong>Black Country industrial hub</strong> · Regional · High demand</div>
+      </div>
+    </div>
+    <div class="fi" style="margin-top:14px;padding:12px 18px;background:var(--gp);border:1px solid var(--bd);border-radius:12px;display:flex;gap:16px;align-items:center;">
+      <span style="font-size:18px;">💡</span>
+      <div style="font-size:12.5px;color:var(--mid);font-weight:300;line-height:1.6;"><strong style="color:var(--ch);font-weight:500;">This area has year-round demand.</strong> Bookings in this Cheltenham High Street location are driven year-round by visiting patients and staff at Cheltenham General Hospital, students and academics at the University of Gloucestershire Park Campus, rail travellers using Cheltenham Spa station, and event-goers attending the 36+ events at The Regal, Evesham.</div>
+    </div>
+
+  <div class="sf-ask light" data-q="1">
+    <div class="sf-ask-q">Which of those guest types sounds most relevant to your property?</div>
+    <div class="sf-options">
+    <button class="sf-opt" onclick="sfSelect(this,1)">Healthcare &amp; NHS workers</button>
+    <button class="sf-opt" onclick="sfSelect(this,1)">Business &amp; contractors</button>
+    <button class="sf-opt" onclick="sfSelect(this,1)">Events &amp; weekend visitors</button>
+    <button class="sf-opt" onclick="sfSelect(this,1)">A mix of all three</button>
+    </div>
+    <div class="sf-confirm" id="sfc-1">
+      <div class="sf-confirm-dot"></div>
+      <span id="sfct-1">Recorded</span>
+      <span class="sf-change" onclick="sfChange(1)">change</span>
+    </div>
+  </div>
+  </div>
+</div>
+
+<!-- ── S2: INCOME (white) ────────────────────────────────── -->
+<div class="slide" id="s2">
+  <div class="si">
+    <div class="ey fi">Your numbers</div>
+    <div class="hl fi" style="font-size:clamp(26px,3.4vw,42px);margin-bottom:18px;">Your income.<br>Your mortgage.<br><em>Here's how it stacks up.</em></div>
+    <div class="two fi" style="gap:28px;">
+      <div style="display:flex;flex-direction:column;gap:10px;">
+
+        <!-- GAP 2: Mortgage coverage — primary metric -->
+        <div id="mtg-covers" class="mtg-banner covers">
+          <span class="mtg-icon">🏠</span>
+          <div class="mtg-body">
+            <div class="mtg-lbl g">Short-let covers your mortgage</div>
+            <div class="mtg-num g" id="mtg-surplus">+£2,492 / month</div>
+            <div class="mtg-sub" id="mtg-sub-text">STL net £2,493 − mortgage £1 = £2,492 surplus every month</div>
+          </div>
+        </div>
+
+        <!-- STL vs LTL comparison -->
+        <div class="strip">
+          <div class="sc hi">
+            <div class="nl2">STL net / month</div>
+            <div class="dn" style="font-size:42px;" id="s2s">£2,493</div>
+            <!-- GAP 3: Cleaning note -->
+            <div class="ns">After management &amp; platform fees</div>
+            <div style="font-size:10.5px;color:var(--green);margin-top:4px;font-style:italic;">Cleaning is charged to guests — not deducted from you</div>
+          </div>
+          <div class="sc">
+            <div class="nl2">Long-let net / month</div>
+            <div class="dn" style="font-size:42px;color:var(--mu);" id="s2l">£979</div>
+            <div class="ns">After letting agent 10%</div>
+            <div id="ltl-mtg-note" style="font-size:10.5px;color:var(--am);margin-top:4px;font-style:italic;">Doesn't cover your £1 mortgage</div>
+          </div>
+        </div>
+
+        <!-- Bar chart -->
+        <div class="cw">
+          <div style="font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--mu);margin-bottom:8px;">12-month net — every bar above long-let line</div>
+          <div class="brs" id="bars"></div>
+          <div style="display:flex;gap:5px;" id="bnames"></div>
+          <div class="lr" id="lref"><span class="ll" id="lrefl">LTL £979</span></div>
+          <div class="cn">Lighter = quietest month · dashed = long-term alternative</div>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="card-p">
+          <div class="nl2">Your quietest month</div>
+          <div class="dn" style="font-size:40px;" id="s2f">£1,661</div>
+          <div style="font-size:12px;color:var(--mid);margin-top:5px;font-weight:300;" id="s2fs">Still +£682 above long-term — in your worst month.</div>
+        </div>
+        <div class="card">
+          <div class="nl2">Setup break-even</div>
+          <div style="font-family:var(--serif);font-size:40px;font-weight:300;color:var(--ch);line-height:1;">0 <span style="font-size:17px;color:var(--mu);font-weight:300;">months</span></div>
+          <div style="font-size:11.5px;color:var(--mu);margin-top:3px;font-weight:300;">£0 est. setup ÷ £1,514/mo uplift</div>
+        </div>
+        <div class="card-am">
+          <div style="font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--am);margin-bottom:4px;font-weight:500;">By year 3</div>
+          <div style="font-family:var(--serif);font-size:32px;font-weight:300;color:var(--am);">+£299<span style="font-size:13px;color:rgba(196,124,26,0.5);"> / month extra</span></div>
+          <div style="font-size:11px;color:rgba(196,124,26,0.6);margin-top:2px;font-weight:300;">As direct bookings cut platform fees</div>
+        </div>
+      </div>
+    </div>
+
+  <div class="sf-ask light" data-q="2">
+    <div class="sf-ask-q">Does this income picture change how you see the opportunity?</div>
+    <div class="sf-options">
+    <button class="sf-opt" onclick="sfSelect(this,2)">Yes — more confident now</button>
+    <button class="sf-opt" onclick="sfSelect(this,2)">Still have concerns about quiet months</button>
+    <button class="sf-opt" onclick="sfSelect(this,2)">I want to understand the costs more</button>
+    <button class="sf-opt" onclick="sfSelect(this,2)">I have a different question</button>
+    </div>
+    <div class="sf-confirm" id="sfc-2">
+      <div class="sf-confirm-dot"></div>
+      <span id="sfct-2">Recorded</span>
+      <span class="sf-change" onclick="sfChange(2)">change</span>
+    </div>
+  </div>
+  </div>
+</div>
+
+<!-- ── S3: MANAGEMENT (dark) ─────────────────────────────── -->
+<div class="slide" id="s3">
+  <div class="si">
+    <div class="ey lt fi">Day to day</div>
+    <div class="hl white fi" style="font-size:clamp(28px,3.6vw,48px);margin-bottom:22px;">You hand over the operation.<br><em>You keep the ownership.</em></div>
+    <div class="two fi">
+      <div>
+        <div class="ch2 lt" style="color:var(--gc);">Stayful handles all of this</div>
+        <div class="rl">
+          <div class="ri dk"><div class="rd w"></div><div class="rt lt">Guest communication — 24/7, every message</div></div>
+          <div class="ri dk"><div class="rd w"></div><div class="rt lt">Cleaning and linen after every stay</div></div>
+          <div class="ri dk"><div class="rd w"></div><div class="rt lt">Dynamic pricing — reviewed and updated daily</div></div>
+          <div class="ri dk"><div class="rd w"></div><div class="rt lt">Key management and guest check-in</div></div>
+          <div class="ri dk"><div class="rd w"></div><div class="rt lt">Listing optimisation across all platforms</div></div>
+          <div class="ri dk"><div class="rd w"></div><div class="rt lt">Maintenance — urgent repairs up to £300 without calling you</div></div>
+          <div class="ri dk"><div class="rd w"></div><div class="rt lt">Monthly reports · payout within 3 working days</div></div>
+        </div>
+      </div>
+      <div>
+        <div class="ch2 lt">What stays with you</div>
+        <div class="rl" style="margin-bottom:14px;">
+          <div class="ri dk" style="opacity:0.7;"><div class="rd" style="background:rgba(255,255,255,0.3);"></div><div class="rt lt">Mortgage</div></div>
+          <div class="ri dk" style="opacity:0.7;"><div class="rd" style="background:rgba(255,255,255,0.3);"></div><div class="rt lt">Short-let building &amp; liability insurance</div></div>
+          <div class="ri dk" style="opacity:0.7;"><div class="rd" style="background:rgba(255,255,255,0.3);"></div><div class="rt lt">Gas &amp; electrical safety certificates (annual)</div></div>
+          <div class="ri dk" style="opacity:0.7;"><div class="rd" style="background:rgba(255,255,255,0.3);"></div><div class="rt lt">Utilities in your name · WiFi active</div></div>
+        </div>
+        <div style="padding:14px 16px;background:rgba(196,124,26,0.12);border:1px solid rgba(196,124,26,0.2);border-radius:12px;margin-bottom:12px;">
+          <div style="font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--am);margin-bottom:3px;font-weight:500;">Before we go live</div>
+          <div style="font-size:12px;color:rgba(212,168,71,0.65);font-weight:300;line-height:1.6;">Gas cert, electrical cert, insurance confirmation — 10 minutes for most landlords.</div>
+        </div>
+        <div style="padding:14px 16px;background:rgba(230,235,215,0.1);border:1px solid rgba(230,235,215,0.15);border-radius:12px;">
+          <div style="font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--gc);margin-bottom:3px;">Fee</div>
+          <div style="font-family:var(--serif);font-size:22px;font-weight:300;color:#fff;">15% + VAT <span style="font-size:13px;color:rgba(255,255,255,0.35);">+ £42/mo software</span></div>
+        </div>
+      </div>
+    </div>
+
+  <div class="sf-ask dark" data-q="3">
+    <div class="sf-ask-q">Is there anything here you'd want to stay more involved with?</div>
+    <div class="sf-options">
+    <button class="sf-opt" onclick="sfSelect(this,3)">No — happy to hand it all over</button>
+    <button class="sf-opt" onclick="sfSelect(this,3)">I want input on maintenance decisions</button>
+    <button class="sf-opt" onclick="sfSelect(this,3)">I'd like more control over pricing</button>
+    <button class="sf-opt" onclick="sfSelect(this,3)">I have a specific question</button>
+    </div>
+    <div class="sf-confirm" id="sfc-3">
+      <div class="sf-confirm-dot"></div>
+      <span id="sfct-3">Recorded</span>
+      <span class="sf-change" onclick="sfChange(3)">change</span>
+    </div>
+  </div>
+  </div>
+</div>
+
+<!-- ── S4: PROTECTION (cream) ────────────────────────────── -->
+<div class="slide" id="s4">
+  <div class="si">
+    <div class="ey fi">Guest screening</div>
+    <div class="hl fi" style="font-size:clamp(28px,3.6vw,48px);margin-bottom:22px;">We treat your property<br>like it's <em>ours.</em></div>
+    <div class="stat-bar fi">
+      <div class="sb-cell"><div class="sb-num">£100k</div><div class="sb-lbl">Insurance / stay</div></div>
+      <div class="sb-cell"><div class="sb-num">100%</div><div class="sb-lbl">Guests ID verified</div></div>
+      <div class="sb-cell"><div class="sb-num">£200</div><div class="sb-lbl">Security deposit</div></div>
+      <div class="sb-cell"><div class="sb-num">Quarterly</div><div class="sb-lbl">Inspections</div></div>
+      <div class="sb-cell"><div class="sb-num">30%</div><div class="sb-lbl">Returning guests</div></div>
+    </div>
+    <div class="g2 fi">
+      <div class="card-p">
+        <div class="ch2 g">How we screen every guest</div>
+        <ul class="ck"><li>Government ID verified before booking confirmed</li><li>Profile history and review record checked</li><li>Purpose of stay confirmed for new guests</li><li>Local bookings flagged for additional review</li></ul>
+      </div>
+      <div class="card-p">
+        <div class="ch2 g">If something goes wrong</div>
+        <ul class="ck"><li>Damage documented and reported within 24 hours</li><li>Claim submitted via Airbnb AirCover or insurance</li><li>Contractor arranged and managed by us</li><li>You're kept informed at every step</li></ul>
+      </div>
+    </div>
+
+  <div class="sf-ask light" data-q="4">
+    <div class="sf-ask-q">What's your biggest worry about having guests in the property?</div>
+    <div class="sf-options">
+    <button class="sf-opt" onclick="sfSelect(this,4)">Damage or theft</button>
+    <button class="sf-opt" onclick="sfSelect(this,4)">Wrong type of guests</button>
+    <button class="sf-opt" onclick="sfSelect(this,4)">Noise or neighbour issues</button>
+    <button class="sf-opt" onclick="sfSelect(this,4)">Not being kept informed</button>
+    </div>
+    <div class="sf-confirm" id="sfc-4">
+      <div class="sf-confirm-dot"></div>
+      <span id="sfct-4">Recorded</span>
+      <span class="sf-change" onclick="sfChange(4)">change</span>
+    </div>
+  </div>
+  </div>
+</div>
+
+<!-- ── S5: PROOF (white) ─────────────────────────────────── -->
+<div class="slide" id="s5">
+  <div class="si">
+    <div class="ey fi">Estimate vs actual · 2025</div>
+    <div class="hl fi" style="font-size:clamp(24px,3.2vw,40px);margin-bottom:6px;">We told landlords what to expect.<br><em>Here's what actually happened.</em></div>
+    <div class="sub fi" style="margin-bottom:12px;">Real 2025 results from Stayful-managed properties. Click any card to open the full case study.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;" class="fi">
+
+      <!-- Manchester -->
+      <div class="cs">
+        <div><div class="cc">Manchester</div><div class="cd">803 Eastbank Tower · 2 bed · ADR £240 · 85% occ</div></div>
+        <div class="ccp">
+          <div class="ccol e"><div class="cll">Tool estimate / mo</div><div class="cln">£2,997</div></div>
+          <div class="ccol a"><div class="cll g">Net after all fees</div><div class="cln g">£2,997</div></div>
+        </div>
+        <a href="#" class="cb" data-city="manchester" target="_blank">📄 View 2025 case study</a>
+      </div>
+
+      <!-- Leeds -->
+      <div class="cs">
+        <div><div class="cc">Leeds</div><div class="cd">7 Beechwood Mount · 3 bed · ADR £258 · 72% occ</div></div>
+        <div class="ccp">
+          <div class="ccol e"><div class="cll">Tool estimate / mo</div><div class="cln">£2,713</div></div>
+          <div class="ccol a"><div class="cll g">Actual owner net</div><div class="cln g">£3,085</div></div>
+        </div>
+        <a href="#" class="cb" data-city="leeds" target="_blank">📄 View 2025 case study</a>
+      </div>
+
+      <!-- York -->
+      <div class="cs">
+        <div><div class="cc">York</div><div class="cd">Chapel Apartments · 2 bed · ADR £170 · 90% occ</div></div>
+        <div class="ccp">
+          <div class="ccol e"><div class="cll">Tool estimate / mo</div><div class="cln">£2,278</div></div>
+          <div class="ccol a"><div class="cll g">Actual owner net</div><div class="cln g">£2,545</div></div>
+        </div>
+        <a href="#" class="cb" data-city="york" target="_blank">📄 View 2025 case study</a>
+      </div>
+
+      <!-- Lincoln -->
+      <div class="cs">
+        <div><div class="cc">Lincoln</div><div class="cd">9 Museum Court · 2 bed · ADR £133 · 82% occ</div></div>
+        <div class="ccp">
+          <div class="ccol e"><div class="cll">Tool estimate / mo</div><div class="cln">£1,611</div></div>
+          <div class="ccol a"><div class="cll g">Actual owner net</div><div class="cln g">£1,852</div></div>
+        </div>
+        <a href="#" class="cb" data-city="lincoln" target="_blank">📄 View 2025 case study</a>
+      </div>
+
+    </div>
+<div class="fi" style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
+      <a class="pill" href="https://drive.google.com/file/d/1OMLH73P0I4UdsoK8g7kMUDX9u4s46jF2/view" target="_blank">📊 Monthly report</a>
+      <a class="pill" href="https://app.slack.com/client/T061GPD7ZB8/C09LDM5GY86" target="_blank">💬 Live Slack channel</a>
+      <a class="pill" href="https://app.uplisting.io/calendar/" target="_blank">🗓 Owner calendar</a>
+    </div>
+
+  <div class="sf-ask light" data-q="5">
+    <div class="sf-ask-q">What would be most useful to see right now?</div>
+    <div class="sf-options">
+    <button class="sf-opt" onclick="sfSelect(this,5)">A comparable property's results</button>
+    <button class="sf-opt" onclick="sfSelect(this,5)">What I'd see as a Stayful customer</button>
+    <button class="sf-opt" onclick="sfSelect(this,5)">Both please</button>
+    <button class="sf-opt" onclick="sfSelect(this,5)">I'm satisfied with the evidence</button>
+    </div>
+    <div class="sf-confirm" id="sfc-5">
+      <div class="sf-confirm-dot"></div>
+      <span id="sfct-5">Recorded</span>
+      <span class="sf-change" onclick="sfChange(5)">change</span>
+    </div>
+  </div>
+  </div>
+</div>
+
+<!-- ── S6: FIRST BOOKING (dark) ──────────────────────────── -->
+<div class="slide" id="s6">
+  <div class="si">
+    <div class="ey lt fi">Going live</div>
+    <div class="hl white fi" style="font-size:clamp(28px,3.6vw,48px);margin-bottom:20px;">Your first booking<br>arrives <em>sooner than you think.</em></div>
+    <div class="two fi" style="align-items:start;">
+      <div>
+        <!-- 80% stat -->
+        <div style="background:rgba(230,235,215,0.1);border:1px solid rgba(230,235,215,0.15);border-radius:16px;padding:24px;margin-bottom:12px;">
+          <div class="nl2 lt" style="margin-bottom:8px;">Probability of first booking</div>
+          <div style="font-family:var(--serif);font-size:58px;font-weight:300;color:var(--gc);line-height:1;">80%</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.5);margin-top:4px;font-weight:300;">within 24–72 hours of going live</div>
+          <div class="prob-bar" style="margin-top:12px;"><div class="prob-fill" style="width:80%;"></div></div>
+          <div style="display:flex;justify-content:space-between;font-size:9px;color:rgba(255,255,255,0.25);margin-top:4px;"><span>Day 1</span><span>Week 1</span><span>Month 1</span></div>
+        </div>
+        <div class="strip-dk">
+          <div class="sc-dk">
+            <div class="nl2 lt">Avg booking lead time</div>
+            <div class="dn gc" style="font-size:32px;">30–45</div>
+            <div class="ns lt">days in advance</div>
+          </div>
+          <div class="sc-dk">
+            <div class="nl2 lt">New listing boost</div>
+            <div class="dn gc" style="font-size:32px;">↑</div>
+            <div class="ns lt">Airbnb algorithm priority</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:14px;font-weight:500;">From signature to first guest</div>
+        <div class="timeline-steps" style="--bd:rgba(255,255,255,0.1);">
+          <div class="tl-step">
+            <div class="tl-dot" style="background:var(--green);">1</div>
+            <div class="tl-body">
+              <div class="tl-title" style="color:#fff;">Sign management agreement</div>
+              <div class="tl-desc" style="color:rgba(255,255,255,0.5);">We send it by email. Signed digitally, takes minutes.</div>
+              <div class="tl-tag" style="color:var(--gc);">Day 1</div>
+            </div>
+          </div>
+          <div class="tl-step">
+            <div class="tl-dot" style="background:var(--green);">2</div>
+            <div class="tl-body">
+              <div class="tl-title" style="color:#fff;">Kick-off call &amp; setup</div>
+              <div class="tl-desc" style="color:rgba(255,255,255,0.5);">Photography, staging, listing prep. Your Slack channel is created.</div>
+              <div class="tl-tag" style="color:var(--gc);">Week 1–2</div>
+            </div>
+          </div>
+          <div class="tl-step">
+            <div class="tl-dot" style="background:var(--green);">3</div>
+            <div class="tl-body">
+              <div class="tl-title" style="color:#fff;">Listed live on Airbnb &amp; Booking.com</div>
+              <div class="tl-desc" style="color:rgba(255,255,255,0.5);">New listings receive a platform algorithm boost — more visibility from day one.</div>
+              <div class="tl-tag" style="color:var(--gc);">Week 3</div>
+            </div>
+          </div>
+          <div class="tl-step">
+            <div class="tl-dot" style="background:rgba(230,235,215,0.25);border:1px solid rgba(230,235,215,0.2);">★</div>
+            <div class="tl-body">
+              <div class="tl-title" style="color:var(--gc);font-family:var(--serif);font-size:18px;font-weight:300;font-style:italic;">First booking arrives</div>
+              <div class="tl-desc" style="color:rgba(255,255,255,0.5);">80% of new Stayful properties receive their first booking within 24–72 hours of going live. Rarely more than 5–6 days.</div>
+              <div class="tl-tag" style="color:var(--gc);">Within 72hrs of going live</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <div class="sf-ask dark" data-q="6">
+    <div class="sf-ask-q">Does knowing the first booking arrives within 72 hours change your thinking on timing?</div>
+    <div class="sf-options">
+    <button class="sf-opt" onclick="sfSelect(this,6)">Yes — sooner than I expected</button>
+    <button class="sf-opt" onclick="sfSelect(this,6)">Still nervous about the early weeks</button>
+    <button class="sf-opt" onclick="sfSelect(this,6)">I want to know more about the algorithm boost</button>
+    <button class="sf-opt" onclick="sfSelect(this,6)">Timing isn't my main concern</button>
+    </div>
+    <div class="sf-confirm" id="sfc-6">
+      <div class="sf-confirm-dot"></div>
+      <span id="sfct-6">Recorded</span>
+      <span class="sf-change" onclick="sfChange(6)">change</span>
+    </div>
+  </div>
+  </div>
+</div>
+
+<!-- ── S7: AGREEMENT (cream) ─────────────────────────────── -->
+<div class="slide" id="s7">
+  <div class="si">
+    <div class="ey fi">The agreement</div>
+    <div class="hl fi" style="font-size:clamp(28px,3.6vw,48px);margin-bottom:22px;">What you're<br><em>actually agreeing to.</em></div>
+    <div class="two fi">
+      <div class="ctl">
+        <div class="ct"><span class="ctk">✓</span><div class="ctt"><strong>6-month initial term.</strong> Exit early: £1,000 fee. After 6 months: 3 months written notice, no penalty.</div></div>
+        <div class="ct"><span class="ctk">✓</span><div class="ctt"><strong>15% + VAT</strong> on gross revenue. Plus <strong>£42/month</strong> software. No other fees unless quoted in advance.</div></div>
+        <div class="ct"><span class="ctk">✓</span><div class="ctt"><strong>72 hours Slack notice</strong> to access your property — to protect guest privacy. Genuine emergencies excepted.</div></div>
+        <div class="ct"><span class="ctk">✓</span><div class="ctt">We <strong>authorise repairs up to £300</strong> without calling you. Above £300, we get your sign-off first.</div></div>
+        <div class="ct"><span class="ctk">✓</span><div class="ctt"><strong>All communication via Slack</strong> — your dedicated channel, set up at kick-off. 24-hour response in office hours.</div></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <div class="card-p">
+          <div style="font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--mu);margin-bottom:10px;">Questions to take away</div>
+          <ul class="ck"><li>Does my mortgage allow short-term letting?</li><li>Do I have short-let building and liability insurance?</li><li>Are my gas and electrical certificates current?</li></ul>
+        </div>
+        <div class="card-p" style="display:flex;flex-direction:column;gap:8px;">
+          <div style="font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--green);">Open the full agreement</div>
+          <a href="#" data-doc="agreement" class="pill" target="_blank" style="align-self:flex-start;">📄 View management agreement</a>
+        </div>
+      </div>
+    </div>
+
+  <div class="sf-ask light" data-q="7">
+    <div class="sf-ask-q">Any of those terms you'd want to talk through?</div>
+    <div class="sf-options">
+    <button class="sf-opt" onclick="sfSelect(this,7)">The 6-month commitment</button>
+    <button class="sf-opt" onclick="sfSelect(this,7)">The fee structure</button>
+    <button class="sf-opt" onclick="sfSelect(this,7)">The 72-hour access notice</button>
+    <button class="sf-opt" onclick="sfSelect(this,7)">No — happy with all of it</button>
+    </div>
+    <div class="sf-confirm" id="sfc-7">
+      <div class="sf-confirm-dot"></div>
+      <span id="sfct-7">Recorded</span>
+      <span class="sf-change" onclick="sfChange(7)">change</span>
+    </div>
+  </div>
+  </div>
+</div>
+
+<!-- ── S8: NEXT STEPS (dark) ─────────────────────────────── -->
+<div class="slide" id="s8">
+  <div class="si">
+    <div class="ey lt fi">Next steps</div>
+    <div class="hl white fi" style="font-size:clamp(28px,3.6vw,48px);margin-bottom:6px;">Ready to move forward,<br><em id="s8n">Tamara?</em></div>
+    <div class="sub lt fi" id="s8s">Every month you wait is +£1,514 you don't collect. First booking in 72 hours. Break-even in month 0</div>
+    <div class="t60 fi">
+      <!-- Presentation response summary -->
+      <div style="background:var(--gc);border-radius:14px;padding:18px 20px;margin-bottom:20px;">
+        <div style="font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;font-weight:500;color:var(--gd);margin-bottom:12px;">Responses from this presentation</div>
+        <div id="sfSummaryRows">
+          <div style="color:rgba(255,255,255,0.4);font-size:12.5px;">Your responses will appear here as you go through each slide.</div>
+        </div>
+      </div>
+      <div class="steps">
+        <div class="step"><div class="sn">1</div><div class="st">Sign the management agreement <span>— we send it by email today</span></div></div>
+        <div class="step"><div class="sn">2</div><div class="st">Kick-off call booked <span>— within 3–5 days</span></div></div>
+        <div class="step"><div class="sn">3</div><div class="st">Live in 3 weeks · <span>first booking typically within 72 hours</span></div></div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div class="card-dk">
+          <div class="ch2 lt">Not ready today?</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.55);font-weight:300;line-height:1.6;margin-top:4px;">This presentation stays live at your link. Your figures are saved. Take the time you need.</div>
+        </div>
+        <div class="card-dk" style="padding:18px 20px;display:flex;flex-direction:column;gap:10px;">
+          <div style="font-size:9.5px;color:rgba(255,255,255,0.3);letter-spacing:0.08em;text-transform:uppercase;margin-bottom:2px;">Ready to take the next step?</div>
+          <!-- Calendly book a call -->
+          <a href="https://calendly.com/zac-stayful/call" target="_blank"
+             style="display:flex;align-items:center;justify-content:center;gap:8px;
+                    background:var(--green);color:#fff;text-decoration:none;
+                    border-radius:10px;padding:12px 18px;font-size:14px;font-weight:600;
+                    font-family:var(--sans);transition:opacity 0.2s;"
+             onmouseover="this.style.opacity=0.85" onmouseout="this.style.opacity=1">
+            📅 Book a call with Zac
+          </a>
+          <!-- Email draft with prefilled questions — real <a> tag for max compatibility -->
+          <a id="sfEmailLink"
+             href="mailto:zac@stayful.co.uk?subject=Stayful%20presentation%20questions"
+             style="display:flex;align-items:center;justify-content:center;gap:8px;
+                    background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);
+                    border:1.5px solid rgba(255,255,255,0.15);
+                    border-radius:10px;padding:11px 18px;font-size:13.5px;font-weight:500;
+                    text-decoration:none;font-family:var(--sans);transition:all 0.2s;"
+             onmouseover="this.style.background='rgba(255,255,255,0.14)'"
+             onmouseout="this.style.background='rgba(255,255,255,0.08)'">
+            ✉️ Send my questions via email
+          </a>
+        </div>
+      </div>
+    </div>
+
+  <div class="sf-ask dark" data-q="8">
+    <div class="sf-ask-q">What would you need to see or know to feel confident moving forward?</div>
+    <textarea class="sf-open-input" id="sfopen" rows="2" placeholder="Type your question or concern..."></textarea>
+    <button class="sf-send" id="sfsend" onclick="sfSendOpen()">Send to Zac →</button>
+    <div class="sf-confirm" id="sfc-8" style="margin-top:8px;">
+      <div class="sf-confirm-dot"></div>
+      <span id="sfct-8">Sent — Zac will see this before the call ends</span>
+    </div>
+  </div>
+  </div>
+</div>
+
+</div><!-- /deck -->
+
+<!-- ERROR TOAST -->
+<div id="sf-toast">↓ Please answer the question below</div>
+
+<!-- WELCOME BACK BANNER -->
+<div id="sf-welcome-back">
+  <span style="font-size:13px;">👋</span>
+  <span class="wb-msg"></span>
+  <button onclick="document.getElementById('sf-welcome-back').classList.remove('show')"
+    style="margin-left:auto;background:none;border:none;color:rgba(255,255,255,0.6);
+           cursor:pointer;font-size:15px;padding:0 4px;line-height:1;">✕</button>
+</div>
+
+<!-- BOTTOM NAV -->
+<div id="bnav">
+  <button class="na" id="prev" onclick="nav(-1)" disabled>←</button>
+  <div class="dots" id="dots"></div>
+  <span id="ctr">1 / 9</span>
+  <button class="na" id="next" onclick="nav(1)">→</button>
+</div>
+
+<script>
+
+// ── Stayful Presentation Tracking ────────────────────────────────────────────
+const _LID = new URLSearchParams(window.location.search).get('lid') || '';
+const _TRACK = 'https://stayful.app.n8n.cloud/webhook/stayful-presentation-track';
+let _firstSlide = true;
+
+function _track(event, data) {
+  if (!_LID) return;
+  fetch(_TRACK, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(Object.assign({ monday_item_id: _LID, event }, data))
+  }).catch(() => {});
+}
+
+// Track initial page view
+window.addEventListener('load', function() {
+  _track('viewed', { slide: 0, total: TOTAL });
+});
+// ─────────────────────────────────────────────────────────────────────────────
+// Declared early as var so sfCanAdvance, sfBuildMailto and sfSelect
+// can all reference these safely before the interactive block executes.
+var sfR = {};
+var SF_LABELS = ['Main concern','Guest type','Income picture','Management involvement',
+                 'Biggest worry about guests','Most useful to see','First booking timing',
+                 'Agreement terms','Final question / concern'];
+
+const MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const FC=[1932,1661,2464,2036,2479,2633,3296,3429,2816,2773,2061,2339];
+let ltl=979,mtg=1,TOTAL=9,cur=0,anim=false;
+const slides=Array.from(document.querySelectorAll('.slide'));
+const LINKS={manchester:'https://drive.google.com/file/d/1frXc2OHyxca0W6bY0pZ5PSZ_Xk8p3aLM/view?usp=sharing',leeds:'https://drive.google.com/file/d/1DJ8GnYj39yjjp1kCFaaqgKSwFbWUhZgP/view?usp=sharing',york:'https://drive.google.com/file/d/1RDj1K8ZfTQqlS0gIhO771BleSeAgTPdL/view?usp=sharing',lincoln:'https://drive.google.com/file/d/1Dq4FvFxe9Mot0NuaFUMJ8zGu50hC1wiv/view?usp=sharing',agreement:'https://drive.google.com/file/d/1ct_Br_7XR69s6beyFfqHSnSPoRouKkG6/view?usp=sharing'};
+
+function go(idx){
+  if(anim||idx===cur||idx<0||idx>=TOTAL)return;
+  // Track slide view
+  if (!_firstSlide) {
+    _track(idx === TOTAL - 1 ? 'completed' : 'slide_viewed', { slide: idx, total: TOTAL });
+  }
+  _firstSlide = false;
+  anim=true;
+  const d=idx>cur?1:-1;
+  const lv=slides[cur],en=slides[idx];
+  lv.classList.add(d>0?'el':'er');
+  en.classList.add(d>0?'nl':'nr');
+  en.classList.add('active');
+  setTimeout(()=>{
+    lv.classList.remove('active','el','er');
+    en.classList.remove('nl','nr');
+    cur=idx;anim=false;update();stagger(en);
+    // Save position so lead can return to this slide
+    try{localStorage.setItem('sfp_'+SF_ITEM_ID, idx);}catch(e){}
+  },440);
+}
+function nav(d){
+  // Block forward navigation if current slide's question is unanswered
+  if(d>0 && !sfCanAdvance(cur)){ sfTriggerError(cur); return; }
+  go(cur+d);
+}
+function stagger(sl){const els=sl.querySelectorAll('.fi');els.forEach((el,i)=>{el.classList.remove('in');setTimeout(()=>el.classList.add('in'),i*85);});}
+function update(){
+  document.getElementById('ctr').textContent=(cur+1)+' / '+TOTAL;
+  document.getElementById('prev').disabled=cur===0;
+  document.getElementById('next').disabled=cur===TOTAL-1;
+  document.getElementById('pf').style.width=((cur+1)/TOTAL*100)+'%';
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('on',i===cur));
+  document.querySelectorAll('.tb-i').forEach((b,i)=>b.classList.toggle('on',i===cur));
+  sfShowAsk(cur);
+  const lbl=document.getElementById('tb-slide-lbl');
+  if(lbl&&SLIDE_NAMES)lbl.textContent=SLIDE_NAMES[cur]||'';
+}
+function buildDots(){const c=document.getElementById('dots');for(let i=0;i<TOTAL;i++){const d=document.createElement('div');d.className='dot'+(i===0?' on':'');d.onclick=()=>go(i);c.appendChild(d);}}
+function buildBars(){
+  const bc=document.getElementById('bars'),bn=document.getElementById('bnames'),max=Math.max(...FC),min=Math.min(...FC);
+
+  // Shared tooltip element
+  // Append tooltip to .cw (position:relative) so coordinates are correct
+  const cwEl=bc.parentElement;  // the .cw container
+  const tip=document.createElement('div');
+  tip.id='bar-tip';
+  tip.innerHTML='<div class="tip-month"></div><div class="tip-val"></div><div class="tip-vs"></div>';
+  cwEl.appendChild(tip);
+
+  FC.forEach((v,i)=>{
+    const bw=document.createElement('div');bw.className='bw';bw.style.position='relative';
+    const b=document.createElement('div');
+    b.className='bar'+(v===min?' lo':'');
+    b.style.height='0';
+    b.style.transition='height 0.9s cubic-bezier(0.4,0,0.2,1), filter 0.15s ease';
+
+    bw.addEventListener('mouseenter',function(){
+      tip.querySelector('.tip-month').textContent=MN[i];
+      tip.querySelector('.tip-val').textContent='£'+v.toLocaleString('en-GB');
+      const diff=v-ltl;
+      tip.querySelector('.tip-vs').textContent=(diff>=0?'+':'')+'£'+diff.toLocaleString('en-GB')+' vs long-let';
+      // Coordinates relative to .cw (tooltip's offsetParent)
+      const cwRect=cwEl.getBoundingClientRect();
+      const bRect=bw.getBoundingClientRect();
+      const tipL=(bRect.left+bRect.width/2)-cwRect.left;
+      const tipT=(bRect.top-cwRect.top)-62;  // 62px above bar top
+      tip.style.left=Math.max(4,tipL-40)+'px';
+      tip.style.top=Math.max(4,tipT)+'px';
+      tip.classList.add('show');
+    });
+    bw.addEventListener('mouseleave',()=>tip.classList.remove('show'));
+
+    bw.appendChild(b);bc.appendChild(bw);
+    const l=document.createElement('div');l.className='bm';l.textContent=MN[i];bn.appendChild(l);
+    setTimeout(()=>{b.style.height=Math.round((v/max)*64)+'px';},400+i*45);
+  });
+}
+function updateLTL(){
+  const max=Math.max(...FC),h=Math.round((ltl/max)*64);
+  const r=document.getElementById('lref');if(r)r.style.marginTop=(64-h)+'px';
+  const l=document.getElementById('lrefl');if(l)l.textContent='LTL £'+ltl.toLocaleString('en-GB');
+}
+function updateMortgage(str,ltlVal,mtgVal){
+  // GAP 2: mortgage coverage framing
+  const surplus=str-mtgVal;
+  const ltlSurplus=ltlVal-mtgVal;
+  const covers=document.getElementById('mtg-covers');
+  const ltlNote=document.getElementById('ltl-mtg-note');
+  if(covers){
+    if(mtgVal>0){
+      covers.style.display='flex';
+      covers.className='mtg-banner '+(surplus>=0?'covers':'shortfall');
+      const lbl=covers.querySelector('.mtg-lbl');
+      const num=covers.querySelector('.mtg-num');
+      const sub=document.getElementById('mtg-surplus');
+      const subtext=document.getElementById('mtg-sub-text');
+      if(surplus>=0){
+        lbl.className='mtg-lbl g';
+        if(sub){sub.className='mtg-num g';sub.textContent='+£'+surplus.toLocaleString('en-GB')+' / month';}
+        if(subtext)subtext.textContent='STL net £'+str.toLocaleString('en-GB')+' − mortgage £'+mtgVal.toLocaleString('en-GB')+' = £'+surplus.toLocaleString('en-GB')+' surplus every month';
+        lbl.textContent='Short-let covers your mortgage';
+      }else{
+        lbl.className='mtg-lbl am';
+        if(sub){sub.className='mtg-num am';sub.textContent='−£'+Math.abs(surplus).toLocaleString('en-GB')+' / month';}
+        if(subtext)subtext.textContent='Discuss with lead — STL is still stronger than LTL';
+        lbl.textContent='STL vs your mortgage';
+      }
+      // LTL vs mortgage note
+      if(ltlNote){
+        ltlNote.style.display='block';
+        if(ltlSurplus<0)ltlNote.textContent="Doesn't cover your £"+mtgVal.toLocaleString('en-GB')+" mortgage";
+        else ltlNote.textContent="Covers mortgage by +£"+ltlSurplus.toLocaleString('en-GB');
+        ltlNote.style.color=ltlSurplus<0?'var(--am)':'var(--green)';
+      }
+    } else {
+      covers.style.display='none';
+      if(ltlNote)ltlNote.style.display='none';
+    }
+  }
+}
+function togglePP(){document.getElementById('pp').classList.toggle('open');}
+function applyPP(){
+  const name=document.getElementById('p-n').value.trim()||'Tamara';
+  const addr=document.getElementById('p-a').value.trim();
+  const rev=Number(document.getElementById('p-r').value)||3208;
+  const occ=Number(document.getElementById('p-o').value)||63;
+  const adr=Number(document.getElementById('p-d').value)||172;
+  ltl=Number(document.getElementById('p-l').value)||950;
+  mtg=Number(document.getElementById('p-m').value)||0;
+  const str=Math.round(rev*0.70),up=str-ltl,fl=Math.min(...FC);
+  // Cover
+  document.getElementById('s0n').textContent=name;
+  document.getElementById('s0a').textContent=addr;
+  document.getElementById('s0r').textContent='£'+rev.toLocaleString('en-GB');
+  document.getElementById('s0u').textContent=(up>=0?'+':'')+'£'+Math.abs(up).toLocaleString('en-GB');
+  document.getElementById('s0d').textContent='£'+adr;
+  document.getElementById('s0o').textContent=occ+'%';
+  // Income
+  document.getElementById('s2s').textContent='£'+str.toLocaleString('en-GB');
+  document.getElementById('s2l').textContent='£'+ltl.toLocaleString('en-GB');
+  document.getElementById('s2f').textContent='£'+fl.toLocaleString('en-GB');
+  document.getElementById('s2fs').textContent='Still +£'+(fl-ltl).toLocaleString('en-GB')+' above long-term — in your worst month.';
+  // Next steps
+  document.getElementById('s8n').textContent=name+'?';
+  document.getElementById('s8s').textContent='Every month you wait is +£'+up.toLocaleString('en-GB')+' you don\'t collect. First booking in 72 hours. Break-even in month 3.';
+  // Badge
+  document.getElementById('tb-b').textContent=name+' · '+addr;
+  // Mortgage coverage
+  updateMortgage(str,ltl,mtg);
+  updateLTL();
+  document.getElementById('pp').classList.remove('open');
+}
+function wireLinks(){
+  document.querySelectorAll('[data-city],[data-doc]').forEach(el=>{
+    const k=el.getAttribute('data-city')||el.getAttribute('data-doc');
+    if(LINKS[k]&&!LINKS[k].includes('REPLACE')){el.href=LINKS[k];}
+    else{el.href='#';el.style.opacity='0.4';el.title='Update LINKS["'+k+'"] in script';el.onclick=e=>{e.preventDefault();alert('Upload to Google Drive and update LINKS["'+k+'"] in the script.');};}
+  });
+}
+document.addEventListener('keydown',e=>{
+  // Don't hijack keys when lead is typing in a text field
+  const tag=document.activeElement&&document.activeElement.tagName;
+  if(tag==='INPUT'||tag==='TEXTAREA'||document.activeElement.isContentEditable)return;
+  if(e.key==='ArrowRight'||e.key===' '){e.preventDefault();nav(1);}
+  if(e.key==='ArrowLeft'){e.preventDefault();nav(-1);}
+  if(e.key==='p'||e.key==='P')togglePP();
+  if(e.key==='f'||e.key==='F'){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}
+});
+let tx=0;
+document.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;},{passive:true});
+document.addEventListener('touchend',e=>{const dx=tx-e.changedTouches[0].clientX;if(Math.abs(dx)>55)nav(dx>0?1:-1);},{ passive:true });
+// Init with Tamara's data
+// Slide names for mobile label — must be defined before update() runs
+// ── BLOCKER LOGIC ────────────────────────────────────────────
+function sfCanAdvance(idx){
+  // Last slide — always allow
+  if(idx>=TOTAL-1) return true;
+  // No question on this slide — allow
+  const el=document.querySelector(`.sf-ask[data-q="${idx}"]`);
+  if(!el) return true;
+  // Has an answered response — allow
+  return sfR[idx]!==undefined;
+}
+
+function sfTriggerError(idx){
+  const el=document.querySelector(`.sf-ask[data-q="${idx}"]`);
+  if(!el) return;
+
+  // 1. Show toast at top of screen
+  const toast=document.getElementById('sf-toast');
+  if(toast){
+    toast.classList.add('show');
+    clearTimeout(toast._t);
+    toast._t=setTimeout(()=>toast.classList.remove('show'),2800);
+  }
+
+  // 2. Scroll question into view inside the slide
+  el.scrollIntoView({behavior:'smooth',block:'center'});
+
+  // 3. Pulse amber glow on the question block
+  el.classList.remove('sf-needs-answer');
+  void el.offsetWidth; // force reflow to restart animation
+  el.classList.add('sf-needs-answer');
+
+  // 4. Show inline error message inside the block
+  const em=el.querySelector('.sf-err-msg');
+  if(em) em.classList.add('show');
+
+  // Keep border highlighted until answered — clear animation class after it finishes
+  setTimeout(()=>el.classList.remove('sf-needs-answer'),520);
+}
+
+var SLIDE_NAMES=['Property','Who books?','Income','Management','Protection','Proof','First booking','Agreement','Next steps'];
+
+// Inject error message div into each question block
+document.querySelectorAll('.sf-ask').forEach(el=>{
+  const em=document.createElement('div');
+  em.className='sf-err-msg';
+  em.textContent='Please answer before continuing →';
+  el.insertBefore(em,el.firstChild);
+});
+
+buildDots();buildBars();
+updateLTL();
+sfShowAsk(0);
+updateMortgage(2493,979,1);
+wireLinks();update();stagger(slides[0]);
+try{sfUpdateEmailLink();}catch(e){} // prime email link — sfR is {} at this point
+
+/* ══════════════════════════════════════════════════════════════
+   INTERACTIVE QUESTION LAYER — JAVASCRIPT
+   Column: long_text_mm2pse8d (Presentation Responses)
+   Item ID: 11755194647 (Tamara)
+══════════════════════════════════════════════════════════════ */
+const SF_ITEM_ID = '11874131527';
+const SF_LEAD    = 'Tamara';
+const SF_ADDR    = 'Flat 1, 128 High Street, Cheltenham GL50 1EG';
+const SF_ZAPIER  = 'https://stayful-voice-api.vercel.app/api/presentation/sync';
+
+// sfR and SF_LABELS declared at top of script (see var declarations above)
+
+function sfShowAsk(idx){
+  document.querySelectorAll('.sf-ask').forEach(el=>{
+    el.style.display='none';
+    el.classList.remove('sf-needs-answer');
+    const em=el.querySelector('.sf-err-msg');
+    if(em)em.classList.remove('show');
+  });
+  const el=document.querySelector(`.sf-ask[data-q="${idx}"]`);
+  if(el)el.style.display='block';
+  // Clear toast on slide change
+  const toast=document.getElementById('sf-toast');
+  if(toast){ toast.classList.remove('show'); clearTimeout(toast._t); }
+}
+
+function sfSelect(btn, qIdx){
+  const parent=btn.closest('.sf-ask');
+  parent.querySelectorAll('.sf-opt').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  sfR[qIdx]=btn.textContent.trim();
+  parent.classList.add('answered');
+  // Clear error state on answer
+  parent.classList.remove('sf-needs-answer');
+  const em=parent.querySelector('.sf-err-msg');
+  if(em) em.classList.remove('show');
+  const toast=document.getElementById('sf-toast');
+  if(toast){ toast.classList.remove('show'); clearTimeout(toast._t); }
+  const ct=document.getElementById('sfct-'+qIdx);
+  const cf=document.getElementById('sfc-'+qIdx);
+  if(ct)ct.textContent='✓ '+sfR[qIdx];
+  if(cf)cf.classList.add('show');
+  setTimeout(()=>{
+    parent.querySelectorAll('.sf-opt').forEach(b=>b.style.display='none');
+    // Auto-advance to next slide after a brief pause
+    setTimeout(()=>{ if(cur < TOTAL-1) nav(1); }, 600);
+  },550);
+  sfSync();
+  sfBuildSummary();
+}
+
+function sfChange(qIdx){
+  const parent=document.querySelector(`.sf-ask[data-q="${qIdx}"]`);
+  if(!parent)return;
+  parent.querySelectorAll('.sf-opt').forEach(b=>{b.style.display='';b.classList.remove('sel');});
+  const cf=document.getElementById('sfc-'+qIdx);
+  if(cf)cf.classList.remove('show');
+  parent.classList.remove('answered');
+  delete sfR[qIdx];
+  sfSync();
+}
+
+function sfSendOpen(){
+  const val=document.getElementById('sfopen')?.value.trim();
+  if(!val)return;
+  const allAsks=document.querySelectorAll('.sf-ask');
+  const lastIdx=allAsks.length-1;
+  sfR[lastIdx]=val;
+  const inp=document.getElementById('sfopen');
+  const btn=document.getElementById('sfsend');
+  if(inp)inp.disabled=true;
+  if(btn)btn.disabled=true;
+  const cf=document.getElementById('sfc-'+lastIdx);
+  if(cf)cf.classList.add('show');
+  sfSync();
+  sfBuildSummary();
+}
+
+function sfBuildSummary(){
+  const container=document.getElementById('sfSummaryRows');
+  if(!container)return;
+  const answered=Object.keys(sfR).filter(k=>parseInt(k)<SF_LABELS.length);
+  if(answered.length===0){
+    container.innerHTML='<div style="color:var(--mu);font-size:12.5px;">Your responses will appear here as you go through each slide.</div>';
+    return;
+  }
+  container.innerHTML=answered.map(k=>`
+    <div style="padding:9px 0;border-bottom:1px solid var(--bd);">
+      <div style="font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--mu);margin-bottom:3px;">${SF_LABELS[k]}</div>
+      <div style="font-size:13.5px;font-weight:500;color:var(--green);">${sfR[k]}</div>
+    </div>
+  `).join('');
+}
+
+function sfFormatForMonday(){
+  const now=new Date().toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+  let text=`📋 Presentation responses — ${now}\n\n`;
+  Object.keys(sfR).sort((a,b)=>a-b).forEach(k=>{
+    const label=SF_LABELS[k]||'Question '+(parseInt(k)+1);
+    text+=`${label}\n→ ${sfR[k]}\n\n`;
+  });
+  return text.trim();
+}
+
+function sfSync(){
+  // Save to localStorage
+  try{
+    localStorage.setItem('sfr_'+SF_ITEM_ID, JSON.stringify(sfR));
+    localStorage.setItem('sfp_'+SF_ITEM_ID, cur); // also save current slide
+  }catch(e){}
+
+  // Keep email link href current
+  sfUpdateEmailLink();
+
+  // Fire Zapier webhook — writes to Monday column long_text_mm2pse8d
+  if(SF_ZAPIER&&SF_ZAPIER!==''){
+    fetch(SF_ZAPIER,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        item_id:SF_ITEM_ID,
+        lead_name:SF_LEAD,
+        address:SF_ADDR,
+        responses:sfR,
+        formatted:sfFormatForMonday(),
+        timestamp:new Date().toISOString()
+      })
+    }).catch(()=>{});
+  }
+}
+
+// Restore responses and slide position on reload
+try{
+  const savedR=localStorage.getItem('sfr_'+SF_ITEM_ID);
+  const savedP=localStorage.getItem('sfp_'+SF_ITEM_ID);
+
+  if(savedR){
+    const parsed=JSON.parse(savedR);
+    Object.assign(sfR,parsed);
+
+    // Restore visual state of each answered question block
+    Object.keys(sfR).forEach(qIdx=>{
+      const parent=document.querySelector(`.sf-ask[data-q="${qIdx}"]`);
+      if(!parent)return;
+      const isOpen=!!parent.querySelector('.sf-open-input');
+      if(isOpen){
+        const inp=document.getElementById('sfopen');
+        if(inp){inp.value=sfR[qIdx];inp.disabled=true;}
+        const btn=document.getElementById('sfsend');
+        if(btn)btn.disabled=true;
+      } else {
+        parent.querySelectorAll('.sf-opt').forEach(b=>{
+          if(b.textContent.trim()===sfR[qIdx])b.classList.add('sel');
+          else b.style.display='none';
+        });
+        parent.classList.add('answered');
+        const ct=document.getElementById('sfct-'+qIdx);
+        if(ct)ct.textContent='✓ '+sfR[qIdx];
+      }
+      const cf=document.getElementById('sfc-'+qIdx);
+      if(cf)cf.classList.add('show');
+    });
+    sfBuildSummary();
+  }
+
+  // Restore slide position — jump straight to where they left off
+  const resumeIdx = savedP !== null ? parseInt(savedP) : 0;
+  if(resumeIdx > 0){
+    // Skip animation — just show the right slide directly
+    slides.forEach((s,i)=>{
+      s.classList.toggle('active', i===resumeIdx);
+      s.style.opacity = i===resumeIdx ? '1' : '0';
+      s.style.pointerEvents = i===resumeIdx ? 'all' : 'none';
+    });
+    cur = resumeIdx;
+    update();
+    stagger(slides[resumeIdx]);
+
+    // Show welcome-back banner for 3.5 seconds
+    const wb = document.getElementById('sf-welcome-back');
+    if(wb){
+      const answeredCount = Object.keys(sfR).length;
+      wb.querySelector('.wb-msg').textContent =
+        'Welcome back — picking up from slide '+(resumeIdx+1)+
+        (answeredCount > 0 ? ' · '+answeredCount+' answer'+(answeredCount>1?'s':'')+' saved' : '');
+      wb.classList.add('show');
+      setTimeout(()=>wb.classList.remove('show'), 3500);
+    }
+  }
+}catch(e){}
+
+
+function sfBuildMailto(){
+  // Builds a mailto: URI with all current responses pre-filled in the body.
+  // Called by sfUpdateEmailLink() on every answer — the <a> tag href stays live.
+  const subject = 'Stayful presentation questions';
+  const addr = SF_ADDR || 'your property';
+  let body = 'Hi Zac,\n\n';
+  body += 'I\'ve been going through the Stayful presentation for ' + addr + '.\n\n';
+
+  const answered = Object.keys(sfR).sort((a,b)=>parseInt(a)-parseInt(b));
+  if(answered.length > 0){
+    body += 'Here are my answers and any questions I have:\n\n';
+    answered.forEach(k=>{
+      const label = (typeof SF_LABELS !== 'undefined' && SF_LABELS[k])
+                    ? SF_LABELS[k]
+                    : ('Question ' + (parseInt(k)+1));
+      body += label + ':\n  ' + sfR[k] + '\n\n';
+    });
+    body += 'Could you come back to me on any of these?\n\n';
+  } else {
+    body += 'I have a few questions before deciding — could you get back to me?\n\n';
+  }
+  body += 'Thanks';
+  return 'mailto:zac@stayful.co.uk'
+       + '?subject=' + encodeURIComponent(subject)
+       + '&body='    + encodeURIComponent(body);
+}
+
+function sfUpdateEmailLink(){
+  // Keep the <a> href fresh so a direct tap always opens the right draft.
+  // Works on iOS Safari, Android Chrome, and desktop — no JS navigation needed.
+  const link = document.getElementById('sfEmailLink');
+  if(link) link.href = sfBuildMailto();
+}
+
+</script>
+</body>
+</html>
