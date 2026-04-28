@@ -769,19 +769,19 @@ a.pill:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.2
       <div class="guest-card">
         <span class="guest-icon">🏥</span>
         <div class="guest-type">Healthcare</div>
-        <div class="guest-title">Medical Visitors & NHS Contractors</div>
-        <div class="guest-desc">Staff, contractors and families visiting patients at St James's University Hospital book extended stays requiring reliable, comfortable accommodation close to Leeds. This demand is consistent year-round, providing strong baseline occupancy outside leisure peak seasons.</div>
+        <div class="guest-title">Hospital Visitors & Medical Staff</div>
+        <div class="guest-desc">Guests travelling to or working at St James's University Hospital book extended midweek stays and last-minute overnight trips. This demand driver provides consistent, year-round occupancy independent of leisure seasons.</div>
         <div class="guest-driver">📍 <strong>St James's University Hospital</strong> · 14.96km · High demand</div>
       </div>
       <div class="guest-card">
         <span class="guest-icon">✈️</span>
-        <div class="guest-type">Transport Links</div>
+        <div class="guest-type">Transport & Aviation</div>
         <div class="guest-title">Away fans, corporate guests &amp; event attendees</div>
         <div class="guest-desc">Molineux Stadium (Wolverhampton Wanderers) draws thousands of away fans and corporate guests every match week. Events at the Wolverhampton Civic Halls and surrounding venues generate consistent short-break demand.</div>
         <div class="guest-driver">📍 <strong>Molineux Stadium</strong> · 2.5km · High demand</div>
       </div>
       <div class="guest-card">
-        <span class="guest-icon">🎵</span>
+        <span class="guest-icon">🎪</span>
         <div class="guest-type">Industrial &amp; business contractors</div>
         <div class="guest-title">Manufacturing, logistics &amp; project workers</div>
         <div class="guest-desc">The Black Country and West Midlands is a major hub for manufacturing, logistics, and automotive supply chain (JLR at Solihull, Stellantis at Ellesmere Port). Contractors and project workers on multi-week placements need accommodation close to sites.</div>
@@ -790,7 +790,7 @@ a.pill:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.2
     </div>
     <div class="fi" style="margin-top:14px;padding:12px 18px;background:var(--gp);border:1px solid var(--bd);border-radius:12px;display:flex;gap:16px;align-items:center;">
       <span style="font-size:18px;">💡</span>
-      <div style="font-size:12.5px;color:var(--mid);font-weight:300;line-height:1.6;"><strong style="color:var(--ch);font-weight:500;">This area has year-round demand.</strong> Bookings in the Clifford/Wetherby area are driven year-round by medical visitors and contractors linked to St James's University Hospital, aviation and leisure travellers using Sherburn Aero Club, and event-goers attending the 1,000+ annual events at The Live Room.</div>
+      <div style="font-size:12.5px;color:var(--mid);font-weight:300;line-height:1.6;"><strong style="color:var(--ch);font-weight:500;">This area has year-round demand.</strong> This Clifford, Wetherby area draws year-round bookings from healthcare workers and visitors to St James's University Hospital, aviation enthusiasts and contractors linked to Sherburn Aero Club, and event-goers attending the 1,021+ annual events at The Live Room.</div>
     </div>
 
   <div class="sf-ask light" data-q="1">
@@ -1271,7 +1271,7 @@ a.pill:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.2
 
 // ── Stayful Presentation Tracking ────────────────────────────────────────────
 const _LID = new URLSearchParams(window.location.search).get('lid') || '';
-const _TRACK = 'https://stayful-voice-api.vercel.app/api/tracking/presentation';
+const _TRACK = 'https://stayful.app.n8n.cloud/webhook/stayful-presentation-track';
 let _firstSlide = true;
 
 function _track(event, data) {
