@@ -559,11 +559,11 @@ a.pill:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.2
   #s0 .sc-dk:last-child { border-bottom: none !important; }
 
   /* ALL MULTI-COLUMN GRIDS → single column */
-  .two        { gap: 16px !important; }
+  .two        { grid-template-columns: 1fr !important; gap: 12px !important; }
   .t60        { grid-template-columns: 1fr !important; gap: 12px !important; }
   .g2         { grid-template-columns: 1fr !important; gap: 10px !important; }
   .g3         { grid-template-columns: 1fr 1fr !important; gap: 8px !important; }
-  .guest-grid { grid-template-columns: 1fr 1fr !important; gap: 10px !important; }
+  .guest-grid { grid-template-columns: 1fr !important; gap: 12px !important; }
 
   /* Case study grid — inline style override */
   #s5 div[style*="grid-template-columns:1fr 1fr"] {
@@ -660,8 +660,6 @@ a.pill:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.2
 
 @media (max-width: 480px) {
   /* Phones — collapse any remaining 2-col to 1-col */
-  .two        { grid-template-columns: 1fr !important; gap: 12px !important; }
-  .guest-grid { grid-template-columns: 1fr !important; gap: 12px !important; }
   .g3    { grid-template-columns: 1fr !important; }
   .pr    { flex-wrap: wrap; }
   .pt    { flex: 0 0 calc(50% - 4px) !important; }
