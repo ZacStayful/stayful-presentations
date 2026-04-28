@@ -769,9 +769,9 @@ a.pill:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.2
       <div class="guest-card">
         <span class="guest-icon">🏥</span>
         <div class="guest-type">Healthcare</div>
-        <div class="guest-title">Hospital Visitor & Medical Guest</div>
-        <div class="guest-desc">Guests visiting patients or working at Leighton Hospital drive consistent mid-week demand throughout the year. These bookings tend to be last-minute, mid-length stays with low price sensitivity.</div>
-        <div class="guest-driver">📍 <strong>Leighton Hospital</strong> · 10.69 km · High demand</div>
+        <div class="guest-title">Hospital Visitors & Medical Staff</div>
+        <div class="guest-desc">Visitors and contractors attending Leighton Hospital generate consistent mid-week demand throughout the year. Stays tend to be shorter, functional bookings with reliable repeat potential from staff and patient families.</div>
+        <div class="guest-driver">📍 <strong>Leighton Hospital</strong> · 10.69km · High demand</div>
       </div>
       <div class="guest-card">
         <span class="guest-icon">✈️</span>
@@ -781,7 +781,7 @@ a.pill:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.2
         <div class="guest-driver">📍 <strong>Molineux Stadium</strong> · 2.5km · High demand</div>
       </div>
       <div class="guest-card">
-        <span class="guest-icon">🎭</span>
+        <span class="guest-icon">🎪</span>
         <div class="guest-type">Industrial &amp; business contractors</div>
         <div class="guest-title">Manufacturing, logistics &amp; project workers</div>
         <div class="guest-desc">The Black Country and West Midlands is a major hub for manufacturing, logistics, and automotive supply chain (JLR at Solihull, Stellantis at Ellesmere Port). Contractors and project workers on multi-week placements need accommodation close to sites.</div>
@@ -790,7 +790,7 @@ a.pill:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.2
     </div>
     <div class="fi" style="margin-top:14px;padding:12px 18px;background:var(--gp);border:1px solid var(--bd);border-radius:12px;display:flex;gap:16px;align-items:center;">
       <span style="font-size:18px;">💡</span>
-      <div style="font-size:12.5px;color:var(--mid);font-weight:300;line-height:1.6;"><strong style="color:var(--ch);font-weight:500;">This area has year-round demand.</strong> Bookings in the Tarporley area are driven year-round by healthcare visitors to Leighton Hospital, travellers connecting through Liverpool John Lennon Airport, and attendees of the 188+ annual events at Pyramid and Parr Hall in Warrington.</div>
+      <div style="font-size:12.5px;color:var(--mid);font-weight:300;line-height:1.6;"><strong style="color:var(--ch);font-weight:500;">This area has year-round demand.</strong> Bookings in Tarporley are driven year-round by healthcare visitors to Leighton Hospital, travellers connecting through Liverpool John Lennon Airport, and event attendees at Pyramid and Parr Hall in Warrington.</div>
     </div>
 
   <div class="sf-ask light" data-q="1">
@@ -1271,7 +1271,7 @@ a.pill:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.2
 
 // ── Stayful Presentation Tracking ────────────────────────────────────────────
 const _LID = new URLSearchParams(window.location.search).get('lid') || '';
-const _TRACK = 'https://stayful-voice-api.vercel.app/api/tracking/presentation';
+const _TRACK = 'https://stayful.app.n8n.cloud/webhook/stayful-presentation-track';
 let _firstSlide = true;
 
 function _track(event, data) {
