@@ -770,7 +770,7 @@ a.pill:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.2
         <span class="guest-icon">🏥</span>
         <div class="guest-type">Healthcare</div>
         <div class="guest-title">Hospital Visitors & Medical Staff</div>
-        <div class="guest-desc">Families visiting patients and contractors working at Royal Sussex County Hospital generate consistent mid-week bookings throughout the year. These guests prioritise proximity, reliability and a home-from-home environment over leisure amenities.</div>
+        <div class="guest-desc">Guests travelling to or working at Royal Sussex County Hospital book medium-length stays, often mid-week and at short notice. This driver provides consistent year-round demand independent of leisure seasonality.</div>
         <div class="guest-driver">📍 <strong>Royal Sussex County Hospital</strong> · 2.29km · High demand</div>
       </div>
       <div class="guest-card">
@@ -781,7 +781,7 @@ a.pill:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.2
         <div class="guest-driver">📍 <strong>Molineux Stadium</strong> · 2.5km · High demand</div>
       </div>
       <div class="guest-card">
-        <span class="guest-icon">🎓</span>
+        <span class="guest-icon">🎪</span>
         <div class="guest-type">Industrial &amp; business contractors</div>
         <div class="guest-title">Manufacturing, logistics &amp; project workers</div>
         <div class="guest-desc">The Black Country and West Midlands is a major hub for manufacturing, logistics, and automotive supply chain (JLR at Solihull, Stellantis at Ellesmere Port). Contractors and project workers on multi-week placements need accommodation close to sites.</div>
@@ -790,7 +790,7 @@ a.pill:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.2
     </div>
     <div class="fi" style="margin-top:14px;padding:12px 18px;background:var(--gp);border:1px solid var(--bd);border-radius:12px;display:flex;gap:16px;align-items:center;">
       <span style="font-size:18px;">💡</span>
-      <div style="font-size:12.5px;color:var(--mid);font-weight:300;line-height:1.6;"><strong style="color:var(--ch);font-weight:500;">This area has year-round demand.</strong> Bookings around Ditchling Rise are driven year-round by healthcare visitors and staff at Royal Sussex County Hospital, students and academics at the University of Sussex, transport-connected travellers via London Road, and leisure guests attending the 594+ annual events at SEA LIFE Brighton.</div>
+      <div style="font-size:12.5px;color:var(--mid);font-weight:300;line-height:1.6;"><strong style="color:var(--ch);font-weight:500;">This area has year-round demand.</strong> Bookings in this Brighton area are driven year-round by visitors to SEA LIFE Brighton (594 events), patients and staff at Royal Sussex County Hospital, students and academics at the University of Sussex, and travellers using London Road transport links just 0.14km away.</div>
     </div>
 
   <div class="sf-ask light" data-q="1">
@@ -1271,7 +1271,7 @@ a.pill:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.2
 
 // ── Stayful Presentation Tracking ────────────────────────────────────────────
 const _LID = new URLSearchParams(window.location.search).get('lid') || '';
-const _TRACK = 'https://stayful-voice-api.vercel.app/api/tracking/presentation';
+const _TRACK = 'https://stayful.app.n8n.cloud/webhook/stayful-presentation-track';
 let _firstSlide = true;
 
 function _track(event, data) {
