@@ -1269,24 +1269,62 @@ a.pill:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.2
 
 <script>
 
-// ── Stayful Presentation Tracking ────────────────────────────────────────────
-const _LID = new URLSearchParams(window.location.search).get('lid') || '';
-const _TRACK = 'https://stayful.app.n8n.cloud/webhook/stayful-presentation-track';
-let _firstSlide = true;
+// ── Stayful Session-End Tracker ──────────────────────────────────────────────
+var _sessionStart = Date.now();
+var _maxSlide = 0;
+var _sessionFired = false;
+var _idleTimer = null;
+var _IDLE_MS = 10 * 60 * 1000;
+var _SESSION_WEBHOOK = 'https://stayful.app.n8n.cloud/webhook/presentation-session-end';
 
-function _track(event, data) {
-  if (!_LID) return;
-  fetch(_TRACK, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(Object.assign({ monday_item_id: _LID, event }, data))
-  }).catch(() => {});
+function _resetIdle() {
+  clearTimeout(_idleTimer);
+  _idleTimer = setTimeout(_fireSessionEnd, _IDLE_MS);
 }
 
-// Track initial page view
-window.addEventListener('load', function() {
-  _track('viewed', { slide: 0, total: TOTAL });
+function _fireSessionEnd(reason) {
+  if (_sessionFired) return;
+  if (!SF_ITEM_ID || SF_ITEM_ID === 'STAYFUL_ITEM_ID') return;
+  _sessionFired = true;
+  clearTimeout(_idleTimer);
+
+  var formattedResponses = [];
+  if (typeof sfR === 'object' && typeof SF_LABELS !== 'undefined') {
+    Object.keys(sfR).sort(function(a,b){return a-b;}).forEach(function(k) {
+      var label = SF_LABELS[k] || ('Question ' + (parseInt(k)+1));
+      formattedResponses.push(label + ': ' + sfR[k]);
+    });
+  }
+
+  var payload = JSON.stringify({
+    item_id: SF_ITEM_ID,
+    current_slide: typeof cur !== 'undefined' ? cur : 0,
+    max_slide: _maxSlide,
+    responses: formattedResponses,
+    session_duration: Math.round((Date.now() - _sessionStart) / 1000),
+    timestamp: new Date().toISOString()
+  });
+
+  if ((reason === 'unload') && navigator.sendBeacon) {
+    navigator.sendBeacon(_SESSION_WEBHOOK, new Blob([payload], {type:'application/json'}));
+  } else {
+    fetch(_SESSION_WEBHOOK, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: payload,
+      keepalive: true
+    }).catch(function(){});
+  }
+}
+
+document.addEventListener('visibilitychange', function() {
+  if (document.visibilityState === 'hidden') _fireSessionEnd('hidden');
 });
+window.addEventListener('beforeunload', function() { _fireSessionEnd('unload'); });
+['mousemove','click','keydown','touchstart','scroll'].forEach(function(e) {
+  document.addEventListener(e, _resetIdle, {passive:true});
+});
+_resetIdle();
 // ─────────────────────────────────────────────────────────────────────────────
 // Declared early as var so sfCanAdvance, sfBuildMailto and sfSelect
 // can all reference these safely before the interactive block executes.
@@ -1303,11 +1341,8 @@ const LINKS={manchester:'https://drive.google.com/file/d/1frXc2OHyxca0W6bY0pZ5PS
 
 function go(idx){
   if(anim||idx===cur||idx<0||idx>=TOTAL)return;
-  // Track slide view
-  if (!_firstSlide) {
-    _track(idx === TOTAL - 1 ? 'completed' : 'slide_viewed', { slide: idx, total: TOTAL });
-  }
-  _firstSlide = false;
+  if(idx > _maxSlide) _maxSlide = idx;
+  _resetIdle();
   anim=true;
   const d=idx>cur?1:-1;
   const lv=slides[cur],en=slides[idx];
@@ -1539,7 +1574,6 @@ try{sfUpdateEmailLink();}catch(e){} // prime email link — sfR is {} at this po
 const SF_ITEM_ID = '11847278227';
 const SF_LEAD    = 'Caroline';
 const SF_ADDR    = 'Nithen Lodge, 39 Manchester Road, Buxton SK17 6SR';
-const SF_ZAPIER  = 'https://stayful-voice-api.vercel.app/api/presentation/sync';
 
 // sfR and SF_LABELS declared at top of script (see var declarations above)
 
@@ -1636,30 +1670,12 @@ function sfFormatForMonday(){
 }
 
 function sfSync(){
-  // Save to localStorage
   try{
     localStorage.setItem('sfr_'+SF_ITEM_ID, JSON.stringify(sfR));
-    localStorage.setItem('sfp_'+SF_ITEM_ID, cur); // also save current slide
+    localStorage.setItem('sfp_'+SF_ITEM_ID, cur);
   }catch(e){}
-
-  // Keep email link href current
   sfUpdateEmailLink();
-
-  // Fire Zapier webhook — writes to Monday column long_text_mm2pse8d
-  if(SF_ZAPIER&&SF_ZAPIER!==''){
-    fetch(SF_ZAPIER,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        item_id:SF_ITEM_ID,
-        lead_name:SF_LEAD,
-        address:SF_ADDR,
-        responses:sfR,
-        formatted:sfFormatForMonday(),
-        timestamp:new Date().toISOString()
-      })
-    }).catch(()=>{});
-  }
+  // Session-end tracker fires all responses in one batch when lead leaves
 }
 
 // Restore responses and slide position on reload
