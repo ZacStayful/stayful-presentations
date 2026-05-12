@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Borehamwood Property Income Plan · Stayful</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #f7f5f0;
+    color: #2a2a28;
+    line-height: 1.55;
+  }
+  .brandbar {
+    background: #5d8156;
+    color: #fff;
+    padding: 14px 28px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .brandbar img { height: 36px; width: auto; display: block; }
+  .brandbar .tag {
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.92;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 32px 22px 80px; }
+
+  /* HERO */
+  .hero { padding: 12px 4px 26px; }
+  .hero h1 {
+    font-size: 30px;
+    margin: 0 0 6px;
+    color: #2a2a28;
+    line-height: 1.18;
+    font-weight: 700;
+  }
+  .hero .sub {
+    color: #6b6b66;
+    margin: 0 0 22px;
+    font-size: 15px;
+  }
+  .stat-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin: 18px 0 22px;
+  }
+  .stat-card {
+    background: #fff;
+    border: 1px solid #ede9e1;
+    border-radius: 10px;
+    padding: 14px 14px;
+  }
+  .stat-card .lbl {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #8a8a82;
+    margin-bottom: 4px;
+  }
+  .stat-card .val {
+    font-size: 22px;
+    font-weight: 700;
+    color: #5d8156;
+  }
+  .stat-card .sub {
+    font-size: 12px;
+    color: #6b6b66;
+    margin-top: 2px;
+  }
+  .intro-line {
+    background: #fdf8f2;
+    border-left: 3px solid #5d8156;
+    padding: 14px 16px;
+    border-radius: 6px;
+    margin-top: 8px;
+    font-size: 15px;
+  }
+
+  /* SECTION HEADERS */
+  .section-h {
+    margin: 42px 0 14px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #2a2a28;
+  }
+  .section-h-sub { color: #6b6b66; font-size: 14px; margin: -8px 0 16px; }
+
+  /* COMP SET */
+  .chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .chip {
+    background: #fff;
+    border: 1px solid #ede9e1;
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-size: 13px;
+    color: #2a2a28;
+  }
+  .chip strong { color: #5d8156; }
+  table.comp {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid #ede9e1;
+    font-size: 13px;
+  }
+  table.comp th, table.comp td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid #f1ede5;
+  }
+  table.comp th {
+    background: #faf7f0;
+    font-weight: 600;
+    color: #6b6b66;
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.06em;
+  }
+  table.comp tr:last-child td { border-bottom: none; }
+  table.comp .top-badge {
+    display: inline-block;
+    background: #5d8156;
+    color: #fff;
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-weight: 600;
+  }
+
+  /* DIRECT BOOKING PROJECTION */
+  .db-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .db-stat {
+    background: #fff;
+    border: 1px solid #ede9e1;
+    border-radius: 10px;
+    padding: 12px;
+    text-align: center;
+  }
+  .db-stat .v { font-size: 20px; font-weight: 700; color: #5d8156; }
+  .db-stat .l { font-size: 11px; color: #6b6b66; margin-top: 4px; }
+  .db-progress {
+    background: #fff;
+    border: 1px solid #ede9e1;
+    border-radius: 10px;
+    padding: 18px 18px 14px;
+  }
+  .db-progress .stage {
+    display: grid;
+    grid-template-columns: 80px 1fr 110px;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .db-progress .stage:last-child { margin-bottom: 0; }
+  .db-progress .stage-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #6b6b66;
+  }
+  .db-progress .bar-bg {
+    background: #f1ede5;
+    height: 18px;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .db-progress .bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #a8c4a4 0%, #5d8156 100%);
+    border-radius: 4px;
+  }
+  .db-progress .stage-val {
+    font-size: 13px;
+    font-weight: 600;
+    color: #2a2a28;
+    text-align: right;
+  }
+
+  /* AMENITIES */
+  .amen-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+  }
+  .amen-col {
+    background: #fff;
+    border: 1px solid #ede9e1;
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .amen-col h4 {
+    margin: 0 0 6px;
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #5d8156;
+  }
+  .amen-col .premium {
+    color: #d4a84b;
+    font-weight: 600;
+    font-size: 11px;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .amen-col ul {
+    margin: 0;
+    padding-left: 18px;
+    font-size: 13px;
+  }
+  .amen-col li { margin-bottom: 4px; }
+
+  /* RISK */
+  .risk-overall {
+    background: #eef5ee;
+    border: 1px solid #cfe1cd;
+    border-radius: 10px;
+    padding: 16px 18px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .risk-overall .lbl-pair { font-size: 14px; color: #2a2a28; }
+  .risk-overall .v { font-size: 24px; font-weight: 700; color: #5d8156; }
+  .risk-overall .badge {
+    background: #5d8156;
+    color: #fff;
+    border-radius: 999px;
+    padding: 4px 12px;
+    font-size: 12px;
+    margin-left: 8px;
+    font-weight: 600;
+  }
+  .risk-bars { background: #fff; border: 1px solid #ede9e1; border-radius: 10px; padding: 16px 18px; }
+  .risk-bars .row { margin-bottom: 12px; }
+  .risk-bars .row:last-child { margin-bottom: 0; }
+  .risk-bars .row-top {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 4px;
+  }
+  .risk-bars .row-top span:last-child { color: #6b6b66; font-weight: 600; }
+  .risk-bars .bar-bg {
+    background: #f1ede5;
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .risk-bars .bar-fill { height: 100%; background: #7aaa74; border-radius: 4px; }
+
+  /* DEMAND DRIVERS */
+  .dem-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .dem-card {
+    background: #fff;
+    border: 1px solid #ede9e1;
+    border-radius: 10px;
+    padding: 14px 16px;
+  }
+  .dem-card .name { font-weight: 600; font-size: 14px; color: #2a2a28; margin-bottom: 2px; }
+  .dem-card .sub { font-size: 12px; color: #6b6b66; }
+  .dem-card .badge {
+    display: inline-block;
+    background: #eef5ee;
+    color: #5d8156;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 4px;
+    letter-spacing: 0.06em;
+    margin-top: 6px;
+  }
+
+  /* VERTICAL TIMELINE OF Q&A */
+  .tl { margin: 24px 0; }
+  .tl-item {
+    background: #fff;
+    border: 1px solid #ede9e1;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+  .tl-item:hover { box-shadow: 0 2px 8px rgba(93, 129, 86, 0.08); }
+  .tl-head {
+    padding: 18px 20px;
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: 36px 1fr 18px;
+    align-items: center;
+    gap: 14px;
+  }
+  .tl-num {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #5d8156;
+    color: #fff;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+  }
+  .tl-q-text { display: flex; flex-direction: column; }
+  .tl-topic {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #5d8156;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .tl-q {
+    font-size: 16px;
+    font-weight: 600;
+    color: #2a2a28;
+    margin-bottom: 4px;
+  }
+  .tl-teaser {
+    font-size: 13px;
+    color: #6b6b66;
+  }
+  .tl-arrow {
+    color: #5d8156;
+    font-size: 22px;
+    transition: transform 0.2s;
+    line-height: 1;
+  }
+  .tl-item.open .tl-arrow { transform: rotate(90deg); }
+  .tl-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+    padding: 0 20px;
+  }
+  .tl-item.open .tl-body {
+    max-height: 1400px;
+    padding: 0 20px 22px;
+    border-top: 1px solid #f1ede5;
+  }
+  .tl-body p { margin: 14px 0 0; font-size: 14px; color: #3a3a36; }
+
+  /* STAT CHIPS (in expanded cards) */
+  .visual-stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .vs {
+    background: #faf7f0;
+    border: 1px solid #ede9e1;
+    border-radius: 8px;
+    padding: 12px 10px;
+    text-align: center;
+  }
+  .vs .v { font-size: 18px; font-weight: 700; color: #5d8156; line-height: 1.1; }
+  .vs .l { font-size: 11px; color: #6b6b66; margin-top: 4px; }
+
+  /* BEFORE / AFTER */
+  .ba-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 16px;
+  }
+  .ba-panel { padding: 16px; border-radius: 10px; border: 1px solid; }
+  .ba-before { background: #fdf0ee; border-color: #f0d4cf; color: #b86050; }
+  .ba-after { background: #eef5ee; border-color: #cfe1cd; color: #5d8156; }
+  .ba-panel .lbl { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; font-weight: 700; }
+  .ba-panel .v { font-size: 22px; font-weight: 700; }
+  .ba-panel .sub { font-size: 12px; margin-top: 4px; opacity: 0.85; }
+
+  /* MILESTONE LIST */
+  .ms-list { margin-top: 16px; }
+  .ms-item {
+    display: grid;
+    grid-template-columns: 32px 1fr 130px;
+    align-items: start;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid #f1ede5;
+  }
+  .ms-item:last-child { border-bottom: none; }
+  .ms-n {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #eef5ee;
+    color: #5d8156;
+    font-weight: 700;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .ms-text strong { display: block; font-size: 14px; color: #2a2a28; margin-bottom: 2px; }
+  .ms-text span { font-size: 13px; color: #6b6b66; }
+  .ms-time {
+    font-size: 12px;
+    color: #5d8156;
+    background: #eef5ee;
+    padding: 3px 10px;
+    border-radius: 4px;
+    text-align: center;
+    font-weight: 600;
+    width: fit-content;
+    margin-left: auto;
+  }
+
+  /* OFFER + CLOSING */
+  .closing {
+    margin-top: 50px;
+    padding-top: 30px;
+    border-top: 1px solid #ede9e1;
+  }
+  .closing h2 { margin: 0 0 6px; font-size: 22px; }
+  .closing-steps { background: #fff; border: 1px solid #ede9e1; border-radius: 12px; padding: 22px 26px; margin-top: 14px; }
+  .closing-steps ol { margin: 0; padding-left: 22px; }
+  .closing-steps li { padding: 6px 0; font-size: 14px; }
+  .closing-steps li strong { color: #5d8156; }
+  .offer-box {
+    background: #fdf8ef;
+    border: 2px solid #d4a84b;
+    border-radius: 12px;
+    padding: 22px 26px;
+    margin-top: 22px;
+  }
+  .offer-box h3 { margin: 0 0 6px; color: #b8881a; font-size: 17px; }
+  .offer-box .rate { font-size: 24px; font-weight: 700; color: #2a2a28; margin: 6px 0; }
+  .offer-box .expiry { font-size: 14px; color: #6b6b66; }
+  .next-meet {
+    background: #eef5ee;
+    border-left: 3px solid #5d8156;
+    padding: 16px 18px;
+    margin-top: 22px;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+  .next-meet strong { color: #5d8156; }
+
+  .footer {
+    text-align: center;
+    color: #8a8a82;
+    font-size: 12px;
+    margin-top: 60px;
+    padding-top: 24px;
+    border-top: 1px solid #ede9e1;
+  }
+
+  @media (max-width: 640px) {
+    .stat-row, .db-stats { grid-template-columns: repeat(2, 1fr); }
+    .amen-grid, .dem-grid, .ba-grid { grid-template-columns: 1fr; }
+    .visual-stats { grid-template-columns: repeat(2, 1fr); }
+    .hero h1 { font-size: 24px; }
+    .ms-item { grid-template-columns: 28px 1fr; }
+    .ms-time { grid-column: 2; margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div class="brandbar">
+  <img src="https://images.squarespace-cdn.com/content/v1/64946e7680c92451dce86167/b6f59d1c-fee6-4f55-948b-3c05b6e18a3b/Stayful_Dark_Green.png?format=300w" alt="Stayful">
+  <span class="tag">Property Income Experts</span>
+</div>
+
+<div class="wrap">
+
+  <!-- HERO -->
+  <section class="hero">
+    <h1>Your Borehamwood property income plan</h1>
+    <p class="sub">Prepared for Noemi Konya · 12 May 2026 · 74 Torworth Road, WD6 · 4-bed house, sleeps 10</p>
+
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="lbl">Gross annual</div>
+        <div class="val">£86,961</div>
+        <div class="sub">£7,247 / month</div>
+      </div>
+      <div class="stat-card">
+        <div class="lbl">Net to you</div>
+        <div class="val">£3,768</div>
+        <div class="sub">per month, after all fees</div>
+      </div>
+      <div class="stat-card">
+        <div class="lbl">Avg nightly</div>
+        <div class="val">£441</div>
+        <div class="sub">across comp set</div>
+      </div>
+      <div class="stat-card">
+        <div class="lbl">Occupancy</div>
+        <div class="val">54%</div>
+        <div class="sub">vs market avg 60%</div>
+      </div>
+    </div>
+
+    <div class="intro-line">
+      You had 5 questions on our call this morning — calendar control while you're in Spain, how the property is protected, using your partner's maintenance team, what the property needs before launch, and the contract commitment. <strong>Tap each one below</strong> to see the full answer.
+    </div>
+  </section>
+
+  <!-- FULL PROPERTY ANALYSIS -->
+  <h2 class="section-h">Full property analysis</h2>
+  <p class="section-h-sub">Everything from your personalised income report, in one place.</p>
+
+  <!-- COMP SET -->
+  <h3 style="font-size:15px;margin:14px 0 10px;color:#5d8156;text-transform:uppercase;letter-spacing:0.06em;">Comparable properties (2.2 km)</h3>
+  <div class="chip-row">
+    <div class="chip"><strong>Avg £435</strong>/night</div>
+    <div class="chip"><strong>60%</strong> occupancy</div>
+    <div class="chip"><strong>£79,271</strong> annual</div>
+    <div class="chip"><strong>4.7</strong> rating</div>
+    <div class="chip"><strong>24</strong> reviews</div>
+  </div>
+  <table class="comp">
+    <thead>
+      <tr><th>Property</th><th>Dist</th><th>Nightly</th><th>Occ</th><th>Annual</th><th>Rating</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>3BR 6Bed · King's Cross 25min Harry Potter x3Cars</td><td>0.94 km</td><td>£216</td><td>76%</td><td>£47,099</td><td>4.0</td></tr>
+      <tr><td>Stylish 4 Bedroom Home with Parking in Borehamwood</td><td>1.57 km</td><td>£334</td><td>50%</td><td>£59,235</td><td>5.0</td></tr>
+      <tr><td>4 bedroom Borehamwood</td><td>2.74 km</td><td>£344</td><td>64%</td><td>£68,241</td><td>5.0</td></tr>
+      <tr><td>Historic 5 Bed Retreat <span class="top-badge">TOP</span></td><td>2.78 km</td><td>£945</td><td>52%</td><td>£151,989</td><td>5.0</td></tr>
+      <tr><td>"The Cromwell" · Contractor's Haven Borehamwood</td><td>0.63 km</td><td>£351</td><td>43%</td><td>£44,710</td><td>4.0</td></tr>
+      <tr><td>A clean, luxurious, spacious and modern 4Bed House <span class="top-badge">TOP</span></td><td>1.73 km</td><td>£355</td><td>84%</td><td>£94,655</td><td>5.0</td></tr>
+      <tr><td>Large, modern house with gym and office <span class="top-badge">TOP</span></td><td>1.87 km</td><td>£497</td><td>54%</td><td>£88,968</td><td>5.0</td></tr>
+    </tbody>
+  </table>
+
+  <!-- DEMAND DRIVERS -->
+  <h3 style="font-size:15px;margin:32px 0 10px;color:#5d8156;text-transform:uppercase;letter-spacing:0.06em;">Local demand drivers</h3>
+  <div class="dem-grid">
+    <div class="dem-card">
+      <div class="name">Healthcare — Barnet Hospital</div>
+      <div class="sub">3 facilities, nearest 4.93 km — medical visitors, contractors, family stays.</div>
+      <div class="badge">HIGH</div>
+    </div>
+    <div class="dem-card">
+      <div class="name">Transport — Elstree &amp; Borehamwood</div>
+      <div class="sub">7 stations within reach, 1.79 km to nearest — direct London commuters.</div>
+      <div class="badge">HIGH</div>
+    </div>
+    <div class="dem-card">
+      <div class="name">Education — UK University Services</div>
+      <div class="sub">1.71 km — visiting families, parents week, term-end stays.</div>
+      <div class="badge">HIGH</div>
+    </div>
+    <div class="dem-card">
+      <div class="name">Events &amp; entertainment</div>
+      <div class="sub">31,637 annual events within reach — Twist Museum at 12.13 km plus all of central London.</div>
+      <div class="badge">HIGH</div>
+    </div>
+  </div>
+
+  <!-- DIRECT BOOKING PROJECTION -->
+  <h3 style="font-size:15px;margin:32px 0 10px;color:#5d8156;text-transform:uppercase;letter-spacing:0.06em;">36-month direct booking projection</h3>
+  <p class="section-h-sub">Your direct booking score is <strong>100/100 — Excellent</strong>. By year 3 the platform fee gets eliminated on around half your revenue.</p>
+  <div class="db-stats">
+    <div class="db-stat"><div class="v">50%</div><div class="l">Direct bookings by Month 36</div></div>
+    <div class="db-stat"><div class="v">126</div><div class="l">Repeat customers built</div></div>
+    <div class="db-stat"><div class="v">15%</div><div class="l">Platform fee saved on direct</div></div>
+    <div class="db-stat"><div class="v">+£452</div><div class="l">Extra monthly profit by Yr 3</div></div>
+  </div>
+  <div class="db-progress">
+    <div class="stage">
+      <div class="stage-label">Month 1</div>
+      <div class="bar-bg"><div class="bar-fill" style="width:5%"></div></div>
+      <div class="stage-val">~5% direct</div>
+    </div>
+    <div class="stage">
+      <div class="stage-label">Month 12</div>
+      <div class="bar-bg"><div class="bar-fill" style="width:20%"></div></div>
+      <div class="stage-val">~20% direct</div>
+    </div>
+    <div class="stage">
+      <div class="stage-label">Month 24</div>
+      <div class="bar-bg"><div class="bar-fill" style="width:35%"></div></div>
+      <div class="stage-val">~35% direct</div>
+    </div>
+    <div class="stage">
+      <div class="stage-label">Month 36</div>
+      <div class="bar-bg"><div class="bar-fill" style="width:50%"></div></div>
+      <div class="stage-val">~50% direct</div>
+    </div>
+  </div>
+
+  <!-- AMENITIES -->
+  <h3 style="font-size:15px;margin:32px 0 10px;color:#5d8156;text-transform:uppercase;letter-spacing:0.06em;">Recommended amenities</h3>
+  <div class="amen-grid">
+    <div class="amen-col">
+      <h4>Essential</h4>
+      <ul>
+        <li>WiFi <span style="color:#8a8a82;">(5/5)</span></li>
+        <li>Kitchen <span style="color:#8a8a82;">(5/5)</span></li>
+      </ul>
+    </div>
+    <div class="amen-col">
+      <h4>Recommended</h4>
+      <ul>
+        <li>Garden <span style="color:#8a8a82;">(3/5)</span></li>
+        <li>Workspace <span style="color:#8a8a82;">(2/5)</span></li>
+        <li>Free parking <span style="color:#8a8a82;">(1/5)</span></li>
+        <li>Smart TV <span style="color:#8a8a82;">(1/5)</span></li>
+      </ul>
+    </div>
+    <div class="amen-col">
+      <h4>Differentiators</h4>
+      <span class="premium">+15–30% rate premium</span>
+      <ul>
+        <li>Hot tub</li>
+        <li>EV charger</li>
+        <li>Pet friendly</li>
+        <li>Smart lock</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- RISK -->
+  <h3 style="font-size:15px;margin:32px 0 10px;color:#5d8156;text-transform:uppercase;letter-spacing:0.06em;">Risk profile</h3>
+  <div class="risk-overall">
+    <div class="lbl-pair">Overall risk score <span class="badge">LOW RISK</span></div>
+    <div class="v">4 / 100</div>
+  </div>
+  <div class="risk-bars">
+    <div class="row">
+      <div class="row-top"><span>Revenue consistency</span><span>50 / 100</span></div>
+      <div class="bar-bg"><div class="bar-fill" style="width:50%"></div></div>
+    </div>
+    <div class="row">
+      <div class="row-top"><span>Long-term comparison</span><span>50 / 100</span></div>
+      <div class="bar-bg"><div class="bar-fill" style="width:50%"></div></div>
+    </div>
+    <div class="row">
+      <div class="row-top"><span>Seasonal variance</span><span>50 / 100</span></div>
+      <div class="bar-bg"><div class="bar-fill" style="width:50%"></div></div>
+    </div>
+    <div class="row">
+      <div class="row-top"><span>Market demand</span><span>25 / 100</span></div>
+      <div class="bar-bg"><div class="bar-fill" style="width:25%"></div></div>
+    </div>
+  </div>
+
+  <!-- Q&A TIMELINE -->
+  <h2 class="section-h">Your questions, answered</h2>
+  <p class="section-h-sub">Tap any card to expand.</p>
+
+  <div class="tl">
+
+    <!-- 1: Calendar / personal use -->
+    <div class="tl-item" id="q1">
+      <div class="tl-head" onclick="toggle('q1')">
+        <div class="tl-num">1</div>
+        <div class="tl-q-text">
+          <div class="tl-topic">Calendar control</div>
+          <div class="tl-q">"How do I block dates when my partner needs the UK property?"</div>
+          <div class="tl-teaser">→ You hold the calendar. We work around your trips.</div>
+        </div>
+        <div class="tl-arrow">›</div>
+      </div>
+      <div class="tl-body">
+        <p>You get full calendar access through our owner portal. Block any date or window for your partner's trips back to the UK — those dates become unbookable and the property is yours. The only constraint is lead time: most of our bookings come within 30 days of the stay, so the further ahead you can block, the cleaner. Once a guest is booked we can't cancel them, so plan visits 4–6 weeks out where you can.</p>
+        <div class="visual-stats">
+          <div class="vs"><div class="v">Owner</div><div class="l">Calendar control</div></div>
+          <div class="vs"><div class="v">30 days</div><div class="l">Typical booking lead time</div></div>
+          <div class="vs"><div class="v">4–6 wks</div><div class="l">Recommended block lead time</div></div>
+          <div class="vs"><div class="v">Slack</div><div class="l">Direct line to our team</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2: Property protection -->
+    <div class="tl-item" id="q2">
+      <div class="tl-head" onclick="toggle('q2')">
+        <div class="tl-num">2</div>
+        <div class="tl-q-text">
+          <div class="tl-topic">Property protection</div>
+          <div class="tl-q">"How is my home actually protected from damage while I'm in Spain?"</div>
+          <div class="tl-teaser">→ Four layers: deposits, ID, insurance, regular inspections.</div>
+        </div>
+        <div class="tl-arrow">›</div>
+      </div>
+      <div class="tl-body">
+        <p>Every booking carries a £200 security deposit per guest, and every guest is ID-checked before they get the key. On top of that, the property is covered by £100,000 of insurance for the duration of each stay. We also inspect the property 1–3 times a year — full walkthroughs with photos. Over time, around 30–40% of stays become trusted repeat guests, which pushes the risk profile down further.</p>
+        <div class="visual-stats">
+          <div class="vs"><div class="v">£200</div><div class="l">Deposit / guest</div></div>
+          <div class="vs"><div class="v">ID check</div><div class="l">Every guest</div></div>
+          <div class="vs"><div class="v">£100k</div><div class="l">Insurance per stay</div></div>
+          <div class="vs"><div class="v">1–3 / yr</div><div class="l">Inspections</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3: Maintenance team -->
+    <div class="tl-item" id="q3">
+      <div class="tl-head" onclick="toggle('q3')">
+        <div class="tl-num">3</div>
+        <div class="tl-q-text">
+          <div class="tl-topic">Your maintenance team</div>
+          <div class="tl-q">"Can I use my partner's maintenance team rather than yours?"</div>
+          <div class="tl-teaser">→ Yes, if they can hit a few non-negotiables. Costs come off your monthly statement.</div>
+        </div>
+        <div class="tl-arrow">›</div>
+      </div>
+      <div class="tl-body">
+        <p>Happy to use your partner's team as long as they meet three things: weekend and out-of-hours availability (guests don't break things 9–5), agreed response times so we can give a guest a real ETA, and clean invoicing. Payments get deducted directly from your monthly statement — we cover up to £300/month for routine maintenance items so cashflow stays clean. Anything bigger we'll always check with you first.</p>
+        <div class="ms-list">
+          <div class="ms-item"><div class="ms-n">1</div><div class="ms-text"><strong>Weekend &amp; out-of-hours cover</strong><span>Guests have issues on Saturdays. The team needs to too.</span></div><div class="ms-time">Required</div></div>
+          <div class="ms-item"><div class="ms-n">2</div><div class="ms-text"><strong>Agreed response times</strong><span>So we can give a real ETA, not a maybe.</span></div><div class="ms-time">Required</div></div>
+          <div class="ms-item"><div class="ms-n">3</div><div class="ms-text"><strong>Payments via monthly statement</strong><span>Up to £300/month covered automatically.</span></div><div class="ms-time">Standard</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4: Property prep -->
+    <div class="tl-item" id="q4">
+      <div class="tl-head" onclick="toggle('q4')">
+        <div class="tl-num">4</div>
+        <div class="tl-q-text">
+          <div class="tl-topic">Getting it ready</div>
+          <div class="tl-q">"What does the property actually need before it goes live?"</div>
+          <div class="tl-teaser">→ Small, focused list. Paint, a bed swap, and proper photography.</div>
+        </div>
+        <div class="tl-arrow">›</div>
+      </div>
+      <div class="tl-body">
+        <p>Three things on the prep list from today. Repaint the children's bedrooms in neutral colours — broadens the guest appeal and lets the property show as a relaxing space, not a family home. Swap the bunk beds for a double-plus-single setup so both rooms sleep grown-ups comfortably. And professional photography rather than iPhone shots — at £441/night ADR, the listing pictures need to match the rate. We coordinate the photographer.</p>
+        <div class="ms-list">
+          <div class="ms-item"><div class="ms-n">1</div><div class="ms-text"><strong>Repaint children's rooms</strong><span>Neutral palette to broaden guest appeal.</span></div><div class="ms-time">1 week</div></div>
+          <div class="ms-item"><div class="ms-n">2</div><div class="ms-text"><strong>Bed swap</strong><span>Bunk beds out, double + single in.</span></div><div class="ms-time">2–3 days</div></div>
+          <div class="ms-item"><div class="ms-n">3</div><div class="ms-text"><strong>Professional photography</strong><span>We arrange and book the shoot.</span></div><div class="ms-time">Half day</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5: Timeline & contract -->
+    <div class="tl-item" id="q5">
+      <div class="tl-head" onclick="toggle('q5')">
+        <div class="tl-num">5</div>
+        <div class="tl-q-text">
+          <div class="tl-topic">Timeline &amp; contract</div>
+          <div class="tl-q">"What's the contract commitment and how fast can we go live?"</div>
+          <div class="tl-teaser">→ 6-month fixed term · 3-month notice · live for August.</div>
+        </div>
+        <div class="tl-arrow">›</div>
+      </div>
+      <div class="tl-body">
+        <p>The agreement is a 6-month fixed term with a 3-month notice period after that — short enough that you're not locked in, long enough that we can build out the listing's review base. If you sign by 31 May the management fee is held at 13% + VAT instead of the standard 15% + VAT. Timeline-wise: setup completes end of July, listing live for August — straight into the second half of summer.</p>
+        <div class="ms-list">
+          <div class="ms-item"><div class="ms-n">1</div><div class="ms-text"><strong>Sign agreement</strong><span>13% rate locked in if signed by 31 May.</span></div><div class="ms-time">By 31 May</div></div>
+          <div class="ms-item"><div class="ms-n">2</div><div class="ms-text"><strong>Prep work + photography</strong><span>Paint, bed swap, photographer.</span></div><div class="ms-time">June – July</div></div>
+          <div class="ms-item"><div class="ms-n">3</div><div class="ms-text"><strong>Setup complete</strong><span>Listing built, pricing dialled in.</span></div><div class="ms-time">End July</div></div>
+          <div class="ms-item"><div class="ms-n">4</div><div class="ms-text"><strong>Live</strong><span>Bookings open for August onwards.</span></div><div class="ms-time">August</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- CLOSING -->
+  <section class="closing">
+    <h2>When you're ready, here's what happens</h2>
+    <p style="color:#6b6b66;margin:0 0 16px;">No pressure on any of this — just a clear picture of the steps.</p>
+    <div class="closing-steps">
+      <ol>
+        <li><strong>Thursday 21 May, 9:00 AM</strong> — Follow-up call with you and your partner. I'll answer anything that's come up since today.</li>
+        <li><strong>Agreement sign-off</strong> — If you'd like to lock the 13% rate, signed copy back by 31 May.</li>
+        <li><strong>June onwards</strong> — Paint, bed swap, photography. We project-manage.</li>
+        <li><strong>End July</strong> — Listing live, taking August bookings.</li>
+      </ol>
+    </div>
+
+    <div class="offer-box">
+      <h3>Special rate locked for you</h3>
+      <div class="rate">13% + VAT management fee</div>
+      <div class="expiry">Held until <strong>31 May 2026</strong> · Standard rate is 15% + VAT</div>
+    </div>
+
+    <div class="next-meet">
+      📅 <strong>Next call confirmed:</strong> Thursday 21 May 2026 at 9:00 AM (UK) via Google Meet — with your partner present. You'll get the Calendly confirmation email separately.
+    </div>
+  </section>
+
+  <div class="footer">
+    Stayful · stayful.co.uk · Prepared for Noemi Konya · 12 May 2026<br>
+    Revenue figures from your personalised Property Income Analysis — projections, not guarantees.
+  </div>
+
+</div>
+
+<script>
+function toggle(id) {
+  const el = document.getElementById(id);
+  const isOpen = el.classList.contains('open');
+  document.querySelectorAll('.tl-item').forEach(e => e.classList.remove('open'));
+  if (!isOpen) el.classList.add('open');
+}
+</script>
+
+</body>
+</html>
