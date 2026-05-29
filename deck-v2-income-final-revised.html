@@ -722,7 +722,7 @@ a.pill:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.2
     <button class="tb-i on" onclick="go(0)">Income (revised)</button>
     <button class="tb-i" onclick="go(1)">Final · Speak to Lucy</button>
   </div>
-  <div class="tb-r"><span class="tb-badge">Review · 2 revised slides</span></div>
+  <div class="tb-r"><span class="tb-badge">Review · model B</span></div>
 </div>
 <div id="prog"><div id="pf"></div></div>
 <div id="deck">
@@ -739,7 +739,7 @@ a.pill:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.2
       </div>
       <div class="wf-bar" id="wf-bar"></div>
       <div class="wf-legend" id="wf-legend"></div>
-      <div class="wf-clean">🧹 Cleaning &amp; laundry is charged to guests — shown here as an estimated average based on typical turnaround.</div>
+      <div class="wf-clean" id="wf-clean"></div>
     </div>
 
     <div class="two fi" style="gap:28px;">
@@ -761,7 +761,7 @@ a.pill:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.2
             <div class="nl2">STL net / month</div>
             <div class="dn" style="font-size:42px;" id="s2s">£1,700</div>
             <!-- GAP 3: Cleaning note -->
-            <div class="ns">After platform, cleaning &amp; management</div>
+            <div class="ns">After platform &amp; management</div>
             
           </div>
           <div class="sc">
@@ -903,14 +903,13 @@ const MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec
 const FC=[1210,1514,1720,1668,1821,1817,1923,1987,1866,1662,1562,1656];
 const OCC=[41,52,60,58,64,63,68,71,65,58,53,57];
 let ltl=842;
-// NEW fee model — platform 15% · cleaning&laundry 18% · management 15% (no VAT, no software)
-const FEE={platform:0.15,cleaning:0.18,management:0.15};
+const FEE={platform:0.15,management:0.15,cleaning:0.18};
 function feeBreakdown(rev){
   const platform=Math.round(rev*FEE.platform);
-  const cleaning=Math.round(rev*FEE.cleaning);
   const management=Math.round(rev*FEE.management);
-  const net=rev-platform-cleaning-management;
-  return {gross:rev,platform,cleaning,management,net};
+  const cleaning=Math.round(rev*FEE.cleaning);
+  const net=rev-platform-management;
+  return {gross:rev,platform,management,cleaning,net};
 }
 function renderWaterfall(rev){
   const b=feeBreakdown(rev),g=b.gross||1;
@@ -921,7 +920,6 @@ function renderWaterfall(rev){
   const segs=[
     {k:'You keep',v:b.net,col:'var(--green)',sub:pct(b.net)+'% of gross'},
     {k:'Booking platform fees',v:b.platform,col:'#8a9e92',sub:'15%'},
-    {k:'Cleaning & laundry',v:b.cleaning,col:'#d9a24a',sub:'18% · charged to guests · est. avg'},
     {k:'Management',v:b.management,col:'var(--am)',sub:'15%'}
   ];
   const bar=document.getElementById('wf-bar'),leg=document.getElementById('wf-legend');
@@ -937,6 +935,8 @@ function renderWaterfall(rev){
       +'<div class="wf-lv">'+gbp(s.v)+'</div><div class="wf-lp">'+s.sub+'</div>';
     leg.appendChild(li);
   });
+  const cw=document.getElementById('wf-clean');
+  if(cw)cw.innerHTML='🧹 <b>Cleaning &amp; laundry</b> — about '+gbp(b.cleaning)+'/mo (estimated average) is <b>charged to guests</b>, so £0 comes out of your share.';
 }
 function buildBars(){
   const bc=document.getElementById('bars'),bn=document.getElementById('bnames');if(!bc)return;
@@ -963,7 +963,6 @@ function buildHeat(){
     return '<div class="heat-c"><div class="heat-b'+out+'" style="background:rgba(93,129,86,'+a+');" title="'+o+'% occupancy"></div><div class="heat-m">'+mn[i]+'</div></div>';
   }).join('');
 }
-// minimal deck nav
 const TOTAL=2;let cur=0,anim=false;
 const slides=Array.from(document.querySelectorAll('.slide'));
 function go(idx){if(anim||idx===cur||idx<0||idx>=TOTAL)return;anim=true;const d=idx>cur?1:-1;const lv=slides[cur],en=slides[idx];lv.classList.add(d>0?'el':'er');en.classList.add(d>0?'nl':'nr');en.classList.add('active');setTimeout(function(){lv.classList.remove('active','el','er');en.classList.remove('nl','nr');cur=idx;anim=false;update();stagger(en);sfShowAsk(cur);},440);}

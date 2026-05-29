@@ -869,7 +869,7 @@ a.pill:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.2
       </div>
       <div class="wf-bar" id="wf-bar"></div>
       <div class="wf-legend" id="wf-legend"></div>
-      <div class="wf-clean">🧹 Cleaning is billed to the guest — £0 comes out of your share.</div>
+      <div class="wf-clean" id="wf-clean"></div>
     </div>
 
     <div class="two fi" style="gap:28px;">
@@ -891,8 +891,8 @@ a.pill:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.2
             <div class="nl2">STL net / month</div>
             <div class="dn" style="font-size:42px;" id="s2s">£1,700</div>
             <!-- GAP 3: Cleaning note -->
-            <div class="ns">After management &amp; platform fees</div>
-            <div style="font-size:10.5px;color:var(--green);margin-top:4px;font-style:italic;">Cleaning is charged to guests — not deducted from you</div>
+            <div class="ns">After platform &amp; management</div>
+            
           </div>
           <div class="sc">
             <div class="nl2">Long-let net / month</div>
@@ -1292,6 +1292,13 @@ a.pill:hover{transform:translateY(-1px);box-shadow:0 3px 10px rgba(93,129,86,0.2
       </div>
     </div>
 
+      <div class="fi" style="margin-top:16px;background:rgba(230,235,215,0.1);border:1px solid rgba(230,235,215,0.18);border-radius:16px;padding:18px 22px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+      <div>
+        <div class="hl white" style="font-size:24px;line-height:1.1;margin-bottom:3px;">Have more <em>questions?</em></div>
+        <div style="font-size:12.5px;color:rgba(255,255,255,0.5);font-weight:300;">Lucy can talk through your numbers, the process, anything — instantly, any time.</div>
+      </div>
+      <a href="https://www.lucy.stayful.co.uk" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:var(--green);color:#fff;text-decoration:none;border-radius:10px;padding:13px 26px;font-size:15px;font-weight:600;font-family:var(--sans);white-space:nowrap;transition:opacity 0.2s;" onmouseover="this.style.opacity=0.85" onmouseout="this.style.opacity=1">💬 Speak to Lucy</a>
+    </div>
   <div class="sf-ask dark" data-q="9">
     <div class="sf-ask-q">What would you need to see or know to feel confident moving forward?</div>
     <textarea class="sf-open-input" id="sfopen" rows="2" placeholder="Type your question or concern..."></textarea>
@@ -1618,44 +1625,41 @@ document.querySelectorAll('.sf-ask').forEach(el=>{
 
 // ── FEE WATERFALL (prototype) ────────────────────────────────
 // Transparent fee model — same numbers the slide and agreement quote.
-const FEE={platform:0.03,mgmt:0.15,vat:0.20,software:42};
+const FEE={platform:0.15,management:0.15,cleaning:0.18};
 function feeBreakdown(rev){
   const platform=Math.round(rev*FEE.platform);
-  const mgmt=Math.round(rev*FEE.mgmt);
-  const vat=Math.round(mgmt*FEE.vat);
-  const software=FEE.software;
-  const net=rev-platform-mgmt-vat-software;
-  return {gross:rev,platform,mgmt,vat,software,net};
+  const management=Math.round(rev*FEE.management);
+  const cleaning=Math.round(rev*FEE.cleaning);
+  const net=rev-platform-management;
+  return {gross:rev,platform,management,cleaning,net};
 }
 function renderWaterfall(rev){
   const b=feeBreakdown(rev),g=b.gross||1;
-  const gbp=v=>'£'+Math.round(v).toLocaleString('en-GB');
-  const pct=v=>Math.round(v/g*100);
+  const gbp=function(v){return '£'+Math.round(v).toLocaleString('en-GB');};
+  const pct=function(v){return Math.round(v/g*100);};
   const kv=document.getElementById('wf-keep-val'),gv=document.getElementById('wf-gross-val');
   if(!kv||!gv)return;
   kv.textContent=gbp(b.net);gv.textContent=gbp(b.gross);
-  const colors={keep:'var(--green)',mgmt:'var(--am)',vat:'#d9a24a',plat:'#8a9e92',soft:'#b7c0b3'};
   const segs=[
-    {c:'keep',k:'You keep',v:b.net},
-    {c:'mgmt',k:'Management 15%',v:b.mgmt},
-    {c:'vat',k:'VAT on fee',v:b.vat},
-    {c:'plat',k:'Platform ~3%',v:b.platform},
-    {c:'soft',k:'Software',v:b.software}
+    {k:'You keep',v:b.net,col:'var(--green)',sub:pct(b.net)+'% of gross'},
+    {k:'Booking platform fees',v:b.platform,col:'#8a9e92',sub:'15%'},
+    {k:'Management',v:b.management,col:'var(--am)',sub:'15%'}
   ];
   const bar=document.getElementById('wf-bar'),leg=document.getElementById('wf-legend');
   bar.innerHTML='';leg.innerHTML='';
-  segs.forEach(s=>{
+  segs.forEach(function(s){
     const seg=document.createElement('div');
-    seg.className='wf-seg '+s.c;
-    seg.style.flexBasis=(s.v/g*100)+'%';
+    seg.className='wf-seg';seg.style.background=s.col;seg.style.flexBasis=(s.v/g*100)+'%';
     seg.title=s.k+': '+gbp(s.v)+' ('+pct(s.v)+'%)';
     seg.innerHTML='<span>'+gbp(s.v)+'</span>';
     bar.appendChild(seg);
     const li=document.createElement('div');li.className='wf-li';
-    li.innerHTML='<div class="wf-lt"><span class="dotc" style="background:'+colors[s.c]+'"></span>'+s.k+'</div>'
-      +'<div class="wf-lv">'+gbp(s.v)+'</div><div class="wf-lp">'+pct(s.v)+'% of gross</div>';
+    li.innerHTML='<div class="wf-lt"><span class="dotc" style="background:'+s.col+'"></span>'+s.k+'</div>'
+      +'<div class="wf-lv">'+gbp(s.v)+'</div><div class="wf-lp">'+s.sub+'</div>';
     leg.appendChild(li);
   });
+  const cw=document.getElementById('wf-clean');
+  if(cw)cw.innerHTML='🧹 <b>Cleaning &amp; laundry</b> — about '+gbp(b.cleaning)+'/mo (estimated average) is <b>charged to guests</b>, so £0 comes out of your share.';
 }
 
 const OCC=[41,52,60,58,64,63,68,71,65,58,53,57];
