@@ -1715,12 +1715,10 @@ try{
 
   // Restore slide position — jump straight to where they left off
   const resumeIdx = savedP !== null ? parseInt(savedP) : 0;
-  if(resumeIdx > 0){
+  if(resumeIdx > 0 && resumeIdx < TOTAL){
     // Skip animation — just show the right slide directly
     slides.forEach((s,i)=>{
       s.classList.toggle('active', i===resumeIdx);
-      s.style.opacity = i===resumeIdx ? '1' : '0';
-      s.style.pointerEvents = i===resumeIdx ? 'all' : 'none';
     });
     cur = resumeIdx;
     update();
